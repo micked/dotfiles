@@ -83,7 +83,6 @@
   users.users.msk = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-    hashedPassword = "$6$HHd/4eGLwi00ySMy$IO9jhX7ksltCqlPV2FDkNKImfNVa7/8lFXUbEqx48GxJxPnqiPLUbUIw432uY5Sllm/dDprcRP97ANmp8yotU.";
   };
 
   # List packages installed in system profile. To search, run:
@@ -94,6 +93,8 @@
     firefox
     alacritty
     home-manager
+
+    cowsay
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
