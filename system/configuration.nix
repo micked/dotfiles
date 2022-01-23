@@ -40,6 +40,9 @@
     keyMap = "dvorak-no";
   };
 
+  nixpkgs.config.allowUnfree = true;
+  services.xserver.videoDrivers = [ "nvidia" ];
+
   # Enable the X11 windowing system.
   services.xserver = {
     enable = true;
@@ -93,8 +96,7 @@
     firefox
     alacritty
     git
-
-    cowsay
+    home-manager
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
