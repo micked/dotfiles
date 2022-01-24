@@ -12,7 +12,7 @@
 
       # system tray (Kind of a hack atm)
       # Need polybar to support this as a first class module
-      # gnome3.networkmanagerapplet
+      networkmanagerapplet
       # volumeicon
       # solaar
       # psensor
@@ -42,29 +42,20 @@
     #  imageDirectory = "%h/Pictures/backgrounds";
     #};
 
-    #services.picom = {
-    #  enable = true;
-    #  # inactiveOpacity = "0.55";
-    #  # activeOpacity = "0.85";
-    #  blur = true;
-    #  experimentalBackends = true;
-    #  opacityRule = [
-    #    "100:class_g   *?= 'Google-chrome'"
-    #  ];
-    #  extraOptions = ''
-    #    # blur-method = "dual_kawase";
-    #    # blur-strength = 8;
-    #    # corner-radius = 8;
-    #    # round-borders = 1;
-    #    #
-    #    # rounded-corners-exclude = [
-    #    #   "class_g = 'Polybar'",
-    #    #   "class_g = 'Google-chrome'"
-    #    # ];
-    #  '';
-    #  fade = true;
-    #  fadeDelta = 5;
-    # };
+    services.picom = {
+      enable = true;
+      vSync = true;
+      inactiveOpacity = "1.00";
+      activeOpacity = "1.00";
+      blur = true;
+      experimentalBackends = true;
+      opacityRule = [
+        "100:class_g  = 'Firefox'"
+        "90:class_g   = 'Alacritty'"
+      ];
+      fade = true;
+      fadeDelta = 5;
+    };
 
     xsession = {
       enable = true;
