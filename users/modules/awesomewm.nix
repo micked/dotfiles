@@ -56,6 +56,13 @@
       fade = true;
       fadeDelta = 5;
     };
+    
+    home.file = {
+      "awesome" = {
+        source = ./awesome;
+        target = "./.config/awesome";
+      };
+    };
 
     xsession = {
       enable = true;
