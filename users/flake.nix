@@ -31,6 +31,7 @@
 
           imports = [
             ./modules/git.nix
+            ./modules/awesomewm.nix
           # ./modules/kitty.nix
           ];
 

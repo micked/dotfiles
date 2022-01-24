@@ -47,22 +47,32 @@
   services.xserver = {
     enable = true;
     
-    displayManager = {
-      sddm.enable = true;
-      defaultSession = "none+awesome";
-    };
+    # displayManager = {
+    #   sddm.enable = true;
+    #   defaultSession = "none+awesome";
+    # };
 
-    windowManager.awesome = {
-      enable = true;
-      luaModules = with pkgs.luaPackages; [
-        luarocks
-        luadbi-mysql
-      ];
-    };
+    # windowManager.awesome = {
+    #   enable = true;
+    #   luaModules = with pkgs.luaPackages; [
+    #     luarocks
+    #     luadbi-mysql
+    #   ];
+    # };
 
     layout = "dk";
     xkbVariant = "dvorak";
     xkbOptions = "compose:sclk caps:escape";
+
+    desktopManager.session = [
+      {
+        name = "home-manager";
+        start = ''
+          ${pkgs.runtimeShell} $HOME/.hm-xsession &
+          waitPID=$!
+        '';
+      }
+    ];
   };
 
   # Enable CUPS to print documents.
