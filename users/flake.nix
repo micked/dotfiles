@@ -18,14 +18,11 @@
           programs.home-manager.enable = true;
 
           imports = [
-            ./modules/git.nix
+            ./modules/common.nix
             ./modules/private.nix
+            ./modules/git.nix
             ./modules/awesomewm.nix
           # ./modules/kitty.nix
-          ];
-
-          home.packages = with pkgs; [
-            sublime4
           ];
         };
       };
