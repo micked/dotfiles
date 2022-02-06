@@ -48,7 +48,11 @@
       inactiveOpacity = "1.00";
       activeOpacity = "1.00";
       blur = true;
-      experimentalBackends = true;
+      #experimentalBackends = true;
+      backend = "xrender";
+      extraOptions = ''
+        unredir-if-possible = false;
+      '';
       opacityRule = [
         "100:class_g  = 'Firefox'"
         "90:class_g   = 'Alacritty'"
