@@ -3,10 +3,18 @@
   home.packages = with pkgs; [
     sublime4
     firefox
-    alacritty
     cinnamon.nemo
     vlc
   ];
+
+  programs.alacritty = {
+    enable = true;
+    settings = {
+      env = {
+        WINIT_X11_SCALE_FACTOR = "1";
+      };
+    };
+  };
 
   xdg.userDirs = {
     enable = true;

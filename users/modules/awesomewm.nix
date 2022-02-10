@@ -57,8 +57,8 @@
         "100:class_g  = 'Firefox'"
         "90:class_g   = 'Alacritty'"
       ];
-      fade = true;
-      fadeDelta = 5;
+      fade = false;
+      #fadeDelta = 5;
     };
     
     home.file = {
