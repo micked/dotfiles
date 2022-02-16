@@ -5,6 +5,7 @@
     firefox
     cinnamon.nemo
     vlc
+    pavucontrol
   ];
 
   programs.alacritty = {

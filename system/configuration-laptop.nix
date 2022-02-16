@@ -36,6 +36,12 @@
 
     libinput.enable = true;
     videoDrivers = [ "intel" ];
+    deviceSection = ''
+      Option "DRI" "2"
+      Option "TearFree" "true"
+    '';
+    #videoDrivers = [ "modesetting" ];
+    #useGlamor = true;
 
     desktopManager.session = [
       {
@@ -55,8 +61,8 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  hardware.bluetooth.enable = true;
+  services.blueman.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
