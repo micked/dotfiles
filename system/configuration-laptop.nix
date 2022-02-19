@@ -37,8 +37,9 @@
     libinput.enable = true;
     videoDrivers = [ "intel" ];
     deviceSection = ''
-      Option "DRI" "2"
+      Option "DRI" "3"
       Option "TearFree" "true"
+      Option "AccelMethod" "sna"
     '';
     #videoDrivers = [ "modesetting" ];
     #useGlamor = true;

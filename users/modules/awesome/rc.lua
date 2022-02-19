@@ -47,9 +47,13 @@ do
 end
 -- }}}
 
+-- hostname
+hostname = io.popen("uname -n"):read()
+
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+hlcolor = beautiful.bg_focus or "#ffffff"
 
 -- This is used later as the default terminal and editor to run.
 terminal = "alacritty"
@@ -103,7 +107,19 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibar
 -- Create a textclock widget
-mytextclock = wibox.widget.textclock()
+mytextclock = wibox.widget.textclock("%Y-%m-%d | A %A in %B | %H:%M  ")
+
+-- Seperator
+sepwidget = wibox.widget.textbox()
+sepwidget:set_text(" | ")
+
+-- Battery
+batterywidget = wibox.widget.textbox()
+batterywidget:set_text("")
+if hostname == "daemon" or hostname == "burger" then
+    vicious.register(batterywidget, vicious.widgets.bat,
+        "BAT:<span color='" .. hlcolor .. "'> $2% ($1) $3</span> | ", 61, "BAT0")
+end
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -205,8 +221,11 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            mykeyboardlayout,
+            -- mykeyboardlayout,
             wibox.widget.systray(),
+	    sepwidget,
+	    batterywidget,
+	    sepwidget,
             mytextclock,
             s.mylayoutbox,
         },
