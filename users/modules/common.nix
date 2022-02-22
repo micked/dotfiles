@@ -6,6 +6,7 @@
     cinnamon.nemo
     vlc
     pavucontrol
+    htop
   ];
 
   programs.alacritty = {

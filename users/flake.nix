@@ -7,6 +7,7 @@
   outputs = {self, ... }@inputs:
   {
     homeConfigurations = {
+
       nixos = inputs.home-manager.lib.homeManagerConfiguration {
         system = "x86_64-linux";
         homeDirectory = "/home/msk";
@@ -26,6 +27,25 @@
           ];
         };
       };
+
+      work = inputs.home-manager.lib.homeManagerConfiguration {
+        system = "x86_64-linux";
+        homeDirectory = "/home/msk";
+        username = "msk";
+        stateVersion = "21.11";
+        configuration = { config, lib, pkgs, ... }:
+        {
+          nixpkgs.config = { allowUnfree = true; };
+          programs.home-manager.enable = true;
+
+          imports = [
+            ./modules/common.nix
+            ./modules/git.nix
+            ./modules/awesomewm.nix
+          ];
+        };
+      };
+
     };
   };
 }
