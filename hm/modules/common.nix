@@ -7,6 +7,8 @@
     vlc
     pavucontrol
     htop
+    inkscape
+    teams
   ];
 
   programs.alacritty = {
@@ -21,7 +23,7 @@
   xdg.userDirs = {
     enable = true;
     desktop = "$HOME";
-    documents = "$HOME";
+    documents = "$HOME/keep";
     download = "$HOME/downloads";
     music = "$HOME";
     pictures = "$HOME/pictures";
