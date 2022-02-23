@@ -53,7 +53,8 @@ hostname = io.popen("uname -n"):read()
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+-- beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+beautiful.init(awful.util.getdir("config") .. "/themes/default/theme.lua")
 hlcolor = beautiful.bg_focus or "#ffffff"
 
 -- This is used later as the default terminal and editor to run.
