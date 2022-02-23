@@ -37,10 +37,11 @@
       # xcwd
     ];
 
-    #services.random-background = {
-    #  enable = true;
-    #  imageDirectory = "%h/Pictures/backgrounds";
-    #};
+    services.random-background = {
+      enable = true;
+      interval = "15min";
+      imageDirectory = "%h/pictures/backgrounds";
+    };
 
     services.picom = {
       enable = true;
