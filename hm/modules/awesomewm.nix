@@ -63,8 +63,15 @@
     
     home.file = {
       "awesome" = {
-        source = ./awesome;
-        target = "./.config/awesome";
+        source = ./awesome/rc.lua;
+        target = "./.config/awesome/rc.lua";
+      };
+
+      ".config/awesome/lain".source = pkgs.fetchFromGitHub {
+         owner = "lcpz";
+         repo = "lain";
+         rev = "4933d6c";
+         sha256 = "NPXsgKcOGp4yDvbv/vouCpDhrEcmXsM2I1IUkDadgjw=";
       };
     };
 
