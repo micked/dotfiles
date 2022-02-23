@@ -41,6 +41,10 @@ theme.fg_focus      = theme.base02
 theme.fg_urgent     = theme.fg_focus
 theme.fg_minimize   = theme.fg_focus
 
+theme.pomgreen      = theme.base0B
+theme.pomyellow     = theme.base0A
+theme.pomred        = theme.base08
+theme.pomheight     = dpi(12)
 
 theme.useless_gap   = 0
 theme.border_width  = dpi(1)

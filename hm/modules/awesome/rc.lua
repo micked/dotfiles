@@ -169,11 +169,11 @@ local function set_wallpaper(s)
 end
 
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
-screen.connect_signal("property::geometry", set_wallpaper)
+-- screen.connect_signal("property::geometry", set_wallpaper)
 
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
-    set_wallpaper(s)
+    -- set_wallpaper(s)
 
     -- Each screen has its own tag table.
     awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
@@ -205,6 +205,8 @@ awful.screen.connect_for_each_screen(function(s)
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s })
 
+    s.pomwibox = awful.wibar({ position = "bottom", screen = s, height = beautiful.pomheight })
+
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
@@ -227,6 +229,44 @@ awful.screen.connect_for_each_screen(function(s)
     }
 end)
 -- }}}
+
+local setpomclr = function(clr)
+    awful.screen.connect_for_each_screen(function(s)
+        s.pomwibox.bg = clr
+    end)
+end
+
+pomtimer = timer({ timeout = 20 * 60 })
+pomtimer:connect_signal("timeout", function()
+    setpomclr(beautiful.pomyellow)
+    pomtimer:stop()
+end)
+
+pomtimer2 = timer({ timeout = 25 * 60 })
+pomtimer2:connect_signal("timeout", function()
+    setpomclr(beautiful.pomgreen)
+pomtimer2:stop()
+end)
+
+pomtimer3 = timer({ timeout = 30 * 60 })
+pomtimer3:connect_signal("timeout", function()
+    setpomclr(beautiful.bg_normal)
+    pomtimer3:stop()
+end)
+
+local startpom = function()
+    setpomclr(beautiful.pomred)
+    pomtimer:again()
+    pomtimer2:again()
+    pomtimer3:again()
+end
+
+local stoppom = function()
+    pomtimer:stop()
+    pomtimer2:stop()
+    pomtimer3:stop()
+    setpomclr(beautiful.bg_normal)
+end
 
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
@@ -318,7 +358,10 @@ globalkeys = gears.table.join(
 
     -- Prompt
     awful.key({ modkey },            "r",     function () awful.screen.focused().mypromptbox:run() end,
-              {description = "run prompt", group = "launcher"})
+              {description = "run prompt", group = "launcher"}),
+    -- My Stuff
+    awful.key({ modkey            }, "p", startpom),
+    awful.key({ modkey, "Shift"   }, "p", stoppom)
 )
 
 clientkeys = gears.table.join(
@@ -509,4 +552,3 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
-
