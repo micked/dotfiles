@@ -110,7 +110,7 @@ sepwidget:set_text(" | ")
 -- Battery
 batterywidget = wibox.widget.textbox()
 batterywidget:set_text("")
-if hostname == "daemon" or hostname == "burger" then
+if hostname == "msk-oblivion" or hostname == "burger" then
     vicious.register(batterywidget, vicious.widgets.bat,
         "BAT:<span color='" .. hlcolor .. "'> $2% ($1) $3</span> | ", 61, "BAT0")
 end
