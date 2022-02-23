@@ -1,6 +1,11 @@
 { config, pkgs, libs, ... }:
-{
+
+let
+  trm = pkgs.writeShellScriptBin "trm" "transmission-remote-gtk $@";
+
+in {
   home.packages = with pkgs; [
+    trm
     transmission-remote-gtk
   ];
 

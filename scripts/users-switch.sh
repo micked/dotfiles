@@ -1,1 +1,1 @@
-home-manager switch --flake "./users#nixos"
+home-manager switch --flake "./hm#nixos"

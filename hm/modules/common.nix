@@ -1,6 +1,16 @@
 { config, pkgs, libs, ... }:
-{
+
+let 
+  fx = pkgs.writeShellScriptBin "fx" "firefox $@";
+  calc = pkgs.writeShellScriptBin "calc" "gnome-calculator $@";
+
+in {
   home.packages = with pkgs; [
+    # my stuff
+    fx
+    calc
+
+    # other
     sublime4
     firefox
     cinnamon.nemo
@@ -9,6 +19,7 @@
     htop
     inkscape
     teams
+    gnome.gnome-calculator
   ];
 
   programs.alacritty = {
