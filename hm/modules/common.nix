@@ -20,7 +20,11 @@ in {
     inkscape
     teams
     gnome.gnome-calculator
+
+    meslo-lgs-nf
   ];
+
+  fonts.fontconfig.enable = true;
 
   programs.alacritty = {
     enable = true;
@@ -28,6 +32,7 @@ in {
       env = {
         WINIT_X11_SCALE_FACTOR = "1";
       };
+      font.normal.family = "MesloLGS NF";
     };
   };
 
