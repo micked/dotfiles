@@ -23,8 +23,8 @@
             ./modules/common.nix
             ./modules/private.nix
             ./modules/git.nix
+            ./modules/zsh.nix
             ./modules/awesomewm.nix
-          # ./modules/kitty.nix
           ];
         };
       };
