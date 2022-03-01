@@ -26,6 +26,7 @@ in {
     teams
     gnome.gnome-calculator
     pass
+    libreoffice-fresh
 
     meslo-lgs-nf
   ];
