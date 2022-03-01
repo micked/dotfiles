@@ -27,6 +27,8 @@ in {
     gnome.gnome-calculator
     pass
     libreoffice-fresh
+    gnome.file-roller
+    evince
 
     meslo-lgs-nf
   ];
