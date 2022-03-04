@@ -58,7 +58,7 @@ beautiful.init(awful.util.getdir("config") .. "/themes/default/theme.lua")
 hlcolor = beautiful.bg_focus or "#ffffff"
 
 -- This is used later as the default terminal and editor to run.
-terminal = "alacritty"
+terminal = "kitty"
 editor = os.getenv("EDITOR") or "vim"
 editor_cmd = terminal .. " -e " .. editor
 

@@ -45,6 +45,19 @@ in {
     };
   };
 
+  programs.kitty = {
+    enable = true;
+    font = {
+      package = pkgs.meslo-lgs-nf;
+      name = "MesloLGS NF";
+    };
+    settings = {
+      enable_audio_bell = "no";
+      background_opacity = "0.8";
+    };
+    theme = "Darkside";
+  };
+
   xdg.userDirs = {
     enable = true;
     desktop = "$HOME";

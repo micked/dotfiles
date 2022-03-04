@@ -10,31 +10,13 @@
       # arc-theme
       # dracula-theme
 
-      # system tray (Kind of a hack atm)
-      # Need polybar to support this as a first class module
       networkmanagerapplet
       # volumeicon
       # solaar
       # psensor
-      # gnome3.nautilus
 
-      # custom scripts
-      # custom-script-sysmenu
-      # custom-panel-launch
-      # custom-browsermediacontrol
-
-      # Required so that BMC can work with chrome
-      # plasma-browser-integration
-
-      # file browser
-      # ranger
       # screenshot utility
       # scrot
-      # image viewer
-      # feh
-      # Utility to open present directory (Only use it with xmonad to open
-      # terminal in same directory)
-      # xcwd
     ];
 
     services.random-background = {
