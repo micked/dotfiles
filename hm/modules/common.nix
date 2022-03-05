@@ -15,6 +15,9 @@ in {
     calc
     c2_pass
 
+    # bluetooth
+    blueberry
+
     # other
     sublime4
     firefox
