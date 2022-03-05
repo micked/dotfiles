@@ -9,7 +9,7 @@
   programs.zsh.enable = true;
   users.users.msk = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "rfkill" ];
     shell = pkgs.zsh;
   };
 
