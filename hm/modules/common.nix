@@ -32,6 +32,7 @@ in {
     libreoffice-fresh
     gnome.file-roller
     evince
+    scrot
 
     meslo-lgs-nf
   ];
@@ -58,7 +59,7 @@ in {
       enable_audio_bell = "no";
       background_opacity = "0.8";
     };
-    theme = "Darkside";
+    theme = "Afterglow";
   };
 
   xdg.userDirs = {
