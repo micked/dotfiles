@@ -3,6 +3,7 @@
 
   home.packages = with pkgs; [
     zotero
+    logseq
   ];
 
   services.dropbox.enable = true;
