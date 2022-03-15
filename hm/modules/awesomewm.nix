@@ -43,7 +43,7 @@
       fade = false;
       #fadeDelta = 5;
     };
-    
+
     home.file = {
       "./.config/awesome/rc.lua".source = ./awesome/rc.lua;
       "./.config/awesome/themes/default/theme.lua".source = ./awesome/theme.lua;

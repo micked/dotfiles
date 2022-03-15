@@ -59,8 +59,14 @@ in {
     settings = {
       enable_audio_bell = "no";
       background_opacity = "0.8";
+      include = pkgs.fetchFromGitHub {
+        owner = "kdrag0n";
+        repo = "base16-kitty";
+        rev = "fe5862c";
+        sha256 = "+pdXnjuYl7E++QvKOrdSokBc32mkYf3e4Gmnn0xS2iQ=";
+      } + "/colors/base16-gruvbox-dark-pale.conf";
     };
-    theme = "Afterglow";
+    #theme = "Afterglow";
   };
 
   xdg.userDirs = {

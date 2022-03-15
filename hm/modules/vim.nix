@@ -8,7 +8,7 @@
       vim-nix
       {
         plugin = nvim-base16;
-        config = "colorscheme base16-gruvbox-dark-soft";
+        config = "colorscheme base16-gruvbox-dark-medium";
       }
     ];
 
