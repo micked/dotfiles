@@ -33,6 +33,7 @@ in {
     gnome.file-roller
     evince
     scrot
+    gnome.eog
 
     meslo-lgs-nf
   ];
