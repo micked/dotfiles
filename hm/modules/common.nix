@@ -34,6 +34,7 @@ in {
     evince
     scrot
     gnome.eog
+    gimp
 
     meslo-lgs-nf
   ];
