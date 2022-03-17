@@ -10,6 +10,7 @@
     userEmail = "sch@ntz.nu";
     extraConfig = {
       init.defaultBranch = "main";
+      pull.rebase = false;
     };
   };
 
