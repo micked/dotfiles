@@ -8,6 +8,9 @@
     enable = true;
     userName = "Michael Schantz Klausen";
     userEmail = "sch@ntz.nu";
+    extraConfig = {
+      init.defaultBranch = "main";
+    };
   };
 
 }

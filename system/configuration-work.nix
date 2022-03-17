@@ -43,7 +43,7 @@
 
   services.xserver = {
     enable = true;
-    
+
     layout = "dk";
     xkbOptions = "compose:sclk, caps:escape";
 
@@ -67,6 +67,8 @@
       }
     ];
   };
+
+  virtualisation.docker.enable = true;
 
   # Enable CUPS to print documents.
   # services.printing.enable = true;
