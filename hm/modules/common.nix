@@ -35,6 +35,7 @@ in {
     scrot
     gnome.eog
     gimp
+    super-slicer-latest
 
     meslo-lgs-nf
   ];
