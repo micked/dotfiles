@@ -2,6 +2,7 @@
 
 let 
   fx = pkgs.writeShellScriptBin "fx" "${pkgs.firefox}/bin/firefox $@";
+  chr = pkgs.writeShellScriptBin "chr" "${pkgs.chromium}/bin/chromium $@";
   calc = pkgs.writeShellScriptBin "calc" "${pkgs.gnome.gnome-calculator}/bin/gnome-calculator $@";
   c2_pass = pkgs.writeShellScriptBin "c2_pass" ''
     ${pkgs.pass}/bin/pass c2
@@ -12,6 +13,7 @@ in {
   home.packages = with pkgs; [
     # my stuff
     fx
+    chr
     calc
     c2_pass
 
