@@ -1,1 +1,1 @@
-home-manager switch --flake "./hm#nixos" -b backup
+home-manager switch --flake ".#nixos" -b backup

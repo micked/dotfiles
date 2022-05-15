@@ -1,1 +1,1 @@
-home-manager switch --flake "./hm#work"
+home-manager switch --flake ".#work"
