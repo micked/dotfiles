@@ -45,6 +45,7 @@
             ./modules/git.nix
             ./modules/vim.nix
             ./modules/zsh.nix
+            ./modules/syncthing.nix
             ./modules/awesomewm.nix
           ];
         };
