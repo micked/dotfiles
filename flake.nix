@@ -68,6 +68,7 @@
             ./modules/vim.nix
             ./modules/zsh.nix
             ./modules/awesomewm.nix
+            ./modules/vscode.nix
           ];
         };
       };
