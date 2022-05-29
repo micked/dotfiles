@@ -30,7 +30,7 @@
 
   services.xserver = {
     enable = true;
-    
+
     layout = "dk";
     xkbOptions = "compose:sclk, caps:escape";
 

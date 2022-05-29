@@ -10,7 +10,6 @@
       # arc-theme
       # dracula-theme
 
-      networkmanagerapplet
       # volumeicon
       # solaar
       # psensor
@@ -18,6 +17,8 @@
       # screenshot utility
       # scrot
     ];
+
+    services.network-manager-applet.enable = true;
 
     services.random-background = {
       enable = true;
