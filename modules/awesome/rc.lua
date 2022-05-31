@@ -239,23 +239,27 @@ end
 pomtimer = timer({ timeout = 20 * 60 })
 pomtimer:connect_signal("timeout", function()
     setpomclr(beautiful.pomyellow)
+    io.popen("blinkstick --set-color orange")
     pomtimer:stop()
 end)
 
 pomtimer2 = timer({ timeout = 25 * 60 })
 pomtimer2:connect_signal("timeout", function()
+    io.popen("blinkstick --set-color green")
     setpomclr(beautiful.pomgreen)
 pomtimer2:stop()
 end)
 
 pomtimer3 = timer({ timeout = 30 * 60 })
 pomtimer3:connect_signal("timeout", function()
+    io.popen("blinkstick --set-color black")
     setpomclr(beautiful.bg_normal)
     pomtimer3:stop()
 end)
 
 local startpom = function()
     setpomclr(beautiful.pomred)
+    io.popen("blinkstick --set-color red")
     pomtimer:again()
     pomtimer2:again()
     pomtimer3:again()
@@ -266,6 +270,7 @@ local stoppom = function()
     pomtimer2:stop()
     pomtimer3:stop()
     setpomclr(beautiful.bg_normal)
+    io.popen("blinkstick --set-color black")
 end
 
 -- {{{ Mouse bindings

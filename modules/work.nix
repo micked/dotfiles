@@ -9,6 +9,7 @@ in {
     zotero
     logseq
     zoom-us
+    python39Packages.BlinkStick
 
     clc
     jdk11 #For CLC
