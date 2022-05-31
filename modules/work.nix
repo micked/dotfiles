@@ -8,6 +8,7 @@ in {
   home.packages = with pkgs; [
     zotero
     logseq
+    zoom-us
 
     clc
     jdk11 #For CLC
