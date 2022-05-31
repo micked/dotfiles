@@ -37,7 +37,7 @@
 
   services.xserver = {
     enable = true;
-    
+
     layout = "dk";
     xkbVariant = "dvorak";
     xkbOptions = "compose:sclk caps:escape";
