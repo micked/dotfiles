@@ -42,6 +42,10 @@ in {
     meslo-lgs-nf
   ];
 
+  imports = [
+    ./inkscape.nix
+  ];
+
   fonts.fontconfig.enable = true;
 
   programs.alacritty = {
