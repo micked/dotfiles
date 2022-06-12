@@ -23,6 +23,8 @@ programs.zsh = {
     setopt HIST_IGNORE_ALL_DUPS
     setopt appendhistory
     setopt incappendhistory
+    setopt no_share_history
+    unsetopt share_history
 
     #zsh-history-substring-search
     bindkey "''${key[Up]}" history-substring-search-up

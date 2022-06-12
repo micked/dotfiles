@@ -37,13 +37,13 @@ in {
     scrot
     gnome.eog
     gimp
-    super-slicer-latest
 
     meslo-lgs-nf
   ];
 
   imports = [
     ./inkscape.nix
+    ./superslicer.nix
   ];
 
   fonts.fontconfig.enable = true;
