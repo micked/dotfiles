@@ -26,6 +26,7 @@
     wget
     git
     home-manager
+    autorandr
   ];
 
   programs.dconf.enable = true;

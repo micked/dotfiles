@@ -37,6 +37,7 @@ in {
     scrot
     gnome.eog
     gimp
+    openvpn
 
     meslo-lgs-nf
   ];
