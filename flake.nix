@@ -24,6 +24,11 @@
       modules = [ ./configuration-work.nix ];
     };
 
+    nixosConfigurations.msk-oblivion-2 = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [ ./configuration-work2.nix ];
+    };
+
     # --
 
     homeConfigurations = {

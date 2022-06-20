@@ -33,7 +33,7 @@
       activeOpacity = "1.00";
       blur = true;
       #experimentalBackends = true;
-      backend = "xrender";
+      backend = "glx";
       extraOptions = ''
         unredir-if-possible = false;
       '';
