@@ -10,7 +10,7 @@ in {
   ];
 
   imports = [
-    ./modules/syncthing.nix
+    ./syncthing.nix
   ];
 
   home.file = {
