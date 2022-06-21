@@ -45,6 +45,10 @@ in {
   imports = [
     ./inkscape.nix
     ./superslicer.nix
+    ./git.nix
+    ./vim.nix
+    ./zsh.nix
+    ./awesomewm.nix
   ];
 
   fonts.fontconfig.enable = true;

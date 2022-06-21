@@ -4,7 +4,7 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
-  outputs = {self, nixpkgs, ... }@inputs:
+  outputs = {self, nixpkgs, home-manager, ... }@inputs:
   {
 
     # --
@@ -26,7 +26,23 @@
 
     nixosConfigurations.msk-oblivion-2 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      modules = [ ./configuration-work2.nix ];
+      modules = [
+        ./configuration-work2.nix
+        home-manager.nixosModules.home-manager {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.msk = { config, pkgs, ... }:
+          {
+            home.homeDirectory = "/home/msk";
+            home.username = "msk";
+            home.stateVersion = "22.05";
+            imports = [
+              ./modules/common.nix
+              ./modules/work.nix
+            ];
+          };
+        }
+      ];
     };
 
     # --
@@ -47,11 +63,11 @@
           imports = [
             ./modules/common.nix
             ./modules/private.nix
-            ./modules/git.nix
-            ./modules/vim.nix
-            ./modules/zsh.nix
+            # ./modules/git.nix
+            # ./modules/vim.nix
+            # ./modules/zsh.nix
             ./modules/syncthing.nix
-            ./modules/awesomewm.nix
+            # ./modules/awesomewm.nix
           ];
         };
       };
@@ -70,11 +86,11 @@
           imports = [
             ./modules/common.nix
             ./modules/work.nix
-            ./modules/git.nix
-            ./modules/vim.nix
-            ./modules/zsh.nix
-            ./modules/awesomewm.nix
-            ./modules/vscode.nix
+            # ./modules/git.nix
+            # ./modules/vim.nix
+            # ./modules/zsh.nix
+            # ./modules/awesomewm.nix
+            # ./modules/vscode.nix
           ];
         };
       };
