@@ -12,6 +12,12 @@
       home.stateVersion = "22.05";
       imports = [ ./modules/common.nix ./modules/work.nix ];
     };
+    homeAtHome = { config, pkgs, ... }: {
+      home.homeDirectory = "/home/msk";
+      home.username = "msk";
+      home.stateVersion = "22.05";
+      imports = [ ./modules/common.nix ./modules/private.nix ];
+    };
   in {
 
     nixosConfigurations.principle = nixpkgs.lib.nixosSystem {
@@ -21,7 +27,14 @@
 
     nixosConfigurations.burger = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      modules = [ ./configuration-laptop.nix ];
+      modules = [
+        ./configuration-laptop.nix
+        home-manager.nixosModules.home-manager {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.msk = homeAtHome;
+        }
+      ];
     };
 
     nixosConfigurations.msk-oblivion = nixpkgs.lib.nixosSystem {
@@ -41,33 +54,5 @@
       ];
     };
 
-    # --
-
-    homeConfigurations = {
-
-      nixos = inputs.home-manager.lib.homeManagerConfiguration {
-        system = "x86_64-linux";
-        homeDirectory = "/home/msk";
-        username = "msk";
-        stateVersion = "21.11";
-        configuration = { config, lib, pkgs, ... }:
-        {
-          #nixpkgs.config = { allowUnfree = true; };
-          nixpkgs.config.allowUnfreePredicate = (_: true);
-          programs.home-manager.enable = true;
-
-          imports = [
-            ./modules/common.nix
-            ./modules/private.nix
-            # ./modules/git.nix
-            # ./modules/vim.nix
-            # ./modules/zsh.nix
-            ./modules/syncthing.nix
-            # ./modules/awesomewm.nix
-          ];
-        };
-      };
-
-    };
   };
 }

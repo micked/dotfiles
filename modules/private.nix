@@ -9,6 +9,10 @@ in {
     transmission-remote-gtk
   ];
 
+  imports = [
+    ./modules/syncthing.nix
+  ];
+
   home.file = {
     "transmission-cfg" = {
       source = ./configs/transmission-remote-gtk-config.json;
