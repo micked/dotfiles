@@ -10,6 +10,7 @@ in {
     logseq
     zoom-us
     python39Packages.BlinkStick
+    xournal
 
     clc
     jdk11 #For CLC
