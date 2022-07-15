@@ -29,15 +29,15 @@
     services.picom = {
       enable = true;
       vSync = true;
-      inactiveOpacity = "1.00";
-      activeOpacity = "1.00";
-      blur = true;
+      inactiveOpacity = 1.00;
+      activeOpacity = 1.00;
+      #blur = true;
       #experimentalBackends = true;
       backend = "glx";
-      extraOptions = ''
+      settings = {
         unredir-if-possible = false;
-      '';
-      opacityRule = [
+      };
+      opacityRules = [
         "100:class_g  = 'Firefox'"
         "90:class_g   = 'Alacritty'"
       ];
