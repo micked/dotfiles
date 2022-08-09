@@ -54,5 +54,15 @@
       ];
     };
 
+    homeConfigurations = let
+      system = "x86_64-linux";
+      pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      evxcompute = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [ ./hm-evxcompute.nix ];
+      };
+    };
+
   };
 }
