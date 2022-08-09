@@ -21,6 +21,8 @@
   boot.initrd.luks.devices."luks-230fca52-1799-4099-8f23-d472f971583c".device = "/dev/disk/by-uuid/230fca52-1799-4099-8f23-d472f971583c";
   boot.initrd.luks.devices."luks-230fca52-1799-4099-8f23-d472f971583c".keyFile = "/crypto_keyfile.bin";
 
+  boot.kernelParams = [ "acpi_backlight=native" ];
+
   networking.hostName = "msk-oblivion-2"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
