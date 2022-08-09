@@ -18,6 +18,7 @@ in {
 
   imports = [
     ./vscode.nix
+    ./syncthing.nix
   ];
 
   systemd.user.services.maestral = {
