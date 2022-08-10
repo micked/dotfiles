@@ -2,6 +2,12 @@
 {
 
 home.file.".config/zsh/p10k.zsh".source = ./zsh/p10k.zsh;
+home.file.".config/base16-shell".source = pkgs.fetchFromGitHub {
+  owner = "chriskempson";
+  repo = "base16-shell";
+  rev = "ae84047";
+  sha256 = "0qy+huAbPypEMkMumDtzcJdQQx5MVgsvgYu4Em/FGpQ=";
+};
 
 programs.zsh = {
   enable = true;
@@ -16,6 +22,8 @@ programs.zsh = {
     path = "${config.xdg.dataHome}/zsh/history";
   };
 
+  completionInit = "autoload -U compinit && compinit -u";
+
   initExtra = ''
     () { [[ -r $1 ]] && source $1 } "''${XDG_CACHE_HOME:-''$HOME/.cache}/p10k-instant-prompt-''$USERNAME.zsh"
 
@@ -29,6 +37,12 @@ programs.zsh = {
     #zsh-history-substring-search
     bindkey "''${key[Up]}" history-substring-search-up
     bindkey "''${key[Down]}" history-substring-search-down
+
+    # Base16 Shell
+    BASE16_SHELL="$HOME/.config/base16-shell/"
+    [ -n "$PS1" ] && \
+        [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+            eval "$("$BASE16_SHELL/profile_helper.sh")"
 
     source ~/.config/zsh/p10k.zsh
   '';

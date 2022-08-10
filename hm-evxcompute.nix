@@ -7,6 +7,7 @@
   imports = [
     ./modules/git.nix
     ./modules/vim.nix
+    ./modules/zsh.nix
   ];
 
   nixpkgs.config = { allowUnfree = true; };
