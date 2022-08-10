@@ -11,6 +11,16 @@ let
     };
   };
 
+  vim-snakemake = pkgs.vimUtils.buildVimPlugin {
+    name = "vim-snakemake";
+    src = pkgs.fetchFromGitHub {
+      owner = "snakemake";
+      repo = "snakemake";
+      rev = "v7.12.0";
+      sha256 = "jdqq+0Gz5EWJRzpQmYEJ62Cdf6fkOhW5qle915brfX8=";
+    } + "/misc/vim";
+  };
+
 in {
   programs.neovim = {
     enable = true;
@@ -19,6 +29,13 @@ in {
     plugins = with pkgs.vimPlugins; [
       vim-nix
       vim-buftabline
+      {
+        plugin = vim-snakemake;
+        config = ''
+          au BufNewFile,BufRead snakefile set filetype=snakemake
+          set nofoldenable
+        '';
+      }
       {
         plugin = vim-polyglot;
         config = "let g:vim_svelte_plugin_use_typescript = 1";
