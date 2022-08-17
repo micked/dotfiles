@@ -76,6 +76,9 @@
 
   virtualisation.docker.enable = true;
 
+  security.pam.services.lightdm.enableGnomeKeyring = true;
+  services.gnome.gnome-keyring.enable = true;
+
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
