@@ -38,7 +38,9 @@ in {
       }
       {
         plugin = vim-polyglot;
-        config = "let g:vim_svelte_plugin_use_typescript = 1";
+        config = ''
+          let g:vim_svelte_plugin_use_typescript = 1
+        '';
       }
       {
         plugin = nvim-base16;
@@ -48,7 +50,8 @@ in {
             source ~/.vimrc_background
           else
             colorscheme base16-gruvbox-dark-medium";
-          endif'';
+          endif
+        '';
       }
     ];
 
