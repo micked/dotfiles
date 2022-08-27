@@ -11,6 +11,7 @@ in {
 
   imports = [
     ./syncthing.nix
+    ./ayab.nix
   ];
 
   home.file = {
