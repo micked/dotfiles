@@ -49,6 +49,7 @@ let
     };
 
     buildInputs = [ ayab-python ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
 
     installPhase = ''
       mkdir -p $out
@@ -56,18 +57,18 @@ let
       rm $out/bin/ayab
       substituteInPlace $out/src/main/python/ayab/ayab.py \
         --replace "logging.basicConfig(filename='ayab_log.txt'," "logging.basicConfig(filename='/dev/null',"
+
+      makeShellWrapper ${ayab-python}/bin/python $out/bin/ayab \
+        --set QT_QPA_PLATFORM_PLUGIN_PATH "${pkgs.qt5.qtbase.bin}/lib/qt-${pkgs.qt5.qtbase.version}/plugins" \
+        --run "cd $out" \
+        --add-flags "-m fbs run"
     '';
   };
-  ayab-runner = pkgs.writeShellScriptBin "ayab" ''
-    cd ${ayab-desktop}
-    export QT_QPA_PLATFORM_PLUGIN_PATH="${pkgs.qt5.qtbase.bin}/lib/qt-${pkgs.qt5.qtbase.version}/plugins";
-    ${ayab-python}/bin/python -m fbs run
-  '';
 in
 {
 
   home.packages = [
-    ayab-runner
+    ayab-desktop
   ];
 
 }
