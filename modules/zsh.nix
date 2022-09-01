@@ -13,6 +13,7 @@ programs.zsh = {
   enable = true;
   shellAliases = {
      ls="ls -1 --color=auto";
+     columnt="column -tns'	'";
   };
 
   dotDir = ".config/zsh";
