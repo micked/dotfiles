@@ -72,6 +72,8 @@ in {
       nnoremap <A-4> :4b<CR>
       nnoremap <A-5> :5b<CR>
       nnoremap <A-6> :6b<CR>
+
+      au FileType python nnoremap <leader>y :0,$!${pkgs.black}/bin/black - -q<Cr>
     '';
 
   };
