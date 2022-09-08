@@ -82,16 +82,24 @@ awful.layout.layouts = {
 }
 -- }}}
 
--- {{{ Menu
--- Create a launcher widget and a main menu
-myawesomemenu = {
-   { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", function() awesome.quit() end },
-}
+-- Keyboard map indicator and changer
+kbdcfg = {}
+kbdcfg.cmd = "setxkbmap -option compose:sclk -option caps:escape"
+kbdcfg.layout  = { { "dk", "dvorak" , "Dvorak master race" }, { "dk", "" , "Qwerty peasant" } }
+kbdcfg.current = 2  -- us is our default layout
+kbdcfg.widget  = wibox.widget.textbox()
+-- kbdcfg.widget:set_text(" " .. kbdcfg.layout[kbdcfg.current][3] .. " ")
+kbdcfg.switch = function ()
+  kbdcfg.current = kbdcfg.current % #(kbdcfg.layout) + 1
+  local t = kbdcfg.layout[kbdcfg.current]
+  kbdcfg.widget:set_markup(" KEY: <span color='" .. hlcolor .. "'>" .. t[3] .. "</span> | ")
+  os.execute( kbdcfg.cmd .. " " .. t[1] .. " " .. t[2] )
+end
+kbdcfg.switch()
 
+if hostname == "msk-oblivion-2" or hostname == "burger" then
+  kbdcfg.switch()
+end
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
@@ -218,11 +226,10 @@ awful.screen.connect_for_each_screen(function(s)
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            -- mykeyboardlayout,
             wibox.widget.systray(),
-	    sepwidget,
-	    batterywidget,
-	    sepwidget,
+            sepwidget,
+            batterywidget,
+            kbdcfg.widget,
             mytextclock,
             s.mylayoutbox,
         },
@@ -366,7 +373,8 @@ globalkeys = gears.table.join(
               {description = "run prompt", group = "launcher"}),
     -- My Stuff
     awful.key({ modkey            }, "p", startpom),
-    awful.key({ modkey, "Shift"   }, "p", stoppom)
+    awful.key({ modkey, "Shift"   }, "p", stoppom),
+    awful.key({ modkey }, ".", function() kbdcfg.switch() end)
 )
 
 clientkeys = gears.table.join(
