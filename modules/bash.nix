@@ -7,7 +7,13 @@
     settings = {
       conda.symbol = "🐍 ";
       hostname.disabled = true;
-      # line_break.disabled = true;
+      line_break.disabled = true;
+      username.disabled = true;
+      custom.load = {
+        command = "cat /proc/loadavg | cut -f1 -d ' '";
+        when = true;
+        symbol = " ";
+      };
     };
   };
 
