@@ -4,6 +4,11 @@
   programs.starship = {
     enable = true;
     enableBashIntegration = true;
+    settings = {
+      conda.symbol = "🐍 ";
+      hostname.disabled = true;
+      # line_break.disabled = true;
+    };
   };
 
   programs.bash = {
