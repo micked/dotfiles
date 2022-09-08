@@ -33,6 +33,7 @@ in
     ./modules/git.nix
     ./modules/vim.nix
     ./modules/zsh.nix
+    ./modules/bash.nix
   ];
 
   programs.zsh.initExtra = ''
