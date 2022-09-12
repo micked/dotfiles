@@ -7,12 +7,16 @@
     settings = {
       conda.symbol = "🐍 ";
       hostname.disabled = true;
-      line_break.disabled = true;
+      # line_break.disabled = true;
       username.disabled = true;
       custom.load = {
         command = "cat /proc/loadavg | cut -f1 -d ' '";
         when = true;
         symbol = " ";
+      };
+      directory = {
+        truncation_length = 1;
+        fish_style_pwd_dir_length = 1;
       };
     };
   };
@@ -23,6 +27,7 @@
        ls="ls -1 --color=auto";
        columnt="column -tns'	'";
     };
+    historyControl = [ "ignoredups" ];
 
     initExtra = ''
       # bind '"\e[A": history-search-backward'
