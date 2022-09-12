@@ -23,7 +23,10 @@ programs.zsh = {
     path = "${config.xdg.dataHome}/zsh/history";
   };
 
-  completionInit = "autoload -U compinit && compinit -u";
+  completionInit = ''
+    autoload -U compinit && compinit -u
+    autoload -U +X bashcompinit && bashcompinit
+  '';
 
   initExtra = ''
     () { [[ -r $1 ]] && source $1 } "''${XDG_CACHE_HOME:-''$HOME/.cache}/p10k-instant-prompt-''$USERNAME.zsh"

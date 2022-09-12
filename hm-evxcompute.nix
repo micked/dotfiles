@@ -28,7 +28,7 @@ let
       # !! Contents within this block are managed by 'mamba init' !!
       export MAMBA_EXE="${pkgs.micromamba}/bin/micromamba";
       export MAMBA_ROOT_PREFIX="/work/msk/micromamba";
-      __mamba_setup="$('${pkgs.micromamba}/bin/micromamba' shell hook --shell zsh --prefix '/work/msk/micromamba' 2> /dev/null)"
+      __mamba_setup="$('${pkgs.micromamba}/bin/micromamba' shell hook --shell zsh --prefix '/work/msk/micromamba' 2> /dev/null | grep -v compinit )"
       if [ $? -eq 0 ]; then
           eval "$__mamba_setup"
       else
@@ -70,6 +70,7 @@ in
 
   programs.bash.initExtra = ''
     [[ -f ${micromamba-bash} ]] && source ${micromamba-bash}
+    [[ -f /etc/profile.d/modules.sh ]] && source /etc/profile.d/modules.sh
   '';
 
   nixpkgs.config = { allowUnfree = true; };
