@@ -28,6 +28,8 @@
     keyMap = "dk";
   };
 
+  nix.settings.secret-key-files = [ "/home/msk/.ssh/nix-key.secret" ];
+
   services.xserver = {
     enable = true;
 
