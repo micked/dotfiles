@@ -55,6 +55,8 @@
     ];
   };
 
+  services.autorandr.enable = true;
+
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
@@ -93,4 +95,3 @@
   system.stateVersion = "21.11"; # Did you read the comment?
 
 }
-

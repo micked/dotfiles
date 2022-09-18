@@ -20,11 +20,6 @@
     };
   in {
 
-    nixosConfigurations.principle = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [ ./configuration-desktop.nix ];
-    };
-
     nixosConfigurations.burger = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
@@ -37,9 +32,21 @@
       ];
     };
 
-    nixosConfigurations.msk-oblivion = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.zentry = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      modules = [ ./configuration-work.nix ];
+      modules = [
+        ./configuration-zentry.nix
+        home-manager.nixosModules.home-manager {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.msk = { config, pkgs, ... }: {
+            home.homeDirectory = "/home/msk";
+            home.username = "msk";
+            home.stateVersion = "22.05";
+            imports = [ ./modules/server.nix ];
+          };
+        }
+      ];
     };
 
     nixosConfigurations.msk-oblivion-2 = nixpkgs.lib.nixosSystem {

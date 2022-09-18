@@ -79,6 +79,8 @@
   security.pam.services.lightdm.enableGnomeKeyring = true;
   services.gnome.gnome-keyring.enable = true;
 
+  services.autorandr.enable = true;
+
   # Enable CUPS to print documents.
   # services.printing.enable = true;
 
