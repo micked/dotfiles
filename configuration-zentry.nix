@@ -49,8 +49,31 @@
   };
 
   services.sonarr = {
+    user = "msk";
     enable = true;
     openFirewall = true;
+  };
+
+  services.radarr = {
+    user = "msk";
+    enable = true;
+    openFirewall = true;
+  };
+
+  services.transmission = {
+    enable = true;
+    openFirewall = true;
+    openRPCPort = true;
+    settings = {
+      download-dir = "/mnt/data/Trnt";
+      rpc-username = "msk";
+      rpc-whitelist = "127.0.0.1,192.168.0.*";
+      rpc-password = "{a0e0ca2b86318e090395cee3913cda88579e922biunK.kTv";
+      rpc-bind-address = "0.0.0.0";
+      rpc-authentication-required = true;
+      incomplete-dir-enabled = false;
+      umask = 0;
+    };
   };
 
   # This value determines the NixOS release from which the default
