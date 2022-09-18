@@ -18,6 +18,7 @@
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
+    settings.trusted-public-keys = [ "burger:obD5BdMxSJs2sGBeAe5AJX1aF0BQCBSAgIjHKWkT3VY=" ];
   };
 
   nixpkgs.config.allowUnfree = true;
