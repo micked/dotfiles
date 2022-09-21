@@ -42,6 +42,7 @@ let
       # <<< mamba initialize <<<
     '';
   };
+  nix-load = "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh";
 in
 {
   home.username = "msk";
@@ -64,6 +65,7 @@ in
   ];
 
   programs.zsh.initExtra = ''
+    [[ -f ${nix-load} ]] && source ${nix-load}
     [[ -f ${micromamba-zsh} ]] && source ${micromamba-zsh}
     [[ -f /etc/profile.d/modules.sh ]] && source /etc/profile.d/modules.sh
   '';
