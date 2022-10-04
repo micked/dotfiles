@@ -27,11 +27,13 @@
     wget
     git
     home-manager
+    chrysalis
   ];
 
   programs.dconf.enable = true;
   services.gvfs.enable = true;
 
+  services.udev.packages = [ pkgs.chrysalis ];
   services.udev.extraRules = ''
     SUBSYSTEM=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="41e5", MODE:="0666"
   '';
