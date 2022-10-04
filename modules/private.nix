@@ -12,6 +12,7 @@ in {
   imports = [
     ./syncthing.nix
     ./ayab.nix
+    ./vscode.nix
   ];
 
   home.file = {
