@@ -38,6 +38,7 @@ in {
     gnome.eog
     gimp
     openvpn
+    ncdu
 
     meslo-lgs-nf
   ];

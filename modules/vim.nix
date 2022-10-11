@@ -1,8 +1,9 @@
 { config, pkgs, libs, ... }:
 let
 
-  vim-buftabline = pkgs.vimUtils.buildVimPlugin {
+  vim-buftabline = pkgs.vimUtils.buildVimPlugin rec {
     name = "vim-buftabline";
+    pname = name;
     src = pkgs.fetchFromGitHub {
       owner = "ap";
       repo = "vim-buftabline";
@@ -11,8 +12,9 @@ let
     };
   };
 
-  vim-snakemake = pkgs.vimUtils.buildVimPlugin {
+  vim-snakemake = pkgs.vimUtils.buildVimPlugin rec {
     name = "vim-snakemake";
+    pname = name;
     src = pkgs.fetchFromGitHub {
       owner = "snakemake";
       repo = "snakemake";
