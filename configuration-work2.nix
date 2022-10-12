@@ -47,7 +47,6 @@
     libinput.enable = true;
     videoDrivers = [ "modesetting" ];
     #videoDrivers = [ "intel" ];
-    useGlamor = true;
 
     desktopManager.session = [
       {
