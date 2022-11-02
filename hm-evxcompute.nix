@@ -68,6 +68,8 @@ in
     [[ -f ${nix-load} ]] && source ${nix-load}
     [[ -f ${micromamba-zsh} ]] && source ${micromamba-zsh}
     [[ -f /etc/profile.d/modules.sh ]] && source /etc/profile.d/modules.sh
+    path+=('/home/msk/.local/bin')
+    export PATH
   '';
 
   programs.bash.initExtra = ''
