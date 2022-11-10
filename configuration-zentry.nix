@@ -61,6 +61,7 @@
   };
 
   services.transmission = {
+    user = "msk";
     enable = true;
     openFirewall = true;
     openRPCPort = true;
