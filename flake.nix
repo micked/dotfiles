@@ -32,10 +32,10 @@
       ];
     };
 
-    nixosConfigurations.zentry = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.zentry3 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        ./configuration-zentry.nix
+        ./configuration-zentry3.nix
         home-manager.nixosModules.home-manager {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
