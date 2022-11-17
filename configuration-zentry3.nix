@@ -43,6 +43,12 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
+  services.jellyfin = {
+    enable = true;
+    openFirewall = true;
+    group = "users";
+  };
+
   services.plex = {
     enable = true;
     openFirewall = true;
