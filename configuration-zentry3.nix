@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   imports =
@@ -43,16 +43,14 @@
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  services.jellyfin = {
-    enable = true;
-    openFirewall = true;
-    group = "users";
-  };
-
   services.plex = {
     enable = true;
     openFirewall = true;
   };
+
+  systemd.extraConfig = ''
+    DefaultTimeoutStopSec=20s
+  '';
 
   services.sonarr = {
     user = "msk";
@@ -82,6 +80,29 @@
       umask = 0;
     };
   };
+
+  nixpkgs.config.packageOverrides = pkgs: {
+    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  };
+
+  hardware.opengl = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+      vaapiIntel
+      vaapiVdpau
+      libvdpau-va-gl
+      intel-compute-runtime # OpenCL filter support (hardware tonemapping and subtitle burn-in)
+    ];
+  };
+
+  services.jellyfin = {
+    enable = true;
+    openFirewall = true;
+    group = "users";
+  };
+
+  systemd.services.jellyfin.serviceConfig.PrivateDevices = lib.mkForce false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
