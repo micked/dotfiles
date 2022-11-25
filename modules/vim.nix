@@ -60,7 +60,7 @@ let
       sha256 = "sha256-4kpw89siUWIt1fzDplb04i2BtUR0UNk6MrTYgPdmfY0=";
     };
     #doCheck = false;
-    nativeBuildInputs = with pkgs.python3.pkgs; [ poetry ];
+    nativeBuildInputs = [ pkgs.poetry ];
     propagatedBuildInputs = with pkgs.python3.pkgs; [
       black
       python-importlib-metadata17
