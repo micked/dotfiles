@@ -1,25 +1,17 @@
 { config, pkgs, libs, ... }:
 
 let
-  trm = pkgs.writeShellScriptBin "trm" "transmission-remote-gtk $@";
+  trm = pkgs.writeShellScriptBin "trm" "${pkgs.transmission-remote-gtk}/bin/transmission-remote-gtk $@";
 
 in {
   home.packages = with pkgs; [
     trm
-    transmission-remote-gtk
   ];
 
   imports = [
     ./syncthing.nix
     ./ayab.nix
-    ./vscode.nix
+    #./vscode.nix
   ];
-
-  home.file = {
-    "transmission-cfg" = {
-      source = ./configs/transmission-remote-gtk-config.json;
-      target = ".config/transmission-remote-gtk/config.json";
-    };
-  };
 
 }
