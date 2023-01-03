@@ -23,18 +23,6 @@ let
     } + "/misc/vim";
   };
 
-  vim-snakefmt = pkgs.vimUtils.buildVimPlugin rec {
-    name = "vim-snakefmt";
-    pname = name;
-    src = pkgs.fetchFromGitHub {
-      owner = "snakemake";
-      repo = "snakefmt";
-      rev = "v0.7.0";
-      sha256 = "sha256-4kpw89siUWIt1fzDplb04i2BtUR0UNk6MrTYgPdmfY0=";
-    };
-    dontBuild = true;
-  };
-
   python-importlib-metadata17 = pkgs.python3.pkgs.buildPythonPackage rec {
     pname = "importlib-metadata";
     version = "1.7.0";
@@ -49,15 +37,15 @@ let
     doCheck = false;
   };
 
-  python-snakefmt = pkgs.python3.pkgs.buildPythonPackage rec {
+  python-snakefmt = pkgs.python3.pkgs.buildPythonApplication rec {
     pname = "snakefmt";
-    version = "0.7.0";
+    version = "0.8.0";
     format = "pyproject";
     src = pkgs.fetchFromGitHub {
       owner = "snakemake";
       repo = "snakefmt";
-      rev = "v0.7.0";
-      sha256 = "sha256-4kpw89siUWIt1fzDplb04i2BtUR0UNk6MrTYgPdmfY0=";
+      rev = "v${version}";
+      sha256 = "sha256-13rlwEV6PU1U+dhDF5H2jyw9M3y+8LfqHRmuh9twjJg=";
     };
     #doCheck = false;
     nativeBuildInputs = [ pkgs.poetry ];
@@ -75,7 +63,6 @@ in {
     plugins = with pkgs.vimPlugins; [
       vim-nix
       vim-buftabline
-      vim-snakefmt
       {
         plugin = vim-snakemake;
         config = ''
@@ -100,9 +87,27 @@ in {
           endif
         '';
       }
+      {
+        plugin = neoformat;
+        config = ''
+          let g:neoformat_enabled_python = ['black']
+          let g:neoformat_enabled_nix = ['alejandra']
+
+          let g:neoformat_snakemake_snakefmt = {
+            \ 'exe': '${python-snakefmt}/bin/snakefmt',
+            \ 'args': ['-'],
+            \ 'stdin': 1,
+            \ }
+          let g:neoformat_enabled_snakemake = ['snakefmt']
+        '';
+      }
     ];
 
-    extraPython3Packages = (ps: [ python-snakefmt ]);
+    extraPackages = with pkgs; [
+      rustfmt
+      black
+      alejandra
+    ];
 
     extraConfig = ''
       set list
@@ -122,8 +127,7 @@ in {
       nnoremap <A-5> :5b<CR>
       nnoremap <A-6> :6b<CR>
 
-      au FileType python nnoremap <leader>y :0,$!${pkgs.black}/bin/black - -q<Cr>
-      au FileType snakemake nnoremap <leader>y :Snakefmt<Cr>
+      nnoremap <leader>y :Neoformat<CR>
     '';
 
   };
