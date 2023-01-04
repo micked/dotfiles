@@ -28,7 +28,7 @@ let
       # !! Contents within this block are managed by 'mamba init' !!
       export MAMBA_EXE="${pkgs.micromamba}/bin/micromamba";
       export MAMBA_ROOT_PREFIX="/work/msk/micromamba";
-      __mamba_setup="$('${pkgs.micromamba}/bin/micromamba' shell hook --shell zsh --prefix '/work/msk/micromamba' 2> /dev/null | grep -v compinit )"
+      __mamba_setup="$('${pkgs.micromamba}/bin/micromamba' shell hook --shell zsh --prefix '/work/msk/micromamba' 2> /dev/null)"
       if [ $? -eq 0 ]; then
           eval "$__mamba_setup"
       else
