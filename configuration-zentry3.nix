@@ -38,7 +38,15 @@
   #   enableSSHSupport = true;
   # };
 
-  # List services that you want to enable:
+  services.syncthing = {
+    enable = true;
+    openDefaultPorts = true;
+    guiAddress = "0.0.0.0:8384";
+  };
+
+  networking.firewall = {
+    allowedTCPPorts = [ 8384 ];
+  };
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
