@@ -60,6 +60,7 @@ in
   imports = [
     ./modules/git.nix
     ./modules/vim.nix
+    ./modules/hx.nix
     ./modules/zsh.nix
     ./modules/bash.nix
   ];
