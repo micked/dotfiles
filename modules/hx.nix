@@ -7,7 +7,7 @@
   programs.helix = {
     enable = true;
     settings = {
-      #theme = "base16";
+      theme = "nord";
       editor = {
         rulers = [80 120];
         cursor-shape.insert = "bar";
