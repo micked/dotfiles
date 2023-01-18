@@ -53,6 +53,8 @@
               eval "$("$BASE16_SHELL/profile_helper.sh")"
 
       source ~/.config/zsh/p10k.zsh
+
+      export LESSOPEN="|${pkgs.lesspipe}/bin/lesspipe.sh %s"
     '';
 
     plugins = [
