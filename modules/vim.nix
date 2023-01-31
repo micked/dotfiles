@@ -48,7 +48,11 @@ let
       sha256 = "sha256-13rlwEV6PU1U+dhDF5H2jyw9M3y+8LfqHRmuh9twjJg=";
     };
     #doCheck = false;
-    nativeBuildInputs = [ pkgs.poetry ];
+    preBuild = ''
+        sed -i 's/requires = ["poetry>=0.12"]/requires = ["poetry-core"]/g' pyproject.toml
+        sed -i 's/build-backend = "poetry.masonry.api"/build-backend = "poetry.core.masonry.api"/g' pyproject.toml
+    '';
+    nativeBuildInputs = [ pkgs.python3.pkgs.poetry-core ];
     propagatedBuildInputs = with pkgs.python3.pkgs; [
       black
       python-importlib-metadata17
