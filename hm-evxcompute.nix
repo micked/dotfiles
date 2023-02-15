@@ -55,6 +55,7 @@ in
 
   home.packages = with pkgs; [
     micromamba
+    cookiecutter
   ];
 
   imports = [

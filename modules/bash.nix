@@ -35,7 +35,7 @@
       # bind '"\e[5~": previous-history'
       # bind '"\e[6~": next-history'
       # Instead, use ble.sh
-      source ${pkgs.blesh}/share/ble.sh
+      source ${pkgs.blesh}/share/blesh/ble.sh
 
       # Base16 Shell
       BASE16_SHELL="$HOME/.config/base16-shell/"
