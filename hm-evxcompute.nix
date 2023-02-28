@@ -56,6 +56,7 @@ in
   home.packages = with pkgs; [
     micromamba
     cookiecutter
+    zellij
   ];
 
   imports = [
