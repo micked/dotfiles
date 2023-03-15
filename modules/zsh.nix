@@ -20,7 +20,6 @@
       ls = "ls -1 --color=auto";
       columnt = "column -tns'	'";
       kssh = "kitty +kitten ssh";
-      cat = "${pkgs.bat}/bin/bat";
     };
 
     dotDir = ".config/zsh";
