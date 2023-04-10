@@ -39,13 +39,13 @@ let
 
   python-snakefmt = pkgs.python3.pkgs.buildPythonApplication rec {
     pname = "snakefmt";
-    version = "0.8.0";
+    version = "0.8.4";
     format = "pyproject";
     src = pkgs.fetchFromGitHub {
       owner = "snakemake";
       repo = "snakefmt";
       rev = "v${version}";
-      sha256 = "sha256-13rlwEV6PU1U+dhDF5H2jyw9M3y+8LfqHRmuh9twjJg=";
+      sha256 = "sha256-rQe2BgX9qNEZV4FfvGHzLHqeRI9Xq3Gm3XozekQjHwo=";
     };
     #doCheck = false;
     preBuild = ''
