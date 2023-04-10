@@ -110,6 +110,7 @@
     group = "users";
   };
 
+  boot.extraModprobeConfig = "options i915 enable_guc=2";
   systemd.services.jellyfin.serviceConfig.PrivateDevices = lib.mkForce false;
 
   # This value determines the NixOS release from which the default
