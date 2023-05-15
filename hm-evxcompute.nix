@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
-let
+{
+  config,
+  pkgs,
+  ...
+}: let
   micromamba-bash = pkgs.writeTextFile {
     name = "micromamba.bash";
     text = ''
@@ -43,8 +46,54 @@ let
     '';
   };
   nix-load = "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh";
-in
-{
+  jlab = let
+    python = pkgs.python311;
+    jupyterlab-vim = python.pkgs.buildPythonPackage rec {
+      pname = "jupyterlab-vim";
+      version = "0.16.0";
+      format = "pyproject";
+      src = python.pkgs.fetchPypi {
+        pname = "jupyterlab_vim";
+        inherit version;
+        hash = "sha256-W8o1KmywOzcwt8ZJ3n8N/UPndjCJ2NpWsE+rJyM8AGs=";
+      };
+      nativeBuildInputs = with python.pkgs; [
+        jupyter-packaging
+      ];
+    };
+    pythonEnv = python.withPackages (ps:
+      with ps; [
+        polars
+        tqdm
+        scipy
+        scikit-learn
+        matplotlib
+        ipykernel
+        jupyterlab
+        jupyterlab-vim
+      ]);
+  in
+    pkgs.stdenvNoCC.mkDerivation rec {
+      pname = "jlab";
+      version = "1.0";
+      dontUnpack = true;
+      buildInputs = with pkgs; [makeWrapper nodejs];
+      installPhase = ''
+        mkdir -p $out/bin/
+        makeWrapper ${pythonEnv}/bin/jupyter $out/bin/jlab \
+          --add-flags "lab" \
+          --append-flags "--app-dir /home/msk/.local/share/jupyter/lab/" \
+          --prefix PATH ":" "${pkgs.nodejs}/bin"
+        cat > $out/bin/jlab-copy << EOF
+          mkdir -p /home/msk/.local/share/jupyter/lab/
+          rm -rf /home/msk/.local/share/jupyter/lab/*
+          cp -r ${python.pkgs.jupyterlab}/share/jupyter/lab/* /home/msk/.local/share/jupyter/lab/
+          chmod u+w -R /home/msk/.local/share/jupyter/lab/
+        EOF
+        chmod +x $out/bin/jlab-copy
+      '';
+    };
+in {
   home.username = "msk";
   home.homeDirectory = "/home/msk";
 
@@ -57,6 +106,7 @@ in
     micromamba
     cookiecutter
     zellij
+    jlab
   ];
 
   imports = [
@@ -80,7 +130,7 @@ in
     [[ -f /etc/profile.d/modules.sh ]] && source /etc/profile.d/modules.sh
   '';
 
-  nixpkgs.config = { allowUnfree = true; };
+  nixpkgs.config = {allowUnfree = true;};
   home.stateVersion = "22.05";
   programs.home-manager.enable = true;
 }
