@@ -71,6 +71,7 @@
         ipykernel
         jupyterlab
         jupyterlab-vim
+        line_profiler
       ]);
   in
     pkgs.stdenvNoCC.mkDerivation rec {
