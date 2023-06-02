@@ -1,1 +1,1 @@
-home-manager switch --flake ".#evxcompute"
+home-manager switch --flake ".#evxcompute" -j 16

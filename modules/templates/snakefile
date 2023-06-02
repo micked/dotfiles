@@ -1,0 +1,36 @@
+"""
+Analysis pipeline for
+
+"""
+
+
+rule all:
+    input:
+        "results/OK",
+
+
+# --
+
+
+rule first_rule:
+    output:
+        txt="results/01_spam/eggs.txt",
+
+
+# --
+
+
+rule ok:
+    """Collects all output from above and writes the OK file for `rule all`."""
+    input:
+        rules.first_rule.output,
+    output:
+        temp(touch("results/OK")),
+
+
+# --
+
+
+localrules:
+    all,
+    ok,

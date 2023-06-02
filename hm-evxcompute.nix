@@ -118,6 +118,7 @@ in {
     ./modules/hx.nix
     ./modules/zsh.nix
     ./modules/bash.nix
+    ./modules/templates.nix
   ];
 
   programs.zsh.initExtra = ''
