@@ -63,6 +63,8 @@
     };
     pythonEnv = python.withPackages (ps:
       with ps; [
+        pandas
+        openpyxl
         polars
         tqdm
         scipy
