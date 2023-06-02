@@ -6,7 +6,7 @@
 }: let
   cptpl = pkgs.writeShellScriptBin "cptpl" ''
     DEST="''${2:-.}"
-    echo "cp ${./templates}/$1 $DEST"
+    cp "${./templates}/$1" "$DEST"
   '';
   lstpl = pkgs.writeShellScriptBin "lstpl" ''
     ls -1 ${./templates}
