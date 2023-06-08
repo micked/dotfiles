@@ -70,6 +70,7 @@
         scipy
         scikit-learn
         matplotlib
+        biopython
         ipykernel
         jupyterlab
         jupyterlab-vim
