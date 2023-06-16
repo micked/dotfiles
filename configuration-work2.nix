@@ -57,6 +57,11 @@
         '';
       }
     ];
+
+    displayManager.autoLogin = {
+      enable = true;
+      user = "msk";
+    };
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
