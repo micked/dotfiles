@@ -1,10 +1,10 @@
-{ config, pkgs, libs, ... }:
+{ config, pkgs, libs, pkgs2305, ... }:
 
 let
-  inkscape-svg2shenzhen = pkgs.stdenv.mkDerivation {
+  inkscape-svg2shenzhen = pkgs2305.stdenv.mkDerivation {
     version = "0.2.18.7";
     pname = "inkscape-svg2shenzhen";
-    src = pkgs.fetchFromGitHub {
+    src = pkgs2305.fetchFromGitHub {
       owner = "badgeek";
       repo = "svg2shenzhen";
       rev = "0.2.18.7";
@@ -12,7 +12,7 @@ let
     };
 
     nativeBuildInputs = [
-      pkgs.boost169
+      pkgs2305.boost169
     ];
 
     installPhase = ''
