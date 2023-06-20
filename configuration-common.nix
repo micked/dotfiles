@@ -15,6 +15,8 @@
     shell = pkgs.zsh;
   };
 
+  #boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   nix = {
     #package = pkgs.nixFlakes;
     extraOptions = ''
