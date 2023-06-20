@@ -63,14 +63,18 @@
     };
     pythonEnv = python.withPackages (ps:
       with ps; [
+        pandas
+        openpyxl
         polars
         tqdm
         scipy
         scikit-learn
         matplotlib
+        biopython
         ipykernel
         jupyterlab
         jupyterlab-vim
+        line_profiler
       ]);
   in
     pkgs.stdenvNoCC.mkDerivation rec {
@@ -115,6 +119,7 @@ in {
     ./modules/hx.nix
     ./modules/zsh.nix
     ./modules/bash.nix
+    ./modules/templates.nix
   ];
 
   programs.zsh.initExtra = ''

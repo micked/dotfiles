@@ -73,7 +73,7 @@ in {
     };
     settings = {
       enable_audio_bell = "no";
-      background_opacity = "0.8";
+      background_opacity = "0.9";
       include = pkgs.fetchFromGitHub {
         owner = "kdrag0n";
         repo = "base16-kitty";
