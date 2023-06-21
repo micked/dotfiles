@@ -4,6 +4,10 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs2305.url = "nixpkgs/nixos-23.05";
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = {
     self,
@@ -75,6 +79,7 @@
       modules = [
         ./configuration-work2.nix
         home-manager.nixosModules.home-manager
+        inputs.agenix.nixosModules.default
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
@@ -82,6 +87,8 @@
           home-manager.extraSpecialArgs = {
             pkgs2305 = import inputs.nixpkgs2305 {system = "x86_64-linux";};
           };
+          environment.systemPackages = [inputs.agenix.packages.x86_64-linux.default];
+          age.secrets.oblivion_nixkey.file = ./secrets/oblivion_nixkey.age;
         }
       ];
     };
