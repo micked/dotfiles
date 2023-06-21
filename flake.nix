@@ -41,6 +41,9 @@
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.users.msk = homeAtHome;
+          home-manager.extraSpecialArgs = {
+            pkgs2305 = import inputs.nixpkgs2305 {system = "x86_64-linux";};
+          };
         }
       ];
     };
