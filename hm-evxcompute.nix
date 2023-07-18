@@ -111,6 +111,7 @@ in {
     cookiecutter
     zellij
     jlab
+    jq
   ];
 
   imports = [

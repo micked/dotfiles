@@ -39,6 +39,7 @@ in {
     gimp
     openvpn
     ncdu
+    jq
 
     meslo-lgs-nf
   ];
