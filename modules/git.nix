@@ -14,6 +14,11 @@
       push.autoSetupRemote = true;
     };
     lfs.enable = true;
+    ignores = [
+      ".direnv/"
+      ".ipynb_checkpoints/"
+      "*.swp"
+    ];
   };
 
 }
