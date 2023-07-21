@@ -63,6 +63,7 @@ in {
   programs.neovim = {
     enable = true;
     vimAlias = true;
+    defaultEditor = true;
 
     plugins = with pkgs.vimPlugins; [
       vim-nix
