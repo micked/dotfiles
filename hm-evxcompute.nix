@@ -115,6 +115,7 @@ in {
   ];
 
   imports = [
+    ./modules/git.nix
     ./modules/vim.nix
     ./modules/hx.nix
     ./modules/zsh.nix
@@ -122,17 +123,7 @@ in {
     ./modules/templates.nix
   ];
 
-  programs.git = {
-    enable = true;
-    userName = "Michael Schantz Klausen";
-    userEmail = "msk@evaxion-biotech.com";
-    extraConfig = {
-      init.defaultBranch = "main";
-      pull.rebase = false;
-      push.autoSetupRemote = true;
-    };
-    lfs.enable = true;
-  };
+  programs.git.userEmail = pkgs.lib.mkForce "msk@evaxion-biotech.com";
 
   programs.zsh.initExtra = ''
     [[ -f ${nix-load} ]] && source ${nix-load}
