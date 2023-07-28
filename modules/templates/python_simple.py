@@ -8,12 +8,13 @@ Author: msk
 
 import argparse
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description=__doc__,
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument('i_X', metavar='i:inputX', help='')
-    parser.add_argument('o_Y', metavar='o:outputY', help='')
+def main(args):
+    pass
 
-    args = parser.parse_args()
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    parser.add_argument("i_X", metavar="i:inputX", help="")
+    parser.add_argument("o_Y", metavar="o:outputY", help="")
+    main(parser.parse_args())
