@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+#! /usr/bin/env nix-shell
+#! nix-shell -i python -p "python311.withPackages(ps: with ps; [])"
+#! nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/nixos-23.05.tar.gz
 """
 The author (msk) was too lazy to write what the program does.
 
