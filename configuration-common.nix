@@ -36,7 +36,7 @@
   nixpkgs.config = {
     allowUnfree = true;
     permittedInsecurePackages = [
-      "openssl-1.1.1u" #sublime4
+      "openssl-1.1.1v" #sublime4
     ];
   };
 

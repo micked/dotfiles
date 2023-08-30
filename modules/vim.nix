@@ -44,14 +44,15 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "snakemake";
       repo = "snakefmt";
-      rev = "v${version}";
-      sha256 = "sha256-rQe2BgX9qNEZV4FfvGHzLHqeRI9Xq3Gm3XozekQjHwo=";
+      #rev = "v${version}";
+      rev = "618df85";
+      hash = "sha256-WrJfE9mMGH7NWPl3W9z2dq2ALraay/PFM78GpszVzJk=";
     };
     #doCheck = false;
-    preBuild = ''
-        sed -i 's/requires = ["poetry>=0.12"]/requires = ["poetry-core"]/g' pyproject.toml
-        sed -i 's/build-backend = "poetry.masonry.api"/build-backend = "poetry.core.masonry.api"/g' pyproject.toml
-    '';
+    #preBuild = ''
+    #    sed -i 's/requires = ["poetry>=0.12"]/requires = ["poetry-core"]/g' pyproject.toml
+    #    sed -i 's/build-backend = "poetry.masonry.api"/build-backend = "poetry.core.masonry.api"/g' pyproject.toml
+    #'';
     nativeBuildInputs = [ pkgs.python3.pkgs.poetry-core ];
     propagatedBuildInputs = with pkgs.python3.pkgs; [
       black
