@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: let
   micromamba-bash = pkgs.writeTextFile {
@@ -50,21 +51,26 @@
     python = pkgs.python311;
     jupyterlab-vim = python.pkgs.buildPythonPackage rec {
       pname = "jupyterlab-vim";
-      version = "0.16.0";
+      version = "4.0.2";
       format = "pyproject";
       src = python.pkgs.fetchPypi {
         pname = "jupyterlab_vim";
         inherit version;
-        hash = "sha256-W8o1KmywOzcwt8ZJ3n8N/UPndjCJ2NpWsE+rJyM8AGs=";
+        hash = "sha256-ubNx0av/MT7cD58AxGM8wzzYH1pgZFNYw2Vksv9fgbE=";
       };
       nativeBuildInputs = with python.pkgs; [
         jupyter-packaging
+        hatchling
+        hatch-nodejs-version
+        hatch-jupyter-builder
+        jupyterlab
       ];
     };
     pythonEnv = python.withPackages (ps:
       with ps; [
         pandas
         openpyxl
+        xlsxwriter
         polars
         tqdm
         scipy
@@ -89,10 +95,12 @@
           --append-flags "--app-dir /home/msk/.local/share/jupyter/lab/" \
           --prefix PATH ":" "${pkgs.nodejs}/bin"
         cat > $out/bin/jlab-copy << EOF
-          mkdir -p /home/msk/.local/share/jupyter/lab/
-          rm -rf /home/msk/.local/share/jupyter/lab/*
-          cp -r ${python.pkgs.jupyterlab}/share/jupyter/lab/* /home/msk/.local/share/jupyter/lab/
-          chmod u+w -R /home/msk/.local/share/jupyter/lab/
+        #!${pkgs.bash}/bin/bash
+        set -euo pipefail
+        mkdir -p /home/msk/.local/share/jupyter/lab/
+        rm -rf /home/msk/.local/share/jupyter/lab/*
+        cp -r ${python.pkgs.jupyterlab}/share/jupyter/lab/* /home/msk/.local/share/jupyter/lab/
+        chmod u+w -R /home/msk/.local/share/jupyter/lab/
         EOF
         chmod +x $out/bin/jlab-copy
       '';
@@ -113,6 +121,13 @@ in {
     jlab
     jq
   ];
+
+  home.activation = {
+    jlab-activate = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      $DRY_RUN_CMD echo 'running `jlab-copy`'
+      $DRY_RUN_CMD ${jlab}/bin/jlab-copy
+    '';
+  };
 
   imports = [
     ./modules/git.nix
