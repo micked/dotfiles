@@ -23,6 +23,9 @@
 
   boot.kernelParams = [ "acpi_backlight=native" ];
 
+  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  nix.settings.secret-key-files = [config.age.secrets.oblivion_nixkey.path];
+
   networking.hostName = "msk-oblivion-2"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 

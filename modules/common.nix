@@ -28,7 +28,6 @@ in {
     pavucontrol
     htop
     inkscape
-    teams
     gnome.gnome-calculator
     pass
     libreoffice-fresh

@@ -11,6 +11,7 @@ in {
     zoom-us
     python39Packages.BlinkStick
     xournal
+    teams
 
     clc
     jdk11 #For CLC
