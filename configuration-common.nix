@@ -24,6 +24,7 @@
       experimental-features = nix-command flakes
     '';
     settings = {
+      auto-optimise-store = true;
       trusted-public-keys = [
         "burger:obD5BdMxSJs2sGBeAe5AJX1aF0BQCBSAgIjHKWkT3VY="
         "msk-oblivion:kmf+iO7oFRQ6blNXZrNdMUBn7jxi5cy1lFzLNLRNEEk="
