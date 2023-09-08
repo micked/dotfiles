@@ -48,7 +48,12 @@
   };
   nix-load = "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh";
   jlab = let
-    python = pkgs.python311;
+    python = pkgs.python311.override {
+      packageOverrides = self: super: {
+        numba = super.numba.overridePythonAttrs (prev: {disabled = false;});
+        pynndescent = super.pynndescent.overridePythonAttrs (prev: {doCheck = false;});
+      };
+    };
     jupyterlab-vim = python.pkgs.buildPythonPackage rec {
       pname = "jupyterlab-vim";
       version = "4.0.2";
@@ -75,6 +80,10 @@
         tqdm
         scipy
         scikit-learn
+        ((umap-learn.override {tensorflow = null;}).overridePythonAttrs (prev: {
+          nativeCheckInputs = [];
+          doCheck = false;
+        }))
         matplotlib
         biopython
         ipykernel
