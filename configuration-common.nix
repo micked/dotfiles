@@ -17,7 +17,6 @@
 
   #boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   #services.openssh.enable = true;
-  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
 
   nix = {
     #package = pkgs.nixFlakes;
@@ -25,11 +24,11 @@
       experimental-features = nix-command flakes
     '';
     settings = {
+      auto-optimise-store = true;
       trusted-public-keys = [
         "burger:obD5BdMxSJs2sGBeAe5AJX1aF0BQCBSAgIjHKWkT3VY="
         "msk-oblivion:kmf+iO7oFRQ6blNXZrNdMUBn7jxi5cy1lFzLNLRNEEk="
       ];
-      secret-key-files = [config.age.secrets.oblivion_nixkey.path];
     };
   };
 
