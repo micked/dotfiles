@@ -1,14 +1,32 @@
-{ config, pkgs, libs, ... }:
-
-let 
+{
+  config,
+  pkgs,
+  libs,
+  ...
+}: let
   fx = pkgs.writeShellScriptBin "fx" "${pkgs.firefox}/bin/firefox $@";
   chr = pkgs.writeShellScriptBin "chr" "${pkgs.chromium}/bin/chromium $@";
   calc = pkgs.writeShellScriptBin "calc" "${pkgs.gnome.gnome-calculator}/bin/gnome-calculator $@";
   c2_pass = pkgs.writeShellScriptBin "c2_pass" ''
     ${pkgs.pass}/bin/pass c2
-    ${pkgs.oathToolkit}/bin/oathtool -v --totp=sha256 --digits=8 $(pass c2_secret) | tail -n1
+    ${pkgs.oathToolkit}/bin/oathtool -v --totp=sha256 --digits=8 $(${pkgs.pass}/bin/pass c2_secret) | tail -n1
   '';
-
+  sophos_pass = pkgs.writeShellScriptBin "sophos_pass" ''
+    PASS=$(${pkgs.pass}/bin/pass sophos)
+    TOKEN=$(${pkgs.oathToolkit}/bin/oathtool --totp=sha1 --digits=6 $(${pkgs.pass}/bin/pass sophos_secret))
+    echo $PASS$TOKEN
+  '';
+  sophos_login = pkgs.writeShellScriptBin "sophos_login" ''
+    curl 'https://remote.evaxion-biotech.com:8090/login.xml' \
+      -X POST \
+      -H 'Content-Type: application/x-www-form-urlencoded' \
+      -H 'Origin: https://remote.evaxion-biotech.com:8090' \
+      -H 'Referer: https://remote.evaxion-biotech.com:8090/' \
+      -H 'Sec-Fetch-Dest: empty' \
+      -H 'Sec-Fetch-Mode: cors' \
+      -H 'Sec-Fetch-Site: same-origin' \
+      --data-raw "mode=191&username=msk&password=$(${sophos_pass}/bin/sophos_pass)&a=1695366061783&producttype=0"
+  '';
 in {
   home.packages = with pkgs; [
     # my stuff
@@ -16,6 +34,8 @@ in {
     chr
     calc
     c2_pass
+    sophos_pass
+    sophos_login
 
     # bluetooth
     blueberry
@@ -74,12 +94,14 @@ in {
     settings = {
       enable_audio_bell = "no";
       background_opacity = "0.9";
-      include = pkgs.fetchFromGitHub {
-        owner = "kdrag0n";
-        repo = "base16-kitty";
-        rev = "fe5862c";
-        sha256 = "+pdXnjuYl7E++QvKOrdSokBc32mkYf3e4Gmnn0xS2iQ=";
-      } + "/colors/base16-gruvbox-dark-pale.conf";
+      include =
+        pkgs.fetchFromGitHub {
+          owner = "kdrag0n";
+          repo = "base16-kitty";
+          rev = "fe5862c";
+          sha256 = "+pdXnjuYl7E++QvKOrdSokBc32mkYf3e4Gmnn0xS2iQ=";
+        }
+        + "/colors/base16-gruvbox-dark-pale.conf";
     };
     #theme = "Afterglow";
   };
