@@ -1,11 +1,13 @@
-{ config, pkgs, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration-work2.nix
-      ./configuration-common.nix
-    ];
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration-work2.nix
+    ./configuration-common.nix
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -21,9 +23,9 @@
   boot.initrd.luks.devices."luks-230fca52-1799-4099-8f23-d472f971583c".device = "/dev/disk/by-uuid/230fca52-1799-4099-8f23-d472f971583c";
   boot.initrd.luks.devices."luks-230fca52-1799-4099-8f23-d472f971583c".keyFile = "/crypto_keyfile.bin";
 
-  boot.kernelParams = [ "acpi_backlight=native" ];
+  boot.kernelParams = ["acpi_backlight=native"];
 
-  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  age.identityPaths = ["/etc/ssh/ssh_host_ed25519_key"];
   nix.settings.secret-key-files = [config.age.secrets.oblivion_nixkey.path];
 
   networking.hostName = "msk-oblivion-2"; # Define your hostname.
@@ -48,7 +50,7 @@
     xkbOptions = "compose:sclk, caps:escape";
 
     libinput.enable = true;
-    videoDrivers = [ "modesetting" ];
+    videoDrivers = ["modesetting"];
     #videoDrivers = [ "intel" ];
 
     desktopManager.session = [
@@ -68,7 +70,7 @@
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
-    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+    vaapiIntel = pkgs.vaapiIntel.override {enableHybridCodec = true;};
   };
 
   hardware.opengl = {
@@ -81,7 +83,11 @@
     ];
   };
 
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    extraPackages = with pkgs; [docker-compose];
+    liveRestore = false;
+  };
 
   security.pam.services.lightdm.enableGnomeKeyring = true;
   services.gnome.gnome-keyring.enable = true;
@@ -91,7 +97,7 @@
   # Enable CUPS to print documents.
   # services.printing.enable = true;
   services.printing.enable = true;
-  services.printing.drivers = [ pkgs.hplipWithPlugin ];
+  services.printing.drivers = [pkgs.hplipWithPlugin];
   services.avahi.enable = true;
   services.avahi.openFirewall = true;
   services.ipp-usb.enable = true;
@@ -110,6 +116,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.05"; # Did you read the comment?
-
 }
-
