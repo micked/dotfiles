@@ -106,17 +106,29 @@ in {
     #theme = "Afterglow";
   };
 
-  xdg.userDirs = {
-    enable = true;
-    desktop = "$HOME";
-    documents = "$HOME/keep";
-    download = "$HOME/downloads";
-    music = "$HOME";
-    pictures = "$HOME/pictures";
-    publicShare = "$HOME/.local/public";
-    templates = "$HOME/templates";
-    videos = "$HOME";
-    createDirectories = true;
+  xdg = {
+    userDirs = {
+      enable = true;
+      desktop = "$HOME";
+      documents = "$HOME/keep";
+      download = "$HOME/downloads";
+      music = "$HOME";
+      pictures = "$HOME/pictures";
+      publicShare = "$HOME/.local/public";
+      templates = "$HOME/templates";
+      videos = "$HOME";
+      createDirectories = true;
+    };
+    mimeApps = {
+      enable = true;
+      defaultApplications = {
+        "application/pdf" = ["org.gnome.Evince.desktop"];
+        "image/png" = ["org.gnome.eog.desktop"];
+        "image/jpeg" = ["org.gnome.eog.desktop"];
+        "image/gif" = ["org.gnome.eog.desktop"];
+        "text/plain" = ["sublime_text.desktop"];
+      };
+    };
   };
 
   services.gpg-agent = {
