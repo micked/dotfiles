@@ -1,7 +1,7 @@
 {
   config,
   pkgs,
-  libs,
+  lib,
   ...
 }: let
   fx = pkgs.writeShellScriptBin "fx" "${pkgs.firefox}/bin/firefox $@";
@@ -129,6 +129,13 @@ in {
         "text/plain" = ["sublime_text.desktop"];
       };
     };
+  };
+
+  # This is illegal according to the manual
+  home.activation = {
+    purgeMimeAppsList = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+      $DRY_RUN_CMD rm -rf ~/.config/mimeapps.list
+    '';
   };
 
   services.gpg-agent = {
