@@ -59,6 +59,8 @@ in {
     openvpn
     ncdu
     jq
+    tomb
+    pinentry-curses
 
     meslo-lgs-nf
   ];
