@@ -9,6 +9,12 @@
     ./configuration-common.nix
   ];
 
+  nixpkgs.config.permittedInsecurePackages = [
+    "zotero-6.0.27"
+    "electron-24.8.6"
+    "openssl-1.1.1w"
+  ];
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

@@ -85,7 +85,15 @@
           home-manager.useUserPackages = true;
           home-manager.users.msk = homeAtWork;
           home-manager.extraSpecialArgs = {
-            pkgs2305 = import inputs.nixpkgs2305 {system = "x86_64-linux";};
+            pkgs2305 = import inputs.nixpkgs2305 {
+              system = "x86_64-linux";
+              config = {
+                allowUnfree = true;
+                permittedInsecurePackages = [
+                  "teams-1.5.00.23861"
+                ];
+              };
+            };
           };
           environment.systemPackages = [inputs.agenix.packages.x86_64-linux.default];
           age.secrets.oblivion_nixkey.file = ./secrets/oblivion_nixkey.age;

@@ -1,17 +1,17 @@
-{ config, pkgs, libs, ... }:
-
-let
+{
+  pkgs,
+  pkgs2305,
+  ...
+}: let
   clc = pkgs.writeShellScriptBin "clc" "/home/msk/keep/clc21/clcmainwb21";
-
 in {
-
   home.packages = with pkgs; [
     zotero
     logseq
     zoom-us
     python39Packages.BlinkStick
     xournal
-    teams
+    pkgs2305.teams
 
     clc
     jdk11 #For CLC
@@ -21,5 +21,4 @@ in {
     ./vscode.nix
     ./syncthing.nix
   ];
-
 }
