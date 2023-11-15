@@ -80,10 +80,10 @@
         tqdm
         scipy
         scikit-learn
-        ((umap-learn.override {tensorflow = null;}).overridePythonAttrs (prev: {
-          nativeCheckInputs = [];
-          doCheck = false;
-        }))
+        #((umap-learn.override {tensorflow = null;}).overridePythonAttrs (prev: {
+        #  nativeCheckInputs = [];
+        #  doCheck = false;
+        #}))
         matplotlib
         biopython
         ipykernel
