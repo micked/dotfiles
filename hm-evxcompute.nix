@@ -150,6 +150,7 @@ in {
   programs.git.userEmail = pkgs.lib.mkForce "msk@evaxion-biotech.com";
 
   programs.zsh.initExtra = ''
+    source ${./modules/slurm-output.sh}
     [[ -f ${nix-load} ]] && source ${nix-load}
     [[ -f ${micromamba-zsh} ]] && source ${micromamba-zsh}
     [[ -f /etc/profile.d/modules.sh ]] && source /etc/profile.d/modules.sh
