@@ -56,12 +56,12 @@
     };
     jupyterlab-vim = python.pkgs.buildPythonPackage rec {
       pname = "jupyterlab-vim";
-      version = "4.0.2";
+      version = "4.1.1";
       format = "pyproject";
       src = python.pkgs.fetchPypi {
         pname = "jupyterlab_vim";
         inherit version;
-        hash = "sha256-ubNx0av/MT7cD58AxGM8wzzYH1pgZFNYw2Vksv9fgbE=";
+        hash = "sha256-qbFC9EZg1WoG+2pMxyXPcSgNRXeb4k/8xp7aku8Goy4=";
       };
       nativeBuildInputs = with python.pkgs; [
         jupyter-packaging
@@ -80,6 +80,7 @@
         tqdm
         scipy
         scikit-learn
+        natsort
         #((umap-learn.override {tensorflow = null;}).overridePythonAttrs (prev: {
         #  nativeCheckInputs = [];
         #  doCheck = false;
@@ -112,6 +113,7 @@
         chmod u+w -R /home/msk/.local/share/jupyter/lab/
         EOF
         chmod +x $out/bin/jlab-copy
+        ln -s ${pythonEnv}/bin/python $out/bin/globalpy
       '';
     };
 in {
