@@ -29,6 +29,8 @@
     '';
   };
 in {
+  fonts.fontconfig.enable = true;
+
   home.packages = [
     poppins
   ];

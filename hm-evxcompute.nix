@@ -147,6 +147,7 @@ in {
     ./modules/zsh.nix
     ./modules/bash.nix
     ./modules/templates.nix
+    ./modules/fonts
   ];
 
   programs.git.userEmail = pkgs.lib.mkForce "msk@evaxion-biotech.com";
