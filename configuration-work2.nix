@@ -52,8 +52,10 @@
   services.xserver = {
     enable = true;
 
-    layout = "dk";
-    xkbOptions = "compose:sclk, caps:escape";
+    xkb = {
+      layout = "dk";
+      options = "compose:sclk, caps:escape";
+    };
 
     libinput.enable = true;
     videoDrivers = ["modesetting"];

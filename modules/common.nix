@@ -73,6 +73,7 @@ in {
     ./hx.nix
     ./zsh.nix
     ./awesomewm.nix
+    ./fonts
   ];
 
   fonts.fontconfig.enable = true;
