@@ -61,6 +61,7 @@ in {
     jq
     tomb
     pinentry-curses
+    gnupg
 
     meslo-lgs-nf
   ];
