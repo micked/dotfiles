@@ -81,6 +81,12 @@ in {
           let g:vim_svelte_plugin_use_typescript = 1
         '';
       }
+      #{
+      #  plugin = oxocarbon-nvim;
+      #  config = ''
+      #    colorscheme oxocarbon
+      #  '';
+      #}
       {
         plugin = tokyonight-nvim;
         config = ''
