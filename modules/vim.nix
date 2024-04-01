@@ -82,29 +82,33 @@ in {
         '';
       }
       {
-        plugin = base16-nvim;
+        plugin = tokyonight-nvim;
         config = ''
-          if filereadable(expand("~/.vimrc_background"))
-            let base16colorspace=256
-            source ~/.vimrc_background
-          else
-            colorscheme base16-gruvbox-dark-medium";
-          endif
+          colorscheme tokyonight-storm
         '';
       }
+      #{
+      #  plugin = base16-nvim;
+      #  config = ''
+      #    if filereadable(expand("~/.vimrc_background"))
+      #      let base16colorspace=256
+      #      source ~/.vimrc_background
+      #    else
+      #      colorscheme base16-gruvbox-dark-medium";
+      #    endif
+      #  '';
+      #}
       {
         plugin = neoformat;
         config = ''
           let g:neoformat_enabled_python = ['black']
           let g:neoformat_enabled_nix = ['alejandra']
-
           let g:neoformat_snakemake_snakefmt = {
             \ 'exe': '${python-snakefmt}/bin/snakefmt',
             \ 'args': ['-'],
             \ 'stdin': 1,
             \ }
           let g:neoformat_enabled_snakemake = ['snakefmt']
-
           let g:neoformat_htmldjango_djlintjinja = {
             \ 'exe': '${pkgs.djlint}/bin/djlint',
             \ 'args': ['-', '--reformat', '--indent=2', '--profile=jinja'],
