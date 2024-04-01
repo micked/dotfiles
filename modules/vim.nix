@@ -1,6 +1,8 @@
-{ config, pkgs, libs, ... }:
-let
-
+{
+  config,
+  pkgs,
+  ...
+}: let
   vim-buftabline = pkgs.vimUtils.buildVimPlugin rec {
     name = "vim-buftabline";
     pname = name;
@@ -15,12 +17,14 @@ let
   vim-snakemake = pkgs.vimUtils.buildVimPlugin rec {
     name = "vim-snakemake";
     pname = name;
-    src = pkgs.fetchFromGitHub {
-      owner = "snakemake";
-      repo = "snakemake";
-      rev = "v7.12.0";
-      sha256 = "jdqq+0Gz5EWJRzpQmYEJ62Cdf6fkOhW5qle915brfX8=";
-    } + "/misc/vim";
+    src =
+      pkgs.fetchFromGitHub {
+        owner = "snakemake";
+        repo = "snakemake";
+        rev = "v7.12.0";
+        sha256 = "jdqq+0Gz5EWJRzpQmYEJ62Cdf6fkOhW5qle915brfX8=";
+      }
+      + "/misc/vim";
   };
 
   python-importlib-metadata17 = pkgs.python3.pkgs.buildPythonPackage rec {
@@ -32,34 +36,29 @@ let
       inherit version;
       hash = "sha256-kLtljNu/bRc1tjQc5wj8cCSj4U6Z/9xXg+3qn5sHf4M=";
     };
-    nativeBuildInputs = with pkgs.python3.pkgs; [ setuptools setuptools-scm ];
-    propagatedBuildInputs = with pkgs.python3.pkgs; [ toml zipp ];
+    nativeBuildInputs = with pkgs.python3.pkgs; [setuptools setuptools-scm];
+    propagatedBuildInputs = with pkgs.python3.pkgs; [toml zipp];
     doCheck = false;
   };
 
   python-snakefmt = pkgs.python3.pkgs.buildPythonApplication rec {
     pname = "snakefmt";
-    version = "0.8.4";
+    version = "0.10.0";
     format = "pyproject";
     src = pkgs.fetchFromGitHub {
       owner = "snakemake";
       repo = "snakefmt";
-      #rev = "v${version}";
-      rev = "618df85";
-      hash = "sha256-WrJfE9mMGH7NWPl3W9z2dq2ALraay/PFM78GpszVzJk=";
+      rev = "v${version}";
+      #rev = "618df85";
+      hash = "sha256-vC6hA311kN8+MpfFkIwjmaSVMtq54qStHeOQHHaJhBw=";
     };
     #doCheck = false;
-    #preBuild = ''
-    #    sed -i 's/requires = ["poetry>=0.12"]/requires = ["poetry-core"]/g' pyproject.toml
-    #    sed -i 's/build-backend = "poetry.masonry.api"/build-backend = "poetry.core.masonry.api"/g' pyproject.toml
-    #'';
-    nativeBuildInputs = [ pkgs.python3.pkgs.poetry-core ];
+    nativeBuildInputs = [pkgs.python3.pkgs.poetry-core];
     propagatedBuildInputs = with pkgs.python3.pkgs; [
       black
       python-importlib-metadata17
     ];
   };
-
 in {
   programs.neovim = {
     enable = true;
@@ -83,7 +82,7 @@ in {
         '';
       }
       {
-        plugin = nvim-base16;
+        plugin = base16-nvim;
         config = ''
           if filereadable(expand("~/.vimrc_background"))
             let base16colorspace=256
@@ -105,6 +104,13 @@ in {
             \ 'stdin': 1,
             \ }
           let g:neoformat_enabled_snakemake = ['snakefmt']
+
+          let g:neoformat_htmldjango_djlintjinja = {
+            \ 'exe': '${pkgs.djlint}/bin/djlint',
+            \ 'args': ['-', '--reformat', '--indent=2', '--profile=jinja'],
+            \ 'stdin': 1,
+            \ }
+          let g:neoformat_enabled_htmldjango = ['djlintjinja']
         '';
       }
     ];
@@ -135,7 +141,5 @@ in {
 
       nnoremap <leader>y :Neoformat<CR>
     '';
-
   };
-
 }

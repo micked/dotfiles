@@ -71,7 +71,7 @@ in {
     ./superslicer.nix
     ./git.nix
     ./vim.nix
-    ./hx.nix
+    #./hx.nix
     ./zsh.nix
     ./awesomewm.nix
     ./fonts
@@ -148,6 +148,6 @@ in {
       default-cache-ttl 36000
       max-cache-ttl 36000
     '';
-    pinentryFlavor = "tty";
+    pinentryPackage = pkgs.pinentry-tty;
   };
 }

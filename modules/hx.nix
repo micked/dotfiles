@@ -21,7 +21,7 @@
         }
         {
           name = "python";
-          language-server = {command = "${pkgs.python310Packages.python-lsp-server}/bin/pylsp";};
+          language-server = {command = "${pkgs.python3Packages.python-lsp-server}/bin/pylsp";};
           formatter = {
             command = "${pkgs.black}/bin/black";
             args = ["-q" "-"];
