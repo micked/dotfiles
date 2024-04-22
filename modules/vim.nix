@@ -43,14 +43,14 @@
 
   python-snakefmt = pkgs.python3.pkgs.buildPythonApplication rec {
     pname = "snakefmt";
-    version = "0.10.0";
+    version = "0.10.1";
     format = "pyproject";
     src = pkgs.fetchFromGitHub {
       owner = "snakemake";
       repo = "snakefmt";
       rev = "v${version}";
       #rev = "618df85";
-      hash = "sha256-vC6hA311kN8+MpfFkIwjmaSVMtq54qStHeOQHHaJhBw=";
+      hash = "sha256-pV7soJD/qX5ZPEIwFVX1v3RsRRHBtVcDkSL6d17zYcA=";
     };
     #doCheck = false;
     nativeBuildInputs = [pkgs.python3.pkgs.poetry-core];
