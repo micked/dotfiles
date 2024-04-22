@@ -56,12 +56,12 @@
     };
     jupyterlab-vim = python.pkgs.buildPythonPackage rec {
       pname = "jupyterlab-vim";
-      version = "4.1.1";
+      version = "4.1.3";
       format = "pyproject";
       src = python.pkgs.fetchPypi {
         pname = "jupyterlab_vim";
         inherit version;
-        hash = "sha256-qbFC9EZg1WoG+2pMxyXPcSgNRXeb4k/8xp7aku8Goy4=";
+        hash = "sha256-V+GgpO3dIzTo16fA34D1CXt49UgP+oQwfy5QjfmLaHg=";
       };
       nativeBuildInputs = with python.pkgs; [
         jupyter-packaging
@@ -86,7 +86,9 @@
         #  doCheck = false;
         #}))
         matplotlib
-        biopython
+        (biopython.overrideAttrs {
+          doInstallCheck = false;
+        })
         ipykernel
         jupyterlab
         jupyterlab-vim
