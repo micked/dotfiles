@@ -15,6 +15,8 @@
     "openssl-1.1.1w"
   ];
 
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
