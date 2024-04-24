@@ -15,7 +15,7 @@
     "openssl-1.1.1w"
   ];
 
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  boot.binfmt.emulatedSystems = ["aarch64-linux"];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -72,11 +72,11 @@
         '';
       }
     ];
+  };
 
-    displayManager.autoLogin = {
-      enable = true;
-      user = "msk";
-    };
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "msk";
   };
 
   nixpkgs.config.packageOverrides = pkgs: {
