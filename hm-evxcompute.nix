@@ -81,6 +81,7 @@
         scipy
         scikit-learn
         natsort
+        requests
         #((umap-learn.override {tensorflow = null;}).overridePythonAttrs (prev: {
         #  nativeCheckInputs = [];
         #  doCheck = false;
