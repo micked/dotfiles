@@ -74,6 +74,11 @@
     ];
   };
 
+  programs.xss-lock = {
+    enable = true;
+    lockerCommand = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p";
+  };
+
   services.displayManager.autoLogin = {
     enable = true;
     user = "msk";
