@@ -51,6 +51,7 @@
     keyMap = "dk";
   };
 
+  services.libinput.enable = true;
   services.xserver = {
     enable = true;
 
@@ -59,7 +60,6 @@
       options = "compose:sclk, caps:escape";
     };
 
-    libinput.enable = true;
     videoDrivers = ["modesetting"];
     #videoDrivers = [ "intel" ];
 
