@@ -1,6 +1,6 @@
 { config, pkgs, libs, ... }:
 let
-  python = pkgs.python39;
+  python = pkgs.python3;
   fbs = python.pkgs.buildPythonPackage rec {
     pname = "fbs";
     version = "0.2.8";
