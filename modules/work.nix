@@ -21,4 +21,6 @@ in {
     ./vscode.nix
     ./syncthing.nix
   ];
+
+  programs.git.userEmail = pkgs.lib.mkForce "msk@evaxion-biotech.com";
 }
