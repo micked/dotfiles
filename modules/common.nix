@@ -6,7 +6,7 @@
 }: let
   fx = pkgs.writeShellScriptBin "fx" "${pkgs.firefox}/bin/firefox $@";
   chr = pkgs.writeShellScriptBin "chr" "${pkgs.chromium}/bin/chromium $@";
-  calc = pkgs.writeShellScriptBin "calc" "${pkgs.gnome.gnome-calculator}/bin/gnome-calculator $@";
+  calc = pkgs.writeShellScriptBin "calc" "${pkgs.gnome-calculator}/bin/gnome-calculator $@";
   c2_pass = pkgs.writeShellScriptBin "c2_pass" ''
     ${pkgs.pass}/bin/pass c2
     ${pkgs.oathToolkit}/bin/oathtool -v --totp=sha256 --digits=8 $(${pkgs.pass}/bin/pass c2_secret) | tail -n1
@@ -48,13 +48,13 @@ in {
     pavucontrol
     htop
     inkscape
-    gnome.gnome-calculator
+    gnome-calculator
     pass
     libreoffice-fresh
-    gnome.file-roller
+    file-roller
     evince
     scrot
-    gnome.eog
+    eog
     gimp
     openvpn
     ncdu
