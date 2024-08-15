@@ -76,6 +76,7 @@
         pandas
         openpyxl
         xlsxwriter
+        xlsx2csv
         polars
         tqdm
         scipy
@@ -87,9 +88,10 @@
         #  doCheck = false;
         #}))
         matplotlib
-        (biopython.overrideAttrs {
-          doInstallCheck = false;
-        })
+        #(biopython.overrideAttrs {
+        #  doInstallCheck = false;
+        #})
+        biopython
         ipykernel
         jupyterlab
         jupyterlab-vim
