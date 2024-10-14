@@ -43,7 +43,7 @@ in {
     # other
     sublime4
     firefox
-    cinnamon.nemo-with-extensions
+    nemo-with-extensions
     vlc
     pavucontrol
     htop

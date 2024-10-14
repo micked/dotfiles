@@ -11,7 +11,7 @@
 
   nixpkgs.config.permittedInsecurePackages = [
     "zotero-6.0.27"
-    "electron-24.8.6"
+    "electron-27.3.11"
     "openssl-1.1.1w"
   ];
 
@@ -88,7 +88,7 @@
     vaapiIntel = pkgs.vaapiIntel.override {enableHybridCodec = true;};
   };
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
       intel-media-driver
@@ -118,7 +118,7 @@
   services.ipp-usb.enable = true;
 
   # Enable sound.
-  sound.enable = true;
+  #sound.enable = true;
   hardware.pulseaudio.enable = true;
 
   hardware.bluetooth.enable = true;
