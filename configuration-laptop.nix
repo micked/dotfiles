@@ -30,6 +30,7 @@
 
   nix.settings.secret-key-files = ["/home/msk/.ssh/nix-key.secret"];
 
+  #
   services.libinput.enable = true;
   services.xserver = {
     enable = true;
@@ -39,13 +40,13 @@
       options = "compose:sclk, caps:escape";
     };
 
-    videoDrivers = ["intel"];
-    deviceSection = ''
-      Option "DRI" "3"
-      Option "TearFree" "true"
-      Option "AccelMethod" "sna"
-    '';
-    #videoDrivers = [ "modesetting" ];
+    #videoDrivers = ["intel"];
+    #deviceSection = ''
+    #  Option "DRI" "3"
+    #  Option "TearFree" "true"
+    #  Option "AccelMethod" "sna"
+    #'';
+    videoDrivers = [ "modesetting" ];
     #useGlamor = true;
 
     desktopManager.session = [
@@ -61,6 +62,11 @@
 
   services.autorandr.enable = true;
 
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "msk";
+  };
+
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
@@ -75,8 +81,8 @@
   # services.printing.enable = true;
 
   # Enable sound.
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
+  # sound.enable = true;
+  # hardware.pulseaudio.enable = true;
 
   hardware.bluetooth.enable = true;
   services.blueman.enable = true;
