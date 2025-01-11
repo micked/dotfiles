@@ -47,6 +47,8 @@
       setopt no_share_history
       unsetopt share_history
 
+      () { [[ -r $1 ]] && source $1 } "$HOME/.config/zsh/.zkbd/$TERM-''${''${DISPLAY:t}:-$VENDOR-$OSTYPE}"
+
       #zsh-history-substring-search
       bindkey "''${key[Up]}" history-substring-search-up
       bindkey "''${key[Down]}" history-substring-search-down

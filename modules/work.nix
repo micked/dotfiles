@@ -9,7 +9,7 @@ in {
     zotero
     logseq
     zoom-us
-    python39Packages.BlinkStick
+    python3Packages.BlinkStick
     xournal
     pkgs2305.teams
 
