@@ -4,6 +4,7 @@
     home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs2305.url = "nixpkgs/nixos-23.05";
+    nixpkgs2411.url = "nixpkgs/nixos-24.11";
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -85,6 +86,7 @@
           home-manager.useUserPackages = true;
           home-manager.users.msk = homeAtWork;
           home-manager.extraSpecialArgs = {
+            pkgs2411 = import inputs.nixpkgs2411 {system = "x86_64-linux";};
             pkgs2305 = import inputs.nixpkgs2305 {
               system = "x86_64-linux";
               config = {
