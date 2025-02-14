@@ -15,6 +15,11 @@
     shell = pkgs.zsh;
   };
 
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "dk";
+  };
+
   #boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
   #services.openssh.enable = true;
 
@@ -49,6 +54,8 @@
 
   programs.dconf.enable = true;
   services.gvfs.enable = true;
+
+  home-manager.backupFileExtension = "backup";
 
   #services.udev.packages = [pkgs.chrysalis];
   #services.udev.extraRules = ''

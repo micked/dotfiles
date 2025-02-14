@@ -107,7 +107,7 @@
     nixosConfigurations.msk-80075 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        ./configuration-work3.nix
+        (import ./configuration-work3.nix {inherit inputs;})
         inputs.nixos-hardware.nixosModules.framework-13-7040-amd
         home-manager.nixosModules.home-manager
       ];

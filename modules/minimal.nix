@@ -9,6 +9,7 @@
     ./vim.nix
     ./zsh.nix
   ];
+
   config = {
     home.packages = with pkgs; [
       firefox
