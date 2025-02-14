@@ -8,11 +8,7 @@
 in {
   home.packages = with pkgs; [
     zotero
-    logseq
-    #zoom-us
     python3Packages.BlinkStick
-    #xournal
-    pkgs2305.teams
     pkgs2411.pymol
 
     clc
