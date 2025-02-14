@@ -97,9 +97,9 @@ kbdcfg.switch = function ()
 end
 kbdcfg.switch()
 
-if hostname == "msk-oblivion-2" or hostname == "burger" then
-  kbdcfg.switch()
-end
+-- if host hostname == "msk-oblivion-2" or hostname == "burger" then
+kbdcfg.switch()
+-- end
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it

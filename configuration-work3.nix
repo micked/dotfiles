@@ -14,25 +14,6 @@
     networking.hostName = "msk-80075";
     networking.networkmanager.enable = true;
 
-    services.xserver = {
-      enable = true;
-
-      xkb = {
-        layout = "dk";
-        options = "compose:sclk, caps:escape";
-      };
-
-      desktopManager.session = [
-        {
-          name = "home-manager";
-          start = ''
-            ${pkgs.runtimeShell} $HOME/.hm-xsession &
-            waitPID=$!
-          '';
-        }
-      ];
-    };
-
     home-manager = {
       useGlobalPkgs = true;
       useUserPackages = true;
