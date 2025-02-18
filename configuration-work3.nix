@@ -14,6 +14,8 @@
     networking.hostName = "msk-80075";
     networking.networkmanager.enable = true;
 
+    boot.binfmt.emulatedSystems = ["aarch64-linux"];
+
     home-manager = {
       useGlobalPkgs = true;
       useUserPackages = true;
