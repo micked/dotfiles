@@ -10,7 +10,6 @@ in {
     zotero
     python3Packages.BlinkStick
     pkgs2411.pymol
-    zed-editor
 
     clc
     jdk11 #For CLC
