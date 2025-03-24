@@ -3,55 +3,79 @@
   pkgs,
   ...
 }: {
-  time.timeZone = "Europe/Copenhagen";
+  config = {
+    services.xserver = {
+      enable = true;
 
-  i18n.defaultLocale = "en_IE.UTF-8";
-  i18n.extraLocaleSettings.LC_TIME = "en_DK.UTF-8";
+      xkb = {
+        layout = "dk";
+        options = "compose:sclk, caps:escape";
+      };
 
-  programs.zsh.enable = true;
-  users.users.msk = {
-    isNormalUser = true;
-    extraGroups = ["wheel" "networkmanager" "rfkill" "docker" "dialout"];
-    shell = pkgs.zsh;
-  };
-
-  #boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-  #services.openssh.enable = true;
-
-  nix = {
-    #package = pkgs.nixFlakes;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
-    settings = {
-      auto-optimise-store = true;
-      trusted-public-keys = [
-        "burger:obD5BdMxSJs2sGBeAe5AJX1aF0BQCBSAgIjHKWkT3VY="
-        "msk-oblivion:kmf+iO7oFRQ6blNXZrNdMUBn7jxi5cy1lFzLNLRNEEk="
-      ];
+      windowManager.awesome = {
+        enable = true;
+        luaModules = [pkgs.luaPackages.vicious];
+      };
     };
-  };
 
-  nixpkgs.config = {
-    allowUnfree = true;
-    permittedInsecurePackages = [
-      "openssl-1.1.1w" #sublime4
+    #programs.nm-applet.enable = true;
+
+    time.timeZone = "Europe/Copenhagen";
+
+    i18n.defaultLocale = "en_IE.UTF-8";
+    i18n.extraLocaleSettings.LC_TIME = "en_DK.UTF-8";
+
+    programs.zsh.enable = true;
+    users.users.msk = {
+      isNormalUser = true;
+      extraGroups = ["wheel" "networkmanager" "rfkill" "docker" "dialout"];
+      shell = pkgs.zsh;
+    };
+
+    console = {
+      font = "Lat2-Terminus16";
+      keyMap = "dk";
+    };
+
+    #boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+    #services.openssh.enable = true;
+
+    nix = {
+      extraOptions = ''
+        experimental-features = nix-command flakes
+      '';
+      settings = {
+        auto-optimise-store = true;
+        trusted-public-keys = [
+          "burger:obD5BdMxSJs2sGBeAe5AJX1aF0BQCBSAgIjHKWkT3VY="
+          "msk-oblivion:kmf+iO7oFRQ6blNXZrNdMUBn7jxi5cy1lFzLNLRNEEk="
+        ];
+      };
+    };
+
+    nixpkgs.config = {
+      allowUnfree = true;
+      #permittedInsecurePackages = [
+      #  "openssl-1.1.1w" #sublime4
+      #];
+    };
+
+    environment.systemPackages = with pkgs; [
+      vim
+      wget
+      git
+      home-manager
+      #chrysalis
     ];
+
+    programs.dconf.enable = true;
+    services.gvfs.enable = true;
+
+    home-manager.backupFileExtension = "backup";
+
+    #services.udev.packages = [pkgs.chrysalis];
+    #services.udev.extraRules = ''
+    #  SUBSYSTEM=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="41e5", MODE:="0666"
+    #'';
   };
-
-  environment.systemPackages = with pkgs; [
-    vim
-    wget
-    git
-    home-manager
-    chrysalis
-  ];
-
-  programs.dconf.enable = true;
-  services.gvfs.enable = true;
-
-  services.udev.packages = [pkgs.chrysalis];
-  services.udev.extraRules = ''
-    SUBSYSTEM=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="41e5", MODE:="0666"
-  '';
 }

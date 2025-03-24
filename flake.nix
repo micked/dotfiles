@@ -9,6 +9,7 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
   };
   outputs = {
     self,
@@ -102,6 +103,18 @@
         }
       ];
     };
+
+    nixosConfigurations.msk-80075 = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        inputs.agenix.nixosModules.default
+        (import ./configuration-work3.nix {inherit inputs;})
+        inputs.nixos-hardware.nixosModules.framework-13-7040-amd
+        home-manager.nixosModules.home-manager
+      ];
+    };
+
+    # --
 
     homeConfigurations = let
       system = "x86_64-linux";

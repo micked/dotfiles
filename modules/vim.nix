@@ -121,6 +121,7 @@ in {
             \ 'stdin': 1,
             \ }
           let g:neoformat_enabled_htmldjango = ['djlintjinja']
+          let g:neoformat_enabled_c = ['clang-format']
         '';
       }
     ];
@@ -129,6 +130,7 @@ in {
       rustfmt
       black
       alejandra
+      clang-tools
     ];
 
     extraConfig = ''

@@ -41,7 +41,6 @@ in {
     blueberry
 
     # other
-    sublime4
     firefox
     nemo-with-extensions
     vlc
@@ -64,6 +63,7 @@ in {
     gnupg
 
     meslo-lgs-nf
+    zed-editor
   ];
 
   imports = [
@@ -130,7 +130,7 @@ in {
         "image/png" = ["org.gnome.eog.desktop"];
         "image/jpeg" = ["org.gnome.eog.desktop"];
         "image/gif" = ["org.gnome.eog.desktop"];
-        "text/plain" = ["sublime_text.desktop"];
+        "text/plain" = ["dev.zed.Zed.desktop"];
       };
     };
   };
