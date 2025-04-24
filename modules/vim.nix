@@ -41,24 +41,24 @@
     doCheck = false;
   };
 
-  python-snakefmt = pkgs.python3.pkgs.buildPythonApplication rec {
-    pname = "snakefmt";
-    version = "0.10.1";
-    format = "pyproject";
-    src = pkgs.fetchFromGitHub {
-      owner = "snakemake";
-      repo = "snakefmt";
-      rev = "v${version}";
-      #rev = "618df85";
-      hash = "sha256-pV7soJD/qX5ZPEIwFVX1v3RsRRHBtVcDkSL6d17zYcA=";
-    };
-    #doCheck = false;
-    nativeBuildInputs = [pkgs.python3.pkgs.poetry-core];
-    propagatedBuildInputs = with pkgs.python3.pkgs; [
-      black
-      python-importlib-metadata17
-    ];
-  };
+  #python-snakefmt = pkgs.python3.pkgs.buildPythonApplication rec {
+  #  pname = "snakefmt";
+  #  version = "0.11.0";
+  #  format = "pyproject";
+  #  src = pkgs.fetchFromGitHub {
+  #    owner = "snakemake";
+  #    repo = "snakefmt";
+  #    rev = "v${version}";
+  #    #rev = "618df85";
+  #    hash = "sha256-nupLxFfbgWOfRbQwbrywO34Cmjns9J0GwEdVfSsAc08=";
+  #  };
+  #  #doCheck = false;
+  #  nativeBuildInputs = [pkgs.python3.pkgs.poetry-core];
+  #  propagatedBuildInputs = with pkgs.python3.pkgs; [
+  #    black
+  #    python-importlib-metadata17
+  #  ];
+  #};
 in {
   programs.neovim = {
     enable = true;
@@ -110,7 +110,7 @@ in {
           let g:neoformat_enabled_python = ['black']
           let g:neoformat_enabled_nix = ['alejandra']
           let g:neoformat_snakemake_snakefmt = {
-            \ 'exe': '${python-snakefmt}/bin/snakefmt',
+            \ 'exe': '${pkgs.snakefmt}/bin/snakefmt',
             \ 'args': ['-'],
             \ 'stdin': 1,
             \ }
