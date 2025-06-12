@@ -90,6 +90,7 @@
         #}))
         matplotlib
         biopython
+        nglview
         ipykernel
         jupyterlab
         jupyterlab-vim
