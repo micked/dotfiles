@@ -61,7 +61,7 @@
     services.autorandr.enable = true;
 
     programs.xss-lock = {
-      enable = true;
+      enable = false;
       lockerCommand = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p";
     };
 
