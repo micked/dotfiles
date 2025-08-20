@@ -114,6 +114,15 @@
       ];
     };
 
+    nixosConfigurations.teenyrig = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        #inputs.agenix.nixosModules.default
+        (import ./configuration-teenyrig.nix {inherit inputs;})
+        home-manager.nixosModules.home-manager
+      ];
+    };
+
     # --
 
     homeConfigurations = let
