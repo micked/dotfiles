@@ -16,7 +16,10 @@
     boot.loader.efi.canTouchEfiVariables = true;
 
     networking.hostName = "msk-80075";
-    networking.networkmanager.enable = true;
+    networking.networkmanager = {
+      enable = true;
+      plugins = [ pkgs.networkmanager-openvpn ];
+    };
 
     boot.binfmt.emulatedSystems = ["aarch64-linux"];
 
@@ -24,6 +27,13 @@
     age.secrets.oblivion_nixkey.file = ./secrets/oblivion_nixkey.age;
     age.identityPaths = ["/etc/ssh/ssh_host_ed25519_key"];
     nix.settings.secret-key-files = [config.age.secrets.oblivion_nixkey.path];
+
+    programs.steam = {
+      enable = true;
+      #remotePlay.openFirewall = true;
+      #dedicatedServer.openFirewall = true;
+      #localNetworkGameTransfers.openFirewall = true;
+    };
 
     home-manager = {
       useGlobalPkgs = true;
