@@ -35,6 +35,17 @@
       #localNetworkGameTransfers.openFirewall = true;
     };
 
+    services.monado = {
+      enable = true;
+      defaultRuntime = true;
+    };
+
+    xdg.portal = {
+      enable = true;
+      extraPortals = [pkgs.xdg-desktop-portal-gtk];
+      xdgOpenUsePortal = true;
+    };
+
     hardware.graphics = {
       enable = true;
     };
@@ -75,6 +86,9 @@
         ];
         services.picom.enable = pkgs.lib.mkForce false;
         xresources.properties."Xft.dpi" = 96;
+        #xdg.configFile = {
+        #"openxr/1/active_runtime.json".source = "${pkgs.monado}/share/openxr/1/openxr_monado.json";
+        #};
       };
       extraSpecialArgs = {
         pkgs2411 = import inputs.nixpkgs2411 {system = "x86_64-linux";};
