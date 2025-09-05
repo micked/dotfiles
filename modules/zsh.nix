@@ -37,7 +37,7 @@
       autoload -U +X bashcompinit && bashcompinit
     '';
 
-    initExtra = ''
+    initContent = ''
       () { [[ -r $1 ]] && source $1 } "''${XDG_CACHE_HOME:-''$HOME/.cache}/p10k-instant-prompt-''$USERNAME.zsh"
 
       setopt HIST_IGNORE_DUPS

@@ -65,6 +65,7 @@
       wget
       git
       home-manager
+      usbutils
       #chrysalis
     ];
 

@@ -48,20 +48,21 @@
   };
   nix-load = "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh";
   jlab = let
-    python = pkgs.python311.override {
+    python = pkgs.python3.override {
       packageOverrides = self: super: {
-        numba = super.numba.overridePythonAttrs (prev: {disabled = false;});
-        pynndescent = super.pynndescent.overridePythonAttrs (prev: {doCheck = false;});
+        #numba = super.numba.overridePythonAttrs (prev: {disabled = false;});
+        #pynndescent = super.pynndescent.overridePythonAttrs (prev: {doCheck = false;});
+        biopython = super.biopython.overrideAttrs {doInstallCheck = false;};
       };
     };
     jupyterlab-vim = python.pkgs.buildPythonPackage rec {
       pname = "jupyterlab-vim";
-      version = "4.1.3";
+      version = "4.1.4";
       format = "pyproject";
       src = python.pkgs.fetchPypi {
         pname = "jupyterlab_vim";
         inherit version;
-        hash = "sha256-V+GgpO3dIzTo16fA34D1CXt49UgP+oQwfy5QjfmLaHg=";
+        hash = "sha256-q/KJGq+zLwy5StmDIa5+vL4Mq+Uj042A1WnApQuFIlo=";
       };
       nativeBuildInputs = with python.pkgs; [
         jupyter-packaging
@@ -88,10 +89,8 @@
         #  doCheck = false;
         #}))
         matplotlib
-        #(biopython.overrideAttrs {
-        #  doInstallCheck = false;
-        #})
         biopython
+        nglview
         ipykernel
         jupyterlab
         jupyterlab-vim
