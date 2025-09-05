@@ -20,8 +20,9 @@
     ".config/PrusaSlicer/PrusaSlicer.ini".source = ./configs/prusaslicer/PrusaSlicer.ini;
     ".config/PrusaSlicer/filament".source = ./configs/prusaslicer/filament;
     ".config/PrusaSlicer/physical_printer/3D0.ini".source = ./configs/prusaslicer/physical_printer/3D0.ini;
+    #".config/PrusaSlicer/physical_printer/E3D_TC.ini".source = ./configs/prusaslicer/physical_printer/E3D_TC.ini;
     ".config/PrusaSlicer/print".source = ./configs/prusaslicer/print;
-    ".config/PrusaSlicer/printer".source = ./configs/prusaslicer/printer;
+    ".config/PrusaSlicer/printer/Voron.ini".source = ./configs/prusaslicer/printer/Voron.ini;
   };
 
   home.activation = {
