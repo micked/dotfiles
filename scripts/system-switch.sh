@@ -1,1 +1,1 @@
-nixos-rebuild switch --use-remote-sudo --flake . --keep-going -L
+nixos-rebuild switch --flake . --keep-going -L --use-remote-sudo
