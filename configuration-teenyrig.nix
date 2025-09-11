@@ -6,6 +6,7 @@
   imports = [
     ./configuration-common.nix
     ./hardware-configuration-teenyrig.nix
+    ./sys_modules/vr.nix
   ];
 
   config = {
@@ -35,39 +36,41 @@
       #localNetworkGameTransfers.openFirewall = true;
     };
 
-    services.monado = {
-      enable = true;
-      defaultRuntime = true;
-    };
+    #services.monado = {
+    #  enable = true;
+    #  defaultRuntime = true;
+    #};
 
-    xdg.portal = {
-      enable = true;
-      extraPortals = [pkgs.xdg-desktop-portal-gtk];
-      xdgOpenUsePortal = true;
-    };
+    #xdg.portal = {
+    #  enable = true;
+    #  extraPortals = [pkgs.xdg-desktop-portal-gtk];
+    #  xdgOpenUsePortal = true;
+    #};
+
+    hardware.bluetooth.enable = true;
 
     hardware.graphics = {
       enable = true;
     };
 
-    services.xserver.videoDrivers = ["nvidia"];
+    #services.xserver.videoDrivers = ["nvidia"];
     services.xserver.dpi = 96;
 
-    hardware.nvidia = {
+    #hardware.nvidia = {
       # Modesetting is required.
-      modesetting.enable = true;
+    #  modesetting.enable = true;
       # Nvidia power management. Experimental, and can cause sleep/suspend to fail.
       # Enable this if you have graphical corruption issues or application crashes after waking
       # up from sleep. This fixes it by saving the entire VRAM memory to /tmp/ instead
       # of just the bare essentials.
-      powerManagement.enable = false;
+   #   powerManagement.enable = false;
       # Fine-grained power management. Turns off GPU when not in use.
       # Experimental and only works on modern Nvidia GPUs (Turing or newer).
-      powerManagement.finegrained = false;
-      open = false;
-      nvidiaSettings = true;
-      package = config.boot.kernelPackages.nvidiaPackages.stable;
-    };
+   #   powerManagement.finegrained = false;
+   #   open = false;
+   #   nvidiaSettings = true;
+   #   package = config.boot.kernelPackages.nvidiaPackages.stable;
+   # };
 
     home-manager = {
       useGlobalPkgs = true;
@@ -84,7 +87,7 @@
           ./modules/common.nix
           ./modules/private.nix
         ];
-        services.picom.enable = pkgs.lib.mkForce false;
+        #services.picom.enable = pkgs.lib.mkForce false;
         xresources.properties."Xft.dpi" = 96;
         #xdg.configFile = {
         #"openxr/1/active_runtime.json".source = "${pkgs.monado}/share/openxr/1/openxr_monado.json";

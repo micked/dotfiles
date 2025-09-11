@@ -25,7 +25,7 @@
       kssh = "kitty +kitten ssh";
     };
 
-    dotDir = ".config/zsh";
+    dotDir = "${config.xdg.configHome}/zsh";
 
     history = {
       size = 10000;

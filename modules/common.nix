@@ -148,6 +148,6 @@ in {
       default-cache-ttl 36000
       max-cache-ttl 36000
     '';
-    pinentryPackage = pkgs.pinentry-tty;
+    pinentry.package = pkgs.pinentry-tty;
   };
 }
