@@ -7,7 +7,7 @@
 }: {
   home.packages = with pkgs; [
     #super-slicer-latest
-    prusa-slicer
+    (config.lib.nixGL.wrap prusa-slicer)
   ];
 
   home.file = {

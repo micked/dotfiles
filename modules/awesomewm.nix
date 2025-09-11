@@ -47,6 +47,7 @@
     ];
     fade = false;
     #fadeDelta = 5;
+    package = config.lib.nixGL.wrap pkgs.picom;
   };
 
   home.file = {

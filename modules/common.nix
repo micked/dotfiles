@@ -4,7 +4,8 @@
   lib,
   ...
 }: let
-  fx = pkgs.writeShellScriptBin "fx" "${pkgs.firefox}/bin/firefox $@";
+  firefox_wrapped = config.lib.nixGL.wrap pkgs.firefox;
+  fx = pkgs.writeShellScriptBin "fx" "${firefox_wrapped}/bin/firefox $@";
   chr = pkgs.writeShellScriptBin "chr" "${pkgs.chromium}/bin/chromium $@";
   calc = pkgs.writeShellScriptBin "calc" "${pkgs.gnome-calculator}/bin/gnome-calculator $@";
   c2_pass = pkgs.writeShellScriptBin "c2_pass" ''
@@ -41,7 +42,7 @@ in {
     blueberry
 
     # other
-    firefox
+    firefox_wrapped
     nemo-with-extensions
     vlc
     pavucontrol

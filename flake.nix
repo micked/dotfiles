@@ -10,6 +10,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixgl = {
+      url = "github:nix-community/nixGL";
+      #inputs.nixpkgs.follows = "nixpkgs";
+      flake = false;
+    };
   };
   outputs = {
     self,
@@ -127,11 +132,39 @@
 
     homeConfigurations = let
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
+      glopts =
+        {inherit pkgs;}
+        // builtins.fromJSON (builtins.readFile ./hm-lime.nvidia-version.json);
+      glpkgs = import (inputs.nixgl + "/default.nix") glopts;
+      nixgl_packages = {
+        nixGLDefault = glpkgs.nixGLDefault;
+        nixGLNvidia = glpkgs.nixGLNvidia;
+        nixVulkanNvidia = glpkgs.nixVulkanNvidia;
+      };
     in {
       evxcompute = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [./hm-evxcompute.nix];
+      };
+
+      lime = home-manager.lib.homeManagerConfiguration {
+        inherit pkgs;
+        modules = [
+          {
+            config.nixGL.packages = nixgl_packages;
+          }
+          ./hm-lime.nix
+        ];
+        extraSpecialArgs = {
+          pkgs2305 = import inputs.nixpkgs2305 {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+          };
+        };
       };
     };
   };
