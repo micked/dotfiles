@@ -2,16 +2,18 @@
   config,
   pkgs,
   lib,
+  pkgs-stable,
   ...
 }: let
+  my-micromamba = pkgs-stable.micromamba;
   micromamba-bash = pkgs.writeTextFile {
     name = "micromamba.bash";
     text = ''
       # >>> mamba initialize >>>
       # !! Contents within this block are managed by 'mamba init' !!
-      export MAMBA_EXE="${pkgs.micromamba}/bin/micromamba";
+      export MAMBA_EXE="${my-micromamba}/bin/micromamba";
       export MAMBA_ROOT_PREFIX="/work/msk/micromamba";
-      __mamba_setup="$('${pkgs.micromamba}/bin/micromamba' shell hook --shell bash --prefix '/work/msk/micromamba' 2> /dev/null)"
+      __mamba_setup="$('${my-micromamba}/bin/micromamba' shell hook --shell bash --prefix '/work/msk/micromamba' 2> /dev/null)"
       if [ $? -eq 0 ]; then
           eval "$__mamba_setup"
       else
@@ -30,9 +32,9 @@
     text = ''
       # >>> mamba initialize >>>
       # !! Contents within this block are managed by 'mamba init' !!
-      export MAMBA_EXE="${pkgs.micromamba}/bin/micromamba";
+      export MAMBA_EXE="${my-micromamba}/bin/micromamba";
       export MAMBA_ROOT_PREFIX="/work/msk/micromamba";
-      __mamba_setup="$('${pkgs.micromamba}/bin/micromamba' shell hook --shell zsh --prefix '/work/msk/micromamba' 2> /dev/null)"
+      __mamba_setup="$('${my-micromamba}/bin/micromamba' shell hook --shell zsh --prefix '/work/msk/micromamba' 2> /dev/null)"
       if [ $? -eq 0 ]; then
           eval "$__mamba_setup"
       else
@@ -52,7 +54,7 @@
       packageOverrides = self: super: {
         #numba = super.numba.overridePythonAttrs (prev: {disabled = false;});
         #pynndescent = super.pynndescent.overridePythonAttrs (prev: {doCheck = false;});
-        biopython = super.biopython.overrideAttrs {doInstallCheck = false;};
+        #biopython = super.biopython.overrideAttrs {doInstallCheck = false;};
       };
     };
     jupyterlab-vim = python.pkgs.buildPythonPackage rec {
@@ -94,7 +96,7 @@
         ipykernel
         jupyterlab
         jupyterlab-vim
-        line_profiler
+        #line_profiler
       ]);
   in
     pkgs.stdenvNoCC.mkDerivation rec {
@@ -130,7 +132,7 @@ in {
   };
 
   home.packages = with pkgs; [
-    micromamba
+    my-micromamba
     cookiecutter
     zellij
     jlab
@@ -154,7 +156,7 @@ in {
     ./modules/fonts
   ];
 
-  programs.git.userEmail = pkgs.lib.mkForce "msk@evaxion-biotech.com";
+  programs.git.settings.user.email = pkgs.lib.mkForce "msk@evaxion.ai";
 
   programs.zsh.initExtra = ''
     source ${./modules/slurm-output.sh}

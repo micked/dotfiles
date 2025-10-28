@@ -1,1 +1,1 @@
-home-manager switch --flake ".#evxcompute" -j 16 -L
+home-manager switch --flake ".#evxcompute" -j 16 -L --keep-going
