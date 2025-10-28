@@ -29,7 +29,7 @@
     nix.settings.secret-key-files = [config.age.secrets.oblivion_nixkey.path];
 
     programs.steam = {
-      enable = true;
+      enable = false;
       #remotePlay.openFirewall = true;
       #dedicatedServer.openFirewall = true;
       #localNetworkGameTransfers.openFirewall = true;
