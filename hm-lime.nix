@@ -14,6 +14,8 @@ in {
 
   home.packages = with pkgs; [
     xterm
+    wget
+
     #fonts
     dejavu_fonts
     freefont_ttf
@@ -27,10 +29,14 @@ in {
     ./modules/common.nix
     ./modules/private.nix
     ./modules/awesomewm.nix
+    ./modules/vr.nix
   ];
 
   programs.zsh.initExtra = ''
     [[ -f ${nix-load} ]] && source ${nix-load}
+    bindkey "''${key[Home]}" beginning-of-line
+    bindkey "''${key[End]}" end-of-line
+    bindkey "''${key[Delete]}" delete-char
   '';
 
   xsession = {
@@ -39,10 +45,11 @@ in {
     windowManager.awesome = {
       enable = true;
       luaModules = [pkgs.luaPackages.vicious];
-      package = (config.lib.nixGL.wrap pkgs.awesome);
+      #package = (config.lib.nixGL.wrap pkgs.awesome);
     };
     profileExtra = ''
       [[ -f ${nix-load} ]] && source ${nix-load}
+      export XDG_DATA_DIRS="/usr/local/share/:/usr/share/:''${XDG_DATA_DIRS}"
     '';
   };
 
