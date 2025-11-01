@@ -9,8 +9,8 @@ in {
   home.username = "msk";
   home.homeDirectory = "/home/msk";
 
-  nixGL.defaultWrapper = "nvidia";
-  programs.kitty.package = (config.lib.nixGL.wrap pkgs.kitty);
+  #nixGL.defaultWrapper = "nvidia";
+  #programs.kitty.package = (config.lib.nixGL.wrap pkgs.kitty);
 
   home.packages = with pkgs; [
     xterm

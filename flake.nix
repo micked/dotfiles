@@ -11,16 +11,25 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    nixgl = {
-      url = "github:nix-community/nixGL";
-      #inputs.nixpkgs.follows = "nixpkgs";
-      flake = false;
+    #nixgl = {
+    #  url = "github:nix-community/nixGL";
+    #  #inputs.nixpkgs.follows = "nixpkgs";
+    #  flake = false;
+    #};
+    system-manager = {
+      url = "github:numtide/system-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-system-graphics = {
+      url = "github:soupglasses/nix-system-graphics";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
   outputs = {
     self,
     nixpkgs,
     home-manager,
+    system-manager,
     ...
   } @ inputs: let
     homeAtWork = {
@@ -137,15 +146,15 @@
         inherit system;
         config.allowUnfree = true;
       };
-      glopts =
-        {inherit pkgs;}
-        // builtins.fromJSON (builtins.readFile ./hm-lime.nvidia-version.json);
-      glpkgs = import (inputs.nixgl + "/default.nix") glopts;
-      nixgl_packages = {
-        nixGLDefault = glpkgs.nixGLDefault;
-        nixGLNvidia = glpkgs.nixGLNvidia;
-        nixVulkanNvidia = glpkgs.nixVulkanNvidia;
-      };
+      #glopts =
+      #  {inherit pkgs;}
+      #  // builtins.fromJSON (builtins.readFile ./hm-lime.nvidia-version.json);
+      #glpkgs = import (inputs.nixgl + "/default.nix") glopts;
+      #nixgl_packages = {
+      #  nixGLDefault = glpkgs.nixGLDefault;
+      #  nixGLNvidia = glpkgs.nixGLNvidia;
+      #  nixVulkanNvidia = glpkgs.nixVulkanNvidia;
+      #};
     in {
       evxcompute = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
@@ -161,9 +170,7 @@
       lime = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [
-          {
-            config.nixGL.packages = nixgl_packages;
-          }
+          #{config.nixGL.packages = nixgl_packages;}
           ./hm-lime.nix
         ];
         extraSpecialArgs = {
@@ -172,6 +179,26 @@
             config.allowUnfree = true;
           };
         };
+      };
+    };
+
+    # --
+
+    systemConfigs.x86_64-linux = {
+      lime = system-manager.lib.makeSystemConfig {
+        modules = [
+          {
+            config = {
+              nixpkgs.hostPlatform = "x86_64-linux";
+              system-manager.allowAnyDistro = true;
+              environment.systemPackages = [
+                system-manager.packages."x86_64-linux".default
+              ];
+            };
+          }
+          inputs.nix-system-graphics.systemModules.default
+          ./sm-lime.nix
+        ];
       };
     };
   };

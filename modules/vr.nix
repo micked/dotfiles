@@ -22,9 +22,9 @@
 in {
   home.packages = [
     slimevr
-    (config.lib.nixGL.wrap wlx-overlay-s)
+    wlx-overlay-s
     #(config.lib.nixGL.wrap baballonia)
-    baballonia
+    #baballonia
     #index_camera_passthrough
   ];
 }

@@ -2,3 +2,4 @@
 set -e -p pipefail
 cat /proc/driver/nvidia/version | grep $(jq -r .nvidiaVersion hm-lime.nvidia-version.json)
 home-manager switch --flake ".#lime" -L
+sudo /run/system-manager/sw/bin/system-manager switch --flake ".#lime"

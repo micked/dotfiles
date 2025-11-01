@@ -86,19 +86,23 @@
         "type": "github"
       }
     },
-    "nixgl": {
-      "flake": false,
+    "nix-system-graphics": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
       "locked": {
-        "lastModified": 1752054764,
-        "narHash": "sha256-Ob/HuUhANoDs+nvYqyTKrkcPXf4ZgXoqMTQoCK0RFgQ=",
-        "owner": "nix-community",
-        "repo": "nixGL",
-        "rev": "a8e1ce7d49a149ed70df676785b07f63288f53c5",
+        "lastModified": 1737457219,
+        "narHash": "sha256-nX9dxoATDCSQgWw/iv6BngXDJEyHVYYEvHEVQ7Ig3fI=",
+        "owner": "soupglasses",
+        "repo": "nix-system-graphics",
+        "rev": "9c875e0c56cf2eb272b9102a4f3e24e4e31629fd",
         "type": "github"
       },
       "original": {
-        "owner": "nix-community",
-        "repo": "nixGL",
+        "owner": "soupglasses",
+        "repo": "nix-system-graphics",
         "type": "github"
       }
     },
@@ -182,12 +186,33 @@
       "inputs": {
         "agenix": "agenix",
         "home-manager": "home-manager_2",
-        "nixgl": "nixgl",
+        "nix-system-graphics": "nix-system-graphics",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixpkgs2305": "nixpkgs2305",
-        "nixpkgs2411": "nixpkgs2411"
+        "nixpkgs2411": "nixpkgs2411",
+        "system-manager": "system-manager"
+      }
+    },
+    "system-manager": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1761809512,
+        "narHash": "sha256-eax/ncPr9rw0qkcb7JKTyL9Un8BzsEe3Pnor8kG9AcQ=",
+        "owner": "numtide",
+        "repo": "system-manager",
+        "rev": "26fb1d50067e63c39be557e4fcedbd1aeec64c2e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "system-manager",
+        "type": "github"
       }
     },
     "systems": {
