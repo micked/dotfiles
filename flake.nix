@@ -5,6 +5,7 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs2305.url = "nixpkgs/nixos-23.05";
     nixpkgs2411.url = "nixpkgs/nixos-24.11";
+    nixpkgs-stable.url = "nixpkgs/nixos-25.05";
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -149,6 +150,12 @@
       evxcompute = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
         modules = [./hm-evxcompute.nix];
+        extraSpecialArgs = {
+          pkgs-stable = import inputs.nixpkgs-stable {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+          };
+        };
       };
 
       lime = home-manager.lib.homeManagerConfiguration {
