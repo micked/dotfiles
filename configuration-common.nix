@@ -68,6 +68,7 @@
       home-manager
       usbutils
       #chrysalis
+      killall
     ];
 
     programs.dconf.enable = true;
