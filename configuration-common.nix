@@ -28,7 +28,7 @@
     programs.zsh.enable = true;
     users.users.msk = {
       isNormalUser = true;
-      extraGroups = ["wheel" "networkmanager" "rfkill" "docker" "dialout"];
+      extraGroups = ["wheel" "networkmanager" "rfkill" "docker" "dialout" "plugdev"];
       shell = pkgs.zsh;
     };
 
