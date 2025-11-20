@@ -9,6 +9,7 @@
   imports = [
     ./hardware-configuration-laptop.nix
     ./configuration-common.nix
+    ./sys_modules/dev.nix
   ];
 
   # Use the systemd-boot EFI boot loader.
@@ -21,7 +22,10 @@
   # Per-interface useDHCP will be mandatory in the future, so this generated config
   # replicates the default behaviour.
   networking.useDHCP = false;
-  networking.networkmanager.enable = true;
+  networking.networkmanager = {
+    enable = true;
+    plugins = [pkgs.networkmanager-openvpn];
+  };
 
   console = {
     font = "Lat2-Terminus16";
@@ -46,7 +50,7 @@
     #  Option "TearFree" "true"
     #  Option "AccelMethod" "sna"
     #'';
-    videoDrivers = [ "modesetting" ];
+    videoDrivers = ["modesetting"];
     #useGlamor = true;
 
     desktopManager.session = [
