@@ -111,6 +111,13 @@ in {
     #theme = "Afterglow";
   };
 
+  home.file.kitten_ssh = {
+    target = ".config/kitty/ssh.conf";
+    text = ''
+      share_connections no
+    '';
+  };
+
   xdg = {
     userDirs = {
       enable = true;

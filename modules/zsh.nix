@@ -22,7 +22,7 @@
     shellAliases = {
       ls = "ls -1 --color=auto";
       columnt = "column -tns'	'";
-      kssh = "kitty +kitten ssh";
+      kssh = "kitten ssh";
     };
 
     dotDir = "${config.xdg.configHome}/zsh";
