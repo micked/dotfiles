@@ -27,6 +27,7 @@
     #  extraPortals = [pkgs.xdg-desktop-portal-gtk];
     #  xdgOpenUsePortal = true;
     #};
+    networking.firewall.allowedTCPPorts = [9090];
 
     hardware.bluetooth.enable = true;
 
