@@ -72,7 +72,7 @@ in {
     ./superslicer.nix
     ./git.nix
     ./vim.nix
-    #./hx.nix
+    ./hx.nix
     ./zsh.nix
     ./awesomewm.nix
     ./fonts
