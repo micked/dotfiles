@@ -10,11 +10,11 @@
   calc = pkgs.writeShellScriptBin "calc" "${pkgs.gnome-calculator}/bin/gnome-calculator $@";
   c2_pass = pkgs.writeShellScriptBin "c2_pass" ''
     ${pkgs.pass}/bin/pass c2
-    ${pkgs.oathToolkit}/bin/oathtool -v --totp=sha256 --digits=8 $(${pkgs.pass}/bin/pass c2_secret) | tail -n1
+    ${pkgs.oath-toolkit}/bin/oathtool -v --totp=sha256 --digits=8 $(${pkgs.pass}/bin/pass c2_secret) | tail -n1
   '';
   sophos_pass = pkgs.writeShellScriptBin "sophos_pass" ''
     PASS=$(${pkgs.pass}/bin/pass sophos)
-    TOKEN=$(${pkgs.oathToolkit}/bin/oathtool --totp=sha1 --digits=6 $(${pkgs.pass}/bin/pass sophos_secret))
+    TOKEN=$(${pkgs.oath-toolkit}/bin/oathtool --totp=sha1 --digits=6 $(${pkgs.pass}/bin/pass sophos_secret))
     echo $PASS$TOKEN
   '';
   sophos_login = pkgs.writeShellScriptBin "sophos_login" ''
