@@ -61,6 +61,7 @@
         imports = [
           ./modules/common.nix
           ./modules/private.nix
+          ./modules/vr.nix
         ];
         #services.picom.enable = pkgs.lib.mkForce false;
         xresources.properties."Xft.dpi" = 96;
