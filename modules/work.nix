@@ -6,8 +6,9 @@
 in {
   home.packages = with pkgs; [
     zotero
-    python3Packages.BlinkStick
+    python3Packages.blinkstick
     pymol
+    kicad
 
     clc
     jdk11 #For CLC
