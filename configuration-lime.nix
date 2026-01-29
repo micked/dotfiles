@@ -1,6 +1,7 @@
 {inputs}: {
   pkgs,
   config,
+  lib,
   ...
 }: {
   imports = [
@@ -19,6 +20,8 @@
       enable = true;
       plugins = [pkgs.networkmanager-openvpn];
     };
+
+    services.xserver.xkb.layout = lib.mkForce "us";
 
     boot.binfmt.emulatedSystems = ["aarch64-linux"];
 
