@@ -17,4 +17,11 @@ in {
     picotool-rules
   ];
   users.groups.plugdev = {};
+  nixpkgs.config = {
+    segger-jlink.acceptLicense = true;
+  };
+
+  environment.systemPackages = with pkgs; [
+    nrfutil
+  ];
 }

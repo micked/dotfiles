@@ -1,11 +1,8 @@
-{
-  pkgs,
-  ...
-}: let
+{pkgs, ...}: let
   patched-bwrap = pkgs.bubblewrap.overrideAttrs (o: {
     patches = (o.patches or []) ++ [./bwrap.patch];
   });
-  patched-bwrap-wrapped = pkgs.runCommand "patched-bwrap-wrapped" {nativeBuildInputs = [ pkgs.makeBinaryWrapper ];} ''
+  patched-bwrap-wrapped = pkgs.runCommand "patched-bwrap-wrapped" {nativeBuildInputs = [pkgs.makeBinaryWrapper];} ''
     mkdir -p $out/bin
     makeBinaryWrapper ${patched-bwrap}/bin/bwrap $out/bin/bwrap
   '';
@@ -40,6 +37,10 @@ in {
         buildFHSEnv = args: ((pkgs.buildFHSEnv.override {bubblewrap = patched-bwrap;})
           (args // {extraBwrapArgs = (args.extraBwrapArgs or []) ++ ["--cap-add ALL"];}));
       };
+      extraPackages = with pkgs; [
+        usbutils
+        procps
+      ];
     };
 
     environment.systemPackages = with pkgs; [

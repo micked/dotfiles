@@ -49,7 +49,9 @@
         trusted-public-keys = [
           "burger:obD5BdMxSJs2sGBeAe5AJX1aF0BQCBSAgIjHKWkT3VY="
           "msk-oblivion:kmf+iO7oFRQ6blNXZrNdMUBn7jxi5cy1lFzLNLRNEEk="
+          "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
         ];
+        substituters = ["https://cache.nixos-cuda.org"];
         trusted-users = ["msk"];
       };
     };
@@ -69,6 +71,7 @@
       usbutils
       killall
       xkill
+      screen
       # chrysalis
     ];
 
