@@ -6,6 +6,7 @@
   imports = [
     ./configuration-common.nix
     ./hardware-configuration-work3.nix
+    ./sys_modules/vr.nix
   ];
 
   config = {
@@ -27,13 +28,6 @@
     age.secrets.oblivion_nixkey.file = ./secrets/oblivion_nixkey.age;
     age.identityPaths = ["/etc/ssh/ssh_host_ed25519_key"];
     nix.settings.secret-key-files = [config.age.secrets.oblivion_nixkey.path];
-
-    programs.steam = {
-      enable = false;
-      #remotePlay.openFirewall = true;
-      #dedicatedServer.openFirewall = true;
-      #localNetworkGameTransfers.openFirewall = true;
-    };
 
     home-manager = {
       useGlobalPkgs = true;
