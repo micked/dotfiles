@@ -25,6 +25,8 @@
 
     boot.binfmt.emulatedSystems = ["aarch64-linux"];
 
+    virtualisation.docker.enable = true;
+
     #xdg.portal = {
     #  enable = true;
     #  extraPortals = [pkgs.xdg-desktop-portal-gtk];

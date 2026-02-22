@@ -7,7 +7,6 @@ in {
   home.packages = with pkgs; [
     trm
     kicad
-    vdhcoapp
   ];
 
   imports = [

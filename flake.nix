@@ -16,10 +16,10 @@
     #  #inputs.nixpkgs.follows = "nixpkgs";
     #  flake = false;
     #};
-    system-manager = {
-      url = "github:numtide/system-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # system-manager = {
+    #   url = "github:numtide/system-manager";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     nix-system-graphics = {
       url = "github:soupglasses/nix-system-graphics";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -29,7 +29,7 @@
     self,
     nixpkgs,
     home-manager,
-    system-manager,
+    # system-manager,
     ...
   } @ inputs: let
     homeAtWork = {
@@ -183,22 +183,22 @@
 
     # --
 
-    systemConfigs.x86_64-linux = {
-      lime = system-manager.lib.makeSystemConfig {
-        modules = [
-          {
-            config = {
-              nixpkgs.hostPlatform = "x86_64-linux";
-              system-manager.allowAnyDistro = true;
-              environment.systemPackages = [
-                system-manager.packages."x86_64-linux".default
-              ];
-            };
-          }
-          inputs.nix-system-graphics.systemModules.default
-          ./sm-lime.nix
-        ];
-      };
-    };
+    # systemConfigs.x86_64-linux = {
+    #   lime = system-manager.lib.makeSystemConfig {
+    #     modules = [
+    #       {
+    #         config = {
+    #           nixpkgs.hostPlatform = "x86_64-linux";
+    #           system-manager.allowAnyDistro = true;
+    #           environment.systemPackages = [
+    #             system-manager.packages."x86_64-linux".default
+    #           ];
+    #         };
+    #       }
+    #       inputs.nix-system-graphics.systemModules.default
+    #       ./sm-lime.nix
+    #     ];
+    #   };
+    # };
   };
 }
