@@ -7,6 +7,7 @@
     ./configuration-common.nix
     ./hardware-configuration-work3.nix
     ./sys_modules/vr.nix
+    ./sys_modules/dev.nix
   ];
 
   config = {
