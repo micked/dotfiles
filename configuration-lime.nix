@@ -14,6 +14,16 @@
   config = {
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
+    boot.kernelPatches = [
+      # {
+      #   name = "BSB DSC Fix";
+      #   patch = ./sys_modules/nvidia-bsb-dsc-fix.patch;
+      # }
+      {
+        name = "BSB UVC Fix";
+        patch = ./sys_modules/0001-Change-device-uvc_version-check-on-dwMaxVideoFrameSi.patch;
+      }
+    ];
 
     networking.hostName = "lime";
     networking.networkmanager = {
@@ -23,15 +33,23 @@
 
     services.xserver.xkb.layout = lib.mkForce "us";
 
-    boot.binfmt.emulatedSystems = ["aarch64-linux"];
+    # boot.binfmt.emulatedSystems = ["aarch64-linux"];
+    # virtualisation.docker.enable = true;
 
-    virtualisation.docker.enable = true;
-
-    #xdg.portal = {
-    #  enable = true;
-    #  extraPortals = [pkgs.xdg-desktop-portal-gtk];
-    #  xdgOpenUsePortal = true;
-    #};
+    # services.pipewire.enable = true;
+    # xdg.portal = {
+    #   enable = true;
+    #   config.common = {
+    #     default = "gtk";
+    #     "org.freedesktop.impl.portal.ScreenCast" = ["gnome"];
+    #   };
+    #   # configPackages = [pkgs.xdg-desktop-portal-gtk];
+    #   extraPortals = [
+    #     pkgs.xdg-desktop-portal-gtk
+    #     pkgs.xdg-desktop-portal-gnome
+    #   ];
+    #   # xdgOpenUsePortal = true;
+    # };
     networking.firewall.allowedTCPPorts = [9090];
 
     hardware.bluetooth.enable = true;
@@ -67,6 +85,7 @@
           ./modules/common.nix
           ./modules/private.nix
           ./modules/vr.nix
+          ./modules/hypr.nix
         ];
         #services.picom.enable = pkgs.lib.mkForce false;
         xresources.properties."Xft.dpi" = 96;
@@ -83,9 +102,14 @@
       };
     };
 
-    services.displayManager.autoLogin = {
+    programs.hyprland = {
       enable = true;
-      user = "msk";
+      withUWSM  = true;
+    };
+    
+    services.displayManager.autoLogin = {
+      # enable = true;
+      # user = "msk";
     };
 
     security.pam.services.lightdm.enableGnomeKeyring = true;
