@@ -37,19 +37,6 @@
     # virtualisation.docker.enable = true;
 
     # services.pipewire.enable = true;
-    # xdg.portal = {
-    #   enable = true;
-    #   config.common = {
-    #     default = "gtk";
-    #     "org.freedesktop.impl.portal.ScreenCast" = ["gnome"];
-    #   };
-    #   # configPackages = [pkgs.xdg-desktop-portal-gtk];
-    #   extraPortals = [
-    #     pkgs.xdg-desktop-portal-gtk
-    #     pkgs.xdg-desktop-portal-gnome
-    #   ];
-    #   # xdgOpenUsePortal = true;
-    # };
     networking.firewall.allowedTCPPorts = [9090];
 
     hardware.bluetooth.enable = true;
@@ -60,6 +47,47 @@
 
     services.xserver.videoDrivers = ["nvidia"];
     services.xserver.dpi = 96;
+    services.xserver.displayManager.lightdm.enable = false;
+
+    programs.hyprland = {
+      enable = true;
+      withUWSM = true;
+    };
+
+    xdg.portal = {
+      enable = true;
+      extraPortals = with pkgs; [xdg-desktop-portal-hyprland];
+    };
+
+    services.greetd = {
+      enable = true;
+      settings = {
+        initial_session = {
+          user = "msk";
+          command = "start-hyprland";
+        };
+
+        default_session = {
+          user = "greeter";
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd start-hyprland";
+        };
+      };
+    };
+
+    security.pam.services.greetd.enableGnomeKeyring = true;
+    services.gnome.gnome-keyring.enable = true;
+    # programs.regreet.enable = true;
+    # systemd.services.greetd.environment = {
+    #   WLR_NO_HARDWARE_CURSORS = "1";
+    #   GSK_RENDERER = "vulkan";
+    #   WLR_RENDERER = "vulkan";
+    # };
+    # environment = {
+    #   variables = {
+    #     WLR_NO_HARDWARE_CURSORS = "1";
+    #     GSK_RENDERER = "ngl";
+    #   };
+    # };
 
     hardware.nvidia = {
       modesetting.enable = true;
@@ -101,19 +129,6 @@
         };
       };
     };
-
-    programs.hyprland = {
-      enable = true;
-      withUWSM  = true;
-    };
-    
-    services.displayManager.autoLogin = {
-      # enable = true;
-      # user = "msk";
-    };
-
-    security.pam.services.lightdm.enableGnomeKeyring = true;
-    services.gnome.gnome-keyring.enable = true;
 
     #services.autorandr.enable = true;
 
