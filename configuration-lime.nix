@@ -14,6 +14,16 @@
   config = {
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
+    boot.kernelPatches = [
+      # {
+      #   name = "BSB DSC Fix";
+      #   patch = ./sys_modules/nvidia-bsb-dsc-fix.patch;
+      # }
+      {
+        name = "BSB UVC Fix";
+        patch = ./sys_modules/0001-Change-device-uvc_version-check-on-dwMaxVideoFrameSi.patch;
+      }
+    ];
 
     networking.hostName = "lime";
     networking.networkmanager = {
@@ -23,15 +33,10 @@
 
     services.xserver.xkb.layout = lib.mkForce "us";
 
-    boot.binfmt.emulatedSystems = ["aarch64-linux"];
+    # boot.binfmt.emulatedSystems = ["aarch64-linux"];
+    # virtualisation.docker.enable = true;
 
-    virtualisation.docker.enable = true;
-
-    #xdg.portal = {
-    #  enable = true;
-    #  extraPortals = [pkgs.xdg-desktop-portal-gtk];
-    #  xdgOpenUsePortal = true;
-    #};
+    # services.pipewire.enable = true;
     networking.firewall.allowedTCPPorts = [9090];
 
     hardware.bluetooth.enable = true;
@@ -42,6 +47,47 @@
 
     services.xserver.videoDrivers = ["nvidia"];
     services.xserver.dpi = 96;
+    services.xserver.displayManager.lightdm.enable = false;
+
+    programs.hyprland = {
+      enable = true;
+      withUWSM = true;
+    };
+
+    xdg.portal = {
+      enable = true;
+      extraPortals = with pkgs; [xdg-desktop-portal-hyprland];
+    };
+
+    services.greetd = {
+      enable = true;
+      settings = {
+        initial_session = {
+          user = "msk";
+          command = "start-hyprland";
+        };
+
+        default_session = {
+          user = "greeter";
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd start-hyprland";
+        };
+      };
+    };
+
+    security.pam.services.greetd.enableGnomeKeyring = true;
+    services.gnome.gnome-keyring.enable = true;
+    # programs.regreet.enable = true;
+    # systemd.services.greetd.environment = {
+    #   WLR_NO_HARDWARE_CURSORS = "1";
+    #   GSK_RENDERER = "vulkan";
+    #   WLR_RENDERER = "vulkan";
+    # };
+    # environment = {
+    #   variables = {
+    #     WLR_NO_HARDWARE_CURSORS = "1";
+    #     GSK_RENDERER = "ngl";
+    #   };
+    # };
 
     hardware.nvidia = {
       modesetting.enable = true;
@@ -67,6 +113,7 @@
           ./modules/common.nix
           ./modules/private.nix
           ./modules/vr.nix
+          ./modules/hypr.nix
         ];
         #services.picom.enable = pkgs.lib.mkForce false;
         xresources.properties."Xft.dpi" = 96;
@@ -82,14 +129,6 @@
         };
       };
     };
-
-    services.displayManager.autoLogin = {
-      enable = true;
-      user = "msk";
-    };
-
-    security.pam.services.lightdm.enableGnomeKeyring = true;
-    services.gnome.gnome-keyring.enable = true;
 
     #services.autorandr.enable = true;
 
