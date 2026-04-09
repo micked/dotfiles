@@ -66,6 +66,7 @@ in {
     meslo-lgs-nf
     zed-editor
     code-cursor
+    alejandra
   ];
 
   imports = [
