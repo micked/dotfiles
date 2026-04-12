@@ -12,9 +12,10 @@
         "${pkgs.ashell}/bin/ashell"
       ];
       bind = [
-        "$mod, R, exec, tofi-drun | xargs hyprctl dispatch exec --"
+        "$mod, R, exec, ${pkgs.tofi}/bin/tofi-drun | xargs hyprctl dispatch exec --"
         "$mod, F, exec, firefox"
         "$mod, RETURN, exec, kitty"
+        "$mod, W, killactive"
         ", Print, exec, grimblast copy area"
         "$mod, code:10, workspace, 1"
         "$mod SHIFT, code:10, movetoworkspace, 1"
@@ -35,6 +36,9 @@
         "$mod, code:18, workspace, 9"
         "$mod SHIFT, code:18, movetoworkspace, 9"
       ];
+      bindm = [
+        "$mod, mouse:272, movewindow"
+      ];
     };
   };
 
@@ -48,6 +52,8 @@
 
   gtk = {
     enable = true;
+
+    gtk4.theme = null;
 
     theme = {
       package = pkgs.flat-remix-gtk;

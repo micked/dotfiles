@@ -39,7 +39,8 @@ in {
     sophos_login
 
     # bluetooth
-    blueberry
+    # blueberry
+    blueman
 
     # other
     firefox_wrapped
@@ -132,6 +133,7 @@ in {
       templates = "$HOME/templates";
       videos = "$HOME";
       createDirectories = true;
+      setSessionVariables = true;
     };
     mimeApps = {
       enable = true;
