@@ -23,7 +23,10 @@
       plugins = [ pkgs.networkmanager-openvpn ];
     };
 
-    boot.binfmt.emulatedSystems = ["aarch64-linux"];
+    hardware.bluetooth.enable = true;
+
+    #boot.binfmt.emulatedSystems = ["aarch64-linux"];
+    virtualisation.docker.enable = true;
 
     environment.systemPackages = [inputs.agenix.packages.x86_64-linux.default];
     age.secrets.oblivion_nixkey.file = ./secrets/oblivion_nixkey.age;
