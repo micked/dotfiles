@@ -1,8 +1,4 @@
-{
-  config,
-  pkgs,
-  ...
-}: let
+{pkgs, ...}: let
   vim-buftabline = pkgs.vimUtils.buildVimPlugin rec {
     name = "vim-buftabline";
     pname = name;
@@ -26,21 +22,19 @@
       }
       + "/misc/vim";
   };
-
-  python-importlib-metadata17 = pkgs.python3.pkgs.buildPythonPackage rec {
-    pname = "importlib-metadata";
-    version = "1.7.0";
-    format = "pyproject";
-    src = pkgs.python3.pkgs.fetchPypi {
-      pname = "importlib_metadata";
-      inherit version;
-      hash = "sha256-kLtljNu/bRc1tjQc5wj8cCSj4U6Z/9xXg+3qn5sHf4M=";
-    };
-    nativeBuildInputs = with pkgs.python3.pkgs; [setuptools setuptools-scm];
-    propagatedBuildInputs = with pkgs.python3.pkgs; [toml zipp];
-    doCheck = false;
-  };
-
+  # python-importlib-metadata17 = pkgs.python3.pkgs.buildPythonPackage rec {
+  #   pname = "importlib-metadata";
+  #   version = "1.7.0";
+  #   format = "pyproject";
+  #   src = pkgs.python3.pkgs.fetchPypi {
+  #     pname = "importlib_metadata";
+  #     inherit version;
+  #     hash = "sha256-kLtljNu/bRc1tjQc5wj8cCSj4U6Z/9xXg+3qn5sHf4M=";
+  #   };
+  #   nativeBuildInputs = with pkgs.python3.pkgs; [setuptools setuptools-scm];
+  #   propagatedBuildInputs = with pkgs.python3.pkgs; [toml zipp];
+  #   doCheck = false;
+  # };
   #python-snakefmt = pkgs.python3.pkgs.buildPythonApplication rec {
   #  pname = "snakefmt";
   #  version = "0.11.0";
@@ -64,6 +58,8 @@ in {
     enable = true;
     vimAlias = true;
     defaultEditor = true;
+    withPython3 = true;
+    withRuby = false;
 
     plugins = with pkgs.vimPlugins; [
       vim-nix
@@ -74,12 +70,14 @@ in {
           au BufNewFile,BufRead snakefile set filetype=snakemake
           set nofoldenable
         '';
+        type = "viml";
       }
       {
         plugin = vim-polyglot;
         config = ''
           let g:vim_svelte_plugin_use_typescript = 1
         '';
+        type = "viml";
       }
       #{
       #  plugin = oxocarbon-nvim;
@@ -92,6 +90,7 @@ in {
         config = ''
           colorscheme tokyonight-storm
         '';
+        type = "viml";
       }
       #{
       #  plugin = base16-nvim;
@@ -123,6 +122,7 @@ in {
           let g:neoformat_enabled_htmldjango = ['djlintjinja']
           let g:neoformat_enabled_c = ['clang-format']
         '';
+        type = "viml";
       }
     ];
 
