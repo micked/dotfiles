@@ -1,4 +1,8 @@
 {pkgs, ...}: let
+  litetrack-rules = pkgs.runCommand "litetrack-rules" {} ''
+    mkdir -p $out/lib/udev/rules.d
+    cp ${./60-litetrack-hidraw.rules} $out/lib/udev/rules.d/60-litetrack-hidraw.rules
+  '';
   probe-rs-rules = pkgs.runCommand "probe-rs-rules" {} ''
     mkdir -p $out/lib/udev/rules.d
     cp ${./69-probe-rs.rules} $out/lib/udev/rules.d/69-probe-rs.rules
@@ -48,6 +52,7 @@ in {
     probe-rs-rules
     picotool-rules
     slogic-rules
+    litetrack-rules
   ];
   users.groups.plugdev = {};
   nixpkgs.config = {

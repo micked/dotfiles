@@ -1,0 +1,5 @@
+# Litetrack USB receiver (HID vendor interface): grants logged-in users access
+# via the uaccess tag. Install with:
+#   sudo cp 99-litetrack-hidraw.rules /etc/udev/rules.d/
+#   sudo udevadm control --reload-rules && sudo udevadm trigger
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="f08c", ATTRS{idProduct}=="0101", MODE="0660", TAG+="uaccess"

@@ -38,6 +38,7 @@
       ];
       bindm = [
         "$mod, mouse:272, movewindow"
+        "$mod SHIFT, mouse:272, resizewindow 2"
       ];
     };
   };
