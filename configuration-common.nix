@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   ...
 }: {
@@ -75,6 +74,8 @@
       # chrysalis
     ];
 
+    services.openssh.enable = true;
+    systemd.services.sshd.wantedBy = pkgs.lib.mkForce [];
     programs.dconf.enable = true;
     services.gvfs.enable = true;
 
