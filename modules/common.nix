@@ -68,6 +68,8 @@ in {
     zed-editor
     code-cursor
     alejandra
+    python3
+    ripgrep
   ];
 
   imports = [
