@@ -2,6 +2,7 @@
   home.sessionVariables.NIXOS_OZONE_WL = "1";
   wayland.windowManager.hyprland = {
     enable = true;
+    # configType = "hyprlang";
     systemd.enable = false;
     settings = {
       "$mod" = "SUPER";

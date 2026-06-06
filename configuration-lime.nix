@@ -34,15 +34,30 @@
 
     networking.firewall.allowedTCPPorts = [9090];
 
-    hardware.bluetooth.enable = true;
+    hardware.bluetooth = {
+      enable = true;
+      powerOnBoot = true;
+      settings = {
+        General = {
+          Experimental = true;
+          FastConnectable = true;
+        };
+        Policy = {
+          AutoEnable = true;
+        };
+      };
+    };
 
     hardware.graphics = {
       enable = true;
     };
 
-    services.xserver.videoDrivers = ["nvidia"];
-    services.xserver.dpi = 96;
-    services.xserver.displayManager.lightdm.enable = false;
+    services.xserver = {
+      videoDrivers = ["nvidia"];
+      dpi = 96;
+      displayManager.lightdm.enable = false;
+      windowManager.awesome.enable = lib.mkForce false;
+    };
 
     services.pipewire.enable = true;
     programs.hyprland = {
