@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}: {
+{pkgs, ...}: {
   config = {
     services.xserver = {
       enable = true;
@@ -27,7 +24,7 @@
     programs.zsh.enable = true;
     users.users.msk = {
       isNormalUser = true;
-      extraGroups = ["wheel" "networkmanager" "rfkill" "docker" "dialout" "plugdev"];
+      extraGroups = ["wheel" "networkmanager" "rfkill" "docker" "dialout" "plugdev" "render" "video"];
       shell = pkgs.zsh;
     };
 

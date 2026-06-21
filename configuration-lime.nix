@@ -12,12 +12,30 @@
   ];
 
   config = {
-    boot.loader.systemd-boot.enable = true;
-    boot.loader.efi.canTouchEfiVariables = true;
-    boot.kernelPatches = [
+    boot = {
+      loader.systemd-boot.enable = true;
+      loader.efi.canTouchEfiVariables = true;
+      kernelPatches = [
+        {
+          name = "BSB UVC Fix";
+          patch = ./sys_modules/0001-Change-device-uvc_version-check-on-dwMaxVideoFrameSi.patch;
+        }
+      ];
+      # kernelParams = ["nvidia-modeset.conceal_vrr_caps=1"];
+    };
+
+    security.pam.loginLimits = [
       {
-        name = "BSB UVC Fix";
-        patch = ./sys_modules/0001-Change-device-uvc_version-check-on-dwMaxVideoFrameSi.patch;
+        domain = "@users";
+        type = "-";
+        item = "rtprio";
+        value = "95";
+      }
+      {
+        domain = "@users";
+        type = "-";
+        item = "nice";
+        value = "-20";
       }
     ];
 

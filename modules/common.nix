@@ -66,10 +66,6 @@ in {
 
     meslo-lgs-nf
     zed-editor
-    code-cursor
-    alejandra
-    python3
-    ripgrep
   ];
 
   imports = [
@@ -81,6 +77,7 @@ in {
     ./zsh.nix
     ./awesomewm.nix
     ./fonts
+    ./dev.nix
   ];
 
   fonts.fontconfig.enable = true;
