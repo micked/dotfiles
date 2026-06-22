@@ -94,20 +94,21 @@
     repo = "tree-sitter-php";
     hash = "sha256-SUoWvPnNpgg5QMxbTw7XfXEoxyOkqnNFPnrMZnoiJH0=";
   };
-  tree-sitter-swift = (treeSitterFromGitHub {
-    pname = "tree-sitter-swift";
-    version = "0.7.2";
-    owner = "alex-pinkus";
-    repo = "tree-sitter-swift";
-    rev = "0.7.2-with-generated-files";
-    hash = "sha256-tG+tM7B6901QP4QyJdf55V38b4XduSU1eb+gaP7BikE=";
-  }).overridePythonAttrs (old: {
-    postPatch =
-      (old.postPatch or "")
-      + ''
-        substituteInPlace pyproject.toml --replace 'version = "0.0.1"' 'version = "0.7.2"'
-      '';
-  });
+  tree-sitter-swift =
+    (treeSitterFromGitHub {
+      pname = "tree-sitter-swift";
+      version = "0.7.2";
+      owner = "alex-pinkus";
+      repo = "tree-sitter-swift";
+      rev = "0.7.2-with-generated-files";
+      hash = "sha256-tG+tM7B6901QP4QyJdf55V38b4XduSU1eb+gaP7BikE=";
+    }).overridePythonAttrs (old: {
+      postPatch =
+        (old.postPatch or "")
+        + ''
+          substituteInPlace pyproject.toml --replace 'version = "0.0.1"' 'version = "0.7.2"'
+        '';
+    });
   tree-sitter-lua = treeSitterFromGitHub {
     pname = "tree-sitter-lua";
     version = "0.5.0";
@@ -206,6 +207,7 @@
       tree-sitter-fortran
       tree-sitter-bash
       tree-sitter-json
+      openai
     ];
     doCheck = false;
   };
