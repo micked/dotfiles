@@ -18,6 +18,7 @@
       ".direnv/"
       ".ipynb_checkpoints/"
       "*.swp"
+      ".cursor"
     ];
   };
 
