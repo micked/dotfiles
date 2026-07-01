@@ -137,6 +137,7 @@ in {
     zellij
     jlab
     jq
+    alejandra
   ];
 
   home.activation = {
