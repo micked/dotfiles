@@ -220,6 +220,14 @@
       wrapProgram $out/bin/cursor --set SHELL ${pkgs.zsh}/bin/zsh
     '';
   };
+  zed-editor = pkgs.symlinkJoin {
+    name = "zed-editor";
+    paths = [pkgs.zed-editor];
+    nativeBuildInputs = [pkgs.makeWrapper];
+    postBuild = ''
+      wrapProgram $out/bin/zeditor --set GPUI_X11_SCALE_FACTOR 1
+    '';
+  };
 in {
   home.packages = with pkgs; [
     cursor
@@ -227,5 +235,28 @@ in {
     python3
     ripgrep
     graphify
+    nil
+    nixd
   ];
+
+  programs.zed-editor = {
+    package = zed-editor;
+    enable = true;
+    extensions = [ "nix" "toml" "rust" ];
+    userSettings = {
+      theme = {
+        mode = "dark";
+        dark = "Gruvbox Dark";
+        light = "One Light";
+      };
+      features = {
+        copilot = false;
+      };
+      telemetry = {
+        metrics = false;
+      };
+      hour_format = "hour24";
+      load_direnv = "shell_hook";
+    };
+  };
 }

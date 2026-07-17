@@ -44,7 +44,7 @@
         glibmm
         pcre
         python3
-        libsForQt5.qt5.qtsvg
+        qt5.qtsvg
       ];
     });
 in {

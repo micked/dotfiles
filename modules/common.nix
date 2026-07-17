@@ -65,7 +65,6 @@ in {
     gnupg
 
     meslo-lgs-nf
-    zed-editor
   ];
 
   imports = [
