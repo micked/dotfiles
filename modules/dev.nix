@@ -242,7 +242,7 @@ in {
   programs.zed-editor = {
     package = zed-editor;
     enable = true;
-    extensions = [ "nix" "toml" "rust" ];
+    extensions = ["nix" "toml" "rust"];
     userSettings = {
       theme = {
         mode = "dark";
@@ -257,6 +257,25 @@ in {
       };
       hour_format = "hour24";
       load_direnv = "shell_hook";
+      agent = {
+        sandbox_permissions = {
+          write_paths = ["/home/msk/.cache/nix"];
+        };
+      };
+      agent_servers = {
+        "Codex (direnv)" = {
+          type = "custom";
+          command = "direnv";
+          args = ["exec" "." "npx" "-y" "@agentclientprotocol/codex-acp"];
+          env = {};
+        };
+        "Claude (direnv)" = {
+          type = "custom";
+          command = "direnv";
+          args = ["exec" "." "npx" "-y" "@agentclientprotocol/claude-agent-acp"];
+          env = {};
+        };
+      };
     };
   };
 }

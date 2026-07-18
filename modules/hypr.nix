@@ -1,46 +1,72 @@
-{pkgs, ...}: {
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}: let
+  inherit (lib.generators) mkLuaInline;
+
+  noctalia = inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
+
+  # hl.bind(keys, dispatcher) - `keys` and `dispatcher` are raw Lua expressions.
+  mkBind = keys: dispatcher: {
+    _args = [(mkLuaInline keys) (mkLuaInline dispatcher)];
+  };
+
+  # hl.bind(keys, dispatcher, { mouse = true }) for interactive mouse binds.
+  mkMouseBind = keys: dispatcher: {
+    _args = [(mkLuaInline keys) (mkLuaInline dispatcher) {mouse = true;}];
+  };
+
+  workspaceBinds = lib.concatMap (
+    ws: let
+      code = "code:${toString (ws + 9)}";
+    in [
+      (mkBind ''mod .. " + ${code}"'' ''hl.dsp.focus({ workspace = ${toString ws} })'')
+      (mkBind ''mod .. " + SHIFT + ${code}"'' ''hl.dsp.window.move({ workspace = ${toString ws} })'')
+    ]
+  ) (lib.range 1 9);
+in {
   home.sessionVariables.NIXOS_OZONE_WL = "1";
+
+  imports = [inputs.noctalia.homeModules.default];
+  programs.noctalia = {
+    enable = true;
+    package = noctalia;
+  };
+
   wayland.windowManager.hyprland = {
     enable = true;
-    # configType = "hyprlang";
+    configType = "lua";
     systemd.enable = false;
     settings = {
-      "$mod" = "SUPER";
-      env = [
-        "WLR_NO_HARDWARE_CURSORS,1"
-      ];
-      exec-once = [
-        "${pkgs.ashell}/bin/ashell"
-      ];
-      bind = [
-        "$mod, R, exec, ${pkgs.tofi}/bin/tofi-drun | xargs hyprctl dispatch exec --"
-        "$mod, F, exec, firefox"
-        "$mod, RETURN, exec, kitty"
-        "$mod, W, killactive"
-        ", Print, exec, grimblast copy area"
-        "$mod, code:10, workspace, 1"
-        "$mod SHIFT, code:10, movetoworkspace, 1"
-        "$mod, code:11, workspace, 2"
-        "$mod SHIFT, code:11, movetoworkspace, 2"
-        "$mod, code:12, workspace, 3"
-        "$mod SHIFT, code:12, movetoworkspace, 3"
-        "$mod, code:13, workspace, 4"
-        "$mod SHIFT, code:13, movetoworkspace, 4"
-        "$mod, code:14, workspace, 5"
-        "$mod SHIFT, code:14, movetoworkspace, 5"
-        "$mod, code:15, workspace, 6"
-        "$mod SHIFT, code:15, movetoworkspace, 6"
-        "$mod, code:16, workspace, 7"
-        "$mod SHIFT, code:16, movetoworkspace, 7"
-        "$mod, code:17, workspace, 8"
-        "$mod SHIFT, code:17, movetoworkspace, 8"
-        "$mod, code:18, workspace, 9"
-        "$mod SHIFT, code:18, movetoworkspace, 9"
-      ];
-      bindm = [
-        "$mod, mouse:272, movewindow"
-        "$mod SHIFT, mouse:272, resizewindow 2"
-      ];
+      mod = {_var = "SUPER";};
+
+      env = {_args = ["WLR_NO_HARDWARE_CURSORS" "1"];};
+
+      bind =
+        [
+          (mkBind ''mod .. " + R"'' ''hl.dsp.exec_cmd("${pkgs.tofi}/bin/tofi-drun | xargs hyprctl dispatch exec --")'')
+          (mkBind ''mod .. " + F"'' ''hl.dsp.exec_cmd("firefox")'')
+          (mkBind ''mod .. " + RETURN"'' ''hl.dsp.exec_cmd("kitty")'')
+          (mkBind ''mod .. " + W"'' ''hl.dsp.window.close()'')
+          (mkBind ''"Print"'' ''hl.dsp.exec_cmd("grimblast copy area")'')
+        ]
+        ++ workspaceBinds
+        ++ [
+          (mkMouseBind ''mod .. " + mouse:272"'' ''hl.dsp.window.drag()'')
+          (mkMouseBind ''mod .. " + SHIFT + mouse:272"'' ''hl.dsp.window.resize()'')
+        ];
+
+      on = {
+        _args = [
+          "hyprland.start"
+          (mkLuaInline ''
+            function()
+              hl.exec_cmd("${lib.getExe noctalia}")
+            end'')
+        ];
+      };
     };
   };
 

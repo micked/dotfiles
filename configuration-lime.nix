@@ -148,6 +148,7 @@
         #};
       };
       extraSpecialArgs = {
+        inherit inputs;
         pkgs2411 = import inputs.nixpkgs2411 {system = "x86_64-linux";};
         pkgs2305 = import inputs.nixpkgs2305 {
           system = "x86_64-linux";
