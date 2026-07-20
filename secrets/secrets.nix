@@ -4,6 +4,7 @@ let
 
   oblivion = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIA+77ql7Xd2lZHGicawue0wO28mJpDOnTi+QR/JUvLql";
   evx-80075 = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPxQcsRKWinhjlt1LzKAbhgYsXWa2ICrXd7q4qucod5Q";
+  lime = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIMq6AW4yVUzS4m60FcYYg8lDeIU1oxjzTMAcNayCRGEC";
 in {
-  "oblivion_nixkey.age".publicKeys = [msk-oblivion oblivion evx-80075];
+  "oblivion_nixkey.age".publicKeys = [msk-oblivion oblivion evx-80075 lime];
 }
