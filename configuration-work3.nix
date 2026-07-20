@@ -1,6 +1,7 @@
 {inputs}: {
   pkgs,
   config,
+  lib,
   ...
 }: {
   imports = [
@@ -25,6 +26,40 @@
 
     hardware.bluetooth.enable = true;
 
+    services.xserver = {
+      displayManager.lightdm.enable = false;
+      windowManager.awesome.enable = lib.mkForce false;
+    };
+
+    services.pipewire.enable = true;
+    programs.hyprland = {
+      enable = true;
+      withUWSM = true;
+    };
+
+    xdg.portal = {
+      enable = true;
+      extraPortals = with pkgs; [xdg-desktop-portal-hyprland];
+    };
+
+    services.greetd = {
+      enable = true;
+      settings = {
+        initial_session = {
+          user = "msk";
+          command = "start-hyprland";
+        };
+
+        default_session = {
+          user = "greeter";
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd start-hyprland";
+        };
+      };
+    };
+
+    security.pam.services.greetd.enableGnomeKeyring = true;
+    services.gnome.gnome-keyring.enable = true;
+
     #boot.binfmt.emulatedSystems = ["aarch64-linux"];
     virtualisation.docker.enable = true;
 
@@ -36,20 +71,24 @@
     home-manager = {
       useGlobalPkgs = true;
       useUserPackages = true;
-      users.msk = {
-        config,
-        pkgs,
-        ...
-      }: {
+      users.msk = {...}: {
         home.homeDirectory = "/home/msk";
         home.username = "msk";
         home.stateVersion = "24.11";
         imports = [
           ./modules/common.nix
           ./modules/work.nix
+          ./modules/hypr.nix
         ];
+
+        wayland.windowManager.hyprland.settings.config.input = {
+          kb_layout = "dk";
+          kb_variant = "";
+          kb_options = "compose:sclk,caps:escape";
+        };
       };
       extraSpecialArgs = {
+        inherit inputs;
         #pkgs2411 = import inputs.nixpkgs2411 {system = "x86_64-linux";};
         pkgs-stable = import inputs.nixpkgs-stable {system = "x86_64-linux";};
         pkgs2305 = import inputs.nixpkgs2305 {
@@ -57,21 +96,6 @@
           config = {allowUnfree = true;};
         };
       };
-    };
-
-    services.displayManager.autoLogin = {
-      enable = true;
-      user = "msk";
-    };
-
-    security.pam.services.lightdm.enableGnomeKeyring = true;
-    services.gnome.gnome-keyring.enable = true;
-
-    services.autorandr.enable = true;
-
-    programs.xss-lock = {
-      enable = false;
-      lockerCommand = "${pkgs.i3lock-fancy}/bin/i3lock-fancy -p";
     };
 
     system.stateVersion = "24.11";
