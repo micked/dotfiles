@@ -44,6 +44,9 @@
     age.identityPaths = ["/etc/ssh/ssh_host_ed25519_key"];
     nix.settings.secret-key-files = [config.age.secrets.oblivion_nixkey.path];
 
+    services.openssh.enable = true;
+    systemd.services.sshd.wantedBy = pkgs.lib.mkForce [];
+
     networking.hostName = "lime";
     networking.networkmanager = {
       enable = true;

@@ -136,6 +136,7 @@
     nixosConfigurations.lime = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
+        inputs.agenix.nixosModules.default
         (import ./configuration-lime.nix {inherit inputs;})
         home-manager.nixosModules.home-manager
       ];
