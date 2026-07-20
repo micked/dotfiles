@@ -230,10 +230,30 @@ let
       wrapProgram $out/bin/zeditor --set GPUI_X11_SCALE_FACTOR 1
     '';
   };
+  nix-format = pkgs.writeShellApplication {
+    name = "nix-format";
+    runtimeInputs = [
+      pkgs.alejandra
+      pkgs.coreutils
+      pkgs.nix
+    ];
+    text = ''
+      tmp_file="$(mktemp --suffix=.nix)"
+      trap 'rm -f "$tmp_file"' EXIT
+
+      cat > "$tmp_file"
+      if nix fmt -- "$tmp_file" >/dev/null 2>&1; then
+        cat "$tmp_file"
+      else
+        alejandra --quiet < "$tmp_file"
+      fi
+    '';
+  };
 in
 {
   home.packages = with pkgs; [
     cursor
+    nix-format
     alejandra
     python3
     ripgrep
@@ -269,6 +289,17 @@ in
       hour_format = "hour24";
       load_direnv = "shell_hook";
       format_on_save = "on";
+      languages = {
+        Nix = {
+          format_on_save = "on";
+          formatter = {
+            external = {
+              command = "nix-format";
+              arguments = [ ];
+            };
+          };
+        };
+      };
       agent = {
         sandbox_permissions = {
           write_paths = [ "/home/msk/.cache/nix" ];
