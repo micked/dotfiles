@@ -1,1 +1,1 @@
-nixos-rebuild switch --flake . --keep-going -L --use-remote-sudo
+nixos-rebuild switch --flake . --keep-going -L --elevate=sudo
