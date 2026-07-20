@@ -4,7 +4,8 @@
   lib,
   pkgs-stable,
   ...
-}: let
+}:
+let
   my-micromamba = pkgs-stable.micromamba;
   micromamba-bash = pkgs.writeTextFile {
     name = "micromamba.bash";
@@ -49,61 +50,66 @@
     '';
   };
   nix-load = "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh";
-  jlab = let
-    python = pkgs.python3.override {
-      packageOverrides = self: super: {
-        #numba = super.numba.overridePythonAttrs (prev: {disabled = false;});
-        #pynndescent = super.pynndescent.overridePythonAttrs (prev: {doCheck = false;});
-        #biopython = super.biopython.overrideAttrs {doInstallCheck = false;};
+  jlab =
+    let
+      python = pkgs.python3.override {
+        packageOverrides = self: super: {
+          #numba = super.numba.overridePythonAttrs (prev: {disabled = false;});
+          #pynndescent = super.pynndescent.overridePythonAttrs (prev: {doCheck = false;});
+          #biopython = super.biopython.overrideAttrs {doInstallCheck = false;};
+        };
       };
-    };
-    jupyterlab-vim = python.pkgs.buildPythonPackage rec {
-      pname = "jupyterlab-vim";
-      version = "4.1.4";
-      format = "pyproject";
-      src = python.pkgs.fetchPypi {
-        pname = "jupyterlab_vim";
-        inherit version;
-        hash = "sha256-q/KJGq+zLwy5StmDIa5+vL4Mq+Uj042A1WnApQuFIlo=";
+      jupyterlab-vim = python.pkgs.buildPythonPackage rec {
+        pname = "jupyterlab-vim";
+        version = "4.1.4";
+        format = "pyproject";
+        src = python.pkgs.fetchPypi {
+          pname = "jupyterlab_vim";
+          inherit version;
+          hash = "sha256-q/KJGq+zLwy5StmDIa5+vL4Mq+Uj042A1WnApQuFIlo=";
+        };
+        nativeBuildInputs = with python.pkgs; [
+          jupyter-packaging
+          hatchling
+          hatch-nodejs-version
+          hatch-jupyter-builder
+          jupyterlab
+        ];
       };
-      nativeBuildInputs = with python.pkgs; [
-        jupyter-packaging
-        hatchling
-        hatch-nodejs-version
-        hatch-jupyter-builder
-        jupyterlab
-      ];
-    };
-    pythonEnv = python.withPackages (ps:
-      with ps; [
-        pandas
-        openpyxl
-        xlsxwriter
-        xlsx2csv
-        polars
-        tqdm
-        scipy
-        scikit-learn
-        natsort
-        requests
-        #((umap-learn.override {tensorflow = null;}).overridePythonAttrs (prev: {
-        #  nativeCheckInputs = [];
-        #  doCheck = false;
-        #}))
-        matplotlib
-        biopython
-        nglview
-        ipykernel
-        jupyterlab
-        jupyterlab-vim
-        #line_profiler
-      ]);
-  in
+      pythonEnv = python.withPackages (
+        ps: with ps; [
+          pandas
+          openpyxl
+          xlsxwriter
+          xlsx2csv
+          polars
+          tqdm
+          scipy
+          scikit-learn
+          natsort
+          requests
+          #((umap-learn.override {tensorflow = null;}).overridePythonAttrs (prev: {
+          #  nativeCheckInputs = [];
+          #  doCheck = false;
+          #}))
+          matplotlib
+          biopython
+          nglview
+          ipykernel
+          jupyterlab
+          jupyterlab-vim
+          #line_profiler
+        ]
+      );
+    in
     pkgs.stdenvNoCC.mkDerivation rec {
       pname = "jlab";
       version = "1.0";
       dontUnpack = true;
-      buildInputs = with pkgs; [makeWrapper nodejs];
+      buildInputs = with pkgs; [
+        makeWrapper
+        nodejs
+      ];
       installPhase = ''
         mkdir -p $out/bin/
         makeWrapper ${pythonEnv}/bin/jupyter $out/bin/jlab \
@@ -122,7 +128,8 @@
         ln -s ${pythonEnv}/bin/python $out/bin/globalpy
       '';
     };
-in {
+in
+{
   home.username = "msk";
   home.homeDirectory = "/home/msk";
 
@@ -141,7 +148,7 @@ in {
   ];
 
   home.activation = {
-    jlab-activate = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    jlab-activate = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       $DRY_RUN_CMD echo 'running `jlab-copy`'
       $DRY_RUN_CMD ${jlab}/bin/jlab-copy
     '';
@@ -155,6 +162,7 @@ in {
     ./modules/bash.nix
     ./modules/templates.nix
     ./modules/fonts
+    ./modules/dev.nix
   ];
 
   programs.git.settings.user.email = pkgs.lib.mkForce "msk@evaxion.ai";
@@ -173,7 +181,9 @@ in {
     [[ -f /etc/profile.d/modules.sh ]] && source /etc/profile.d/modules.sh
   '';
 
-  nixpkgs.config = {allowUnfree = true;};
+  nixpkgs.config = {
+    allowUnfree = true;
+  };
   home.stateVersion = "22.05";
   programs.home-manager.enable = true;
 }

@@ -1,25 +1,32 @@
 {
   pkgs,
   ...
-}: let
+}:
+let
   python = pkgs.python3Packages;
 
-  treeSitterFromGitHub = {
-    pname,
-    version,
-    owner,
-    repo,
-    rev ? "v${version}",
-    hash,
-  }:
+  treeSitterFromGitHub =
+    {
+      pname,
+      version,
+      owner,
+      repo,
+      rev ? "v${version}",
+      hash,
+    }:
     python.buildPythonPackage {
       inherit pname version;
       pyproject = true;
       src = pkgs.fetchFromGitHub {
-        inherit owner repo rev hash;
+        inherit
+          owner
+          repo
+          rev
+          hash
+          ;
       };
-      build-system = [python.setuptools];
-      dependencies = [python.tree-sitter];
+      build-system = [ python.setuptools ];
+      dependencies = [ python.tree-sitter ];
       doCheck = false;
     };
 
@@ -101,13 +108,12 @@
       repo = "tree-sitter-swift";
       rev = "0.7.2-with-generated-files";
       hash = "sha256-tG+tM7B6901QP4QyJdf55V38b4XduSU1eb+gaP7BikE=";
-    }).overridePythonAttrs (old: {
-      postPatch =
-        (old.postPatch or "")
-        + ''
+    }).overridePythonAttrs
+      (old: {
+        postPatch = (old.postPatch or "") + ''
           substituteInPlace pyproject.toml --replace 'version = "0.0.1"' 'version = "0.7.2"'
         '';
-    });
+      });
   tree-sitter-lua = treeSitterFromGitHub {
     pname = "tree-sitter-lua";
     version = "0.5.0";
@@ -175,7 +181,7 @@
       rev = "v${version}";
       hash = "sha256-/xDaBr5jFm7rGKnj1jiUhmX3+WeqHdB06ieiQHgRQsI=";
     };
-    build-system = [python.setuptools];
+    build-system = [ python.setuptools ];
     dependencies = with python; [
       networkx
       numpy
@@ -213,21 +219,22 @@
 
   cursor = pkgs.symlinkJoin {
     name = "cursor";
-    paths = [pkgs.code-cursor];
-    nativeBuildInputs = [pkgs.makeWrapper];
+    paths = [ pkgs.code-cursor ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/cursor --set SHELL ${pkgs.zsh}/bin/zsh
     '';
   };
   zed-editor = pkgs.symlinkJoin {
     name = "zed-editor";
-    paths = [pkgs.zed-editor];
-    nativeBuildInputs = [pkgs.makeWrapper];
+    paths = [ pkgs.zed-editor ];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
     postBuild = ''
       wrapProgram $out/bin/zeditor --set GPUI_X11_SCALE_FACTOR 1
     '';
   };
-in {
+in
+{
   home.packages = with pkgs; [
     cursor
     alejandra
@@ -236,12 +243,18 @@ in {
     graphify
     nil
     nixd
+    codex-acp
+    claude-agent-acp
   ];
 
   programs.zed-editor = {
     package = zed-editor;
     enable = true;
-    extensions = ["nix" "toml" "rust"];
+    extensions = [
+      "nix"
+      "toml"
+      "rust"
+    ];
     userSettings = {
       theme = {
         mode = "dark";
@@ -259,21 +272,29 @@ in {
       format_on_save = "on";
       agent = {
         sandbox_permissions = {
-          write_paths = ["/home/msk/.cache/nix"];
+          write_paths = [ "/home/msk/.cache/nix" ];
         };
       };
       agent_servers = {
         "Codex (direnv)" = {
           type = "custom";
           command = "direnv";
-          args = ["exec" "." "npx" "-y" "@agentclientprotocol/codex-acp"];
-          env = {};
+          args = [
+            "exec"
+            "."
+            "codex-acp"
+          ];
+          env = { };
         };
         "Claude (direnv)" = {
           type = "custom";
           command = "direnv";
-          args = ["exec" "." "npx" "-y" "@agentclientprotocol/claude-agent-acp"];
-          env = {};
+          args = [
+            "exec"
+            "."
+            "claude-agent-acp"
+          ];
+          env = { };
         };
       };
     };
