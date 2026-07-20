@@ -1,7 +1,4 @@
-{
-  pkgs,
-  ...
-}:
+{ pkgs, ... }:
 let
   python = pkgs.python3Packages;
 
@@ -243,8 +240,10 @@ in
     graphify
     nil
     nixd
-    codex-acp
+    #codex-acp
+    nodejs
     claude-agent-acp
+    cursor-cli
   ];
 
   programs.zed-editor = {
@@ -282,7 +281,9 @@ in
           args = [
             "exec"
             "."
-            "codex-acp"
+            "npx"
+            "-y"
+            "@agentclientprotocol/codex-acp"
           ];
           env = { };
         };
@@ -293,6 +294,17 @@ in
             "exec"
             "."
             "claude-agent-acp"
+          ];
+          env = { };
+        };
+        "Cursor (direnv)" = {
+          type = "custom";
+          command = "direnv";
+          args = [
+            "exec"
+            "."
+            "cursor-agent"
+            "acp"
           ];
           env = { };
         };
