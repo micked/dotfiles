@@ -39,8 +39,7 @@ in {
     sophos_login
 
     # bluetooth
-    # blueberry
-    blueman
+    # blueman
 
     # other
     firefox_wrapped

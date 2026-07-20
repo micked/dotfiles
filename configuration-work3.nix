@@ -21,38 +21,32 @@
     networking.hostName = "msk-80075";
     networking.networkmanager = {
       enable = true;
-      plugins = [ pkgs.networkmanager-openvpn ];
+      plugins = [pkgs.networkmanager-openvpn];
     };
 
     hardware.bluetooth.enable = true;
 
+    # TODO: Remove awesome as the default path
+    services.network-manager-applet.enable = lib.mkForce false;
     services.xserver = {
       displayManager.lightdm.enable = false;
       windowManager.awesome.enable = lib.mkForce false;
     };
 
     services.pipewire.enable = true;
-    programs.hyprland = {
-      enable = true;
-      withUWSM = true;
-    };
-
-    xdg.portal = {
-      enable = true;
-      extraPortals = with pkgs; [xdg-desktop-portal-hyprland];
-    };
+    programs.niri.enable = true;
 
     services.greetd = {
       enable = true;
       settings = {
         initial_session = {
           user = "msk";
-          command = "start-hyprland";
+          command = "${pkgs.niri}/bin/niri-session";
         };
 
         default_session = {
           user = "greeter";
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd start-hyprland";
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd ${pkgs.niri}/bin/niri-session";
         };
       };
     };
@@ -78,14 +72,8 @@
         imports = [
           ./modules/common.nix
           ./modules/work.nix
-          ./modules/hypr.nix
+          ./modules/niri.nix
         ];
-
-        wayland.windowManager.hyprland.settings.config.input = {
-          kb_layout = "dk";
-          kb_variant = "";
-          kb_options = "compose:sclk,caps:escape";
-        };
       };
       extraSpecialArgs = {
         inherit inputs;
