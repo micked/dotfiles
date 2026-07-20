@@ -26,8 +26,6 @@
 
     hardware.bluetooth.enable = true;
 
-    # TODO: Remove awesome as the default path
-    services.network-manager-applet.enable = lib.mkForce false;
     services.xserver = {
       displayManager.lightdm.enable = false;
       windowManager.awesome.enable = lib.mkForce false;

@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   ...
 }: let
@@ -13,7 +12,7 @@
     rev ? "v${version}",
     hash,
   }:
-    python.buildPythonPackage rec {
+    python.buildPythonPackage {
       inherit pname version;
       pyproject = true;
       src = pkgs.fetchFromGitHub {
@@ -257,6 +256,7 @@ in {
       };
       hour_format = "hour24";
       load_direnv = "shell_hook";
+      format_on_save = "on";
       agent = {
         sandbox_permissions = {
           write_paths = ["/home/msk/.cache/nix"];

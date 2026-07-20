@@ -73,7 +73,6 @@ in {
     ./vim.nix
     ./hx.nix
     ./zsh.nix
-    ./awesomewm.nix
     ./fonts
     ./dev.nix
   ];
