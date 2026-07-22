@@ -86,27 +86,19 @@
     };
 
     services.pipewire.enable = true;
-    programs.hyprland = {
-      enable = true;
-      withUWSM = true;
-    };
-
-    xdg.portal = {
-      enable = true;
-      extraPortals = with pkgs; [xdg-desktop-portal-hyprland];
-    };
+    programs.niri.enable = true;
 
     services.greetd = {
       enable = true;
       settings = {
         initial_session = {
           user = "msk";
-          command = "start-hyprland";
+          command = "${pkgs.niri}/bin/niri-session";
         };
 
         default_session = {
           user = "greeter";
-          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd start-hyprland";
+          command = "${pkgs.tuigreet}/bin/tuigreet --time --cmd ${pkgs.niri}/bin/niri-session";
         };
       };
     };
@@ -147,7 +139,7 @@
           ./modules/common.nix
           ./modules/private.nix
           ./modules/vr.nix
-          ./modules/hypr.nix
+          ./modules/niri.nix
         ];
         #services.picom.enable = pkgs.lib.mkForce false;
         xresources.properties."Xft.dpi" = 96;
