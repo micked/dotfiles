@@ -1,6 +1,7 @@
 {
   inputs,
   lib,
+  osConfig,
   pkgs,
   ...
 }: let
@@ -23,8 +24,8 @@ in {
     input {
         keyboard {
             xkb {
-                layout "dk"
-                options "compose:sclk,caps:escape"
+                layout "${osConfig.services.xserver.xkb.layout}"
+                options "${osConfig.services.xserver.xkb.options}"
             }
 
             numlock
