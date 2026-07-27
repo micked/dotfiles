@@ -35,6 +35,7 @@
     completionInit = ''
       autoload -U compinit && compinit -u
       autoload -U +X bashcompinit && bashcompinit
+      zstyle ':completion:*' completer _complete _default
     '';
 
     initContent = ''

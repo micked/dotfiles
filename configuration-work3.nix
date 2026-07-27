@@ -23,6 +23,7 @@
       enable = true;
       plugins = [pkgs.networkmanager-openvpn];
     };
+    programs.nm-applet.enable = true;
 
     hardware.bluetooth.enable = true;
 
