@@ -4,39 +4,7 @@
   ...
 }: let
   graphify = pkgs.callPackage ../packages/graphify.nix {};
-
-  librusty_v8 = pkgs.fetchurl {
-    url = "https://github.com/denoland/rusty_v8/releases/download/v147.4.0/librusty_v8_release_${pkgs.stdenv.hostPlatform.rust.rustcTarget}.a.gz";
-    hash =
-      {
-        x86_64-linux = "sha256-Cd3vbFEZKv/wVBExoO+cAPgxhdI5HaqxgDgqOr82rJU=";
-        aarch64-linux = "sha256-lMPw/eAFFAT8obaR8opJbXjbgw58+0maBEyxpeOllFU=";
-        aarch64-darwin = "sha256-fnR0DD7woOj8DiaKJYYSPpg0D+lDVmjNwSiPrvtzYq4=";
-      }
-      .${
-        pkgs.stdenv.hostPlatform.system
-      }
-        or (throw "librusty_v8 147.4.0 is not available for ${pkgs.stdenv.hostPlatform.system}");
-  };
-  codex-acp = pkgs.codex-acp.overrideAttrs (finalAttrs: previousAttrs: {
-    version = "0.16.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "zed-industries";
-      repo = "codex-acp";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-LeD3nHvRWX4ZgZ3/fVngDcR6/LtaY4eb2M2WmWaymlY=";
-    };
-    cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
-      inherit (finalAttrs) pname version src;
-      hash = "sha256-ea3XyOaSshvv3oD4rm37nE76ABTbSv1y/s7HX2fqNRk=";
-    };
-    postPatch = "";
-    env =
-      previousAttrs.env
-      // {
-        RUSTY_V8_ARCHIVE = librusty_v8;
-      };
-  });
+  codex-acp = pkgs.callPackage ../packages/codex-acp.nix {};
   cursor = pkgs.symlinkJoin {
     name = "cursor";
     paths = [pkgs.code-cursor];
