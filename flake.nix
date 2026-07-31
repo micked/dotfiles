@@ -24,6 +24,7 @@
       url = "github:soupglasses/nix-system-graphics";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    jail-nix.url = "sourcehut:~alexdavid/jail.nix";
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -67,6 +68,7 @@
           home-manager.useUserPackages = true;
           home-manager.users.msk = homeAtHome;
           home-manager.extraSpecialArgs = {
+            inherit inputs;
             pkgs2305 = import inputs.nixpkgs2305 {system = "x86_64-linux";};
           };
         }
@@ -106,6 +108,7 @@
           home-manager.useUserPackages = true;
           home-manager.users.msk = homeAtWork;
           home-manager.extraSpecialArgs = {
+            inherit inputs;
             pkgs2411 = import inputs.nixpkgs2411 {system = "x86_64-linux";};
             pkgs2305 = import inputs.nixpkgs2305 {
               system = "x86_64-linux";
@@ -164,6 +167,7 @@
         inherit pkgs;
         modules = [./hm-evxcompute.nix];
         extraSpecialArgs = {
+          inherit inputs;
           pkgs-stable = import inputs.nixpkgs-stable {
             system = "x86_64-linux";
             config.allowUnfree = true;
@@ -178,6 +182,7 @@
           ./hm-lime.nix
         ];
         extraSpecialArgs = {
+          inherit inputs;
           pkgs2305 = import inputs.nixpkgs2305 {
             system = "x86_64-linux";
             config.allowUnfree = true;

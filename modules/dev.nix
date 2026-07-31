@@ -1,4 +1,8 @@
-{pkgs, ...}: let
+{
+  inputs,
+  pkgs,
+  ...
+}: let
   python = pkgs.python3Packages;
 
   treeSitterFromGitHub = {
@@ -249,10 +253,74 @@
       fi
     '';
   };
+  zed-agent-sandbox-builder = pkgs.writeText "zed-agent-sandbox-builder.nix" ''
+    (import ${./zed-agent-sandbox.nix} {
+      nixpkgs = ${pkgs.path};
+      jail-nix = ${inputs.jail-nix};
+      system = ${builtins.toJSON pkgs.stdenv.hostPlatform.system};
+    })
+  '';
+  zed-agent-sandbox = pkgs.writeShellApplication {
+    name = "zed-agent-sandbox";
+    runtimeInputs = [
+      pkgs.coreutils
+      pkgs.git
+      pkgs.nix
+    ];
+    text = ''
+      agent="''${1:-}"
+      if [[ "$agent" != "codex" && "$agent" != "claude" ]]; then
+        echo "Usage: zed-agent-sandbox {codex|claude} [ACP arguments...]" >&2
+        exit 2
+      fi
+      shift
+
+      project_dir="$PWD"
+      while [[ "$project_dir" != "/" && ! -f "$project_dir/flake.nix" ]]; do
+        project_dir="$(dirname "$project_dir")"
+      done
+      if [[ ! -f "$project_dir/flake.nix" ]]; then
+        project_dir=""
+      fi
+
+      project_git_root=""
+      project_git_dir=""
+      if [[ -n "$project_dir" ]]; then
+        project_git_root="$(
+          git -C "$project_dir" rev-parse --show-toplevel 2>/dev/null || true
+        )"
+        if [[ -n "$project_git_root" ]]; then
+          project_git_dir="$(
+            git -C "$project_dir" rev-parse --show-prefix
+          )"
+          project_git_dir="''${project_git_dir%/}"
+        fi
+      fi
+
+      sandbox="$(
+        nix build \
+          --impure \
+          --no-link \
+          --print-out-paths \
+          --file ${zed-agent-sandbox-builder} \
+          --argstr projectDir "$project_dir" \
+          --argstr projectGitRoot "$project_git_root" \
+          --argstr projectGitDir "$project_git_dir" \
+          --argstr agent "$agent"
+      )"
+      if [[ -z "$sandbox" || "$sandbox" == *$'\n'* ]]; then
+        echo "Expected one sandbox output, got: $sandbox" >&2
+        exit 1
+      fi
+
+      exec "$sandbox/bin/zed-agent-sandboxed" "$@"
+    '';
+  };
 in {
   home.packages = with pkgs; [
     cursor
     nix-format
+    zed-agent-sandbox
     alejandra
     python3
     ripgrep
@@ -305,32 +373,16 @@ in {
         };
       };
       agent_servers = {
-        "Codex (direnv)" = {
+        "Codex (sandboxed)" = {
           type = "custom";
-          command = "direnv";
-          args = [
-            "exec"
-            "."
-            "npx"
-            "-y"
-            "@agentclientprotocol/codex-acp"
-          ];
+          command = "zed-agent-sandbox";
+          args = ["codex"];
           env = {};
         };
-        "Codex (local)" = {
+        "Claude (sandboxed)" = {
           type = "custom";
-          command = "nix";
-          args = ["run" ".#codex-acp-sandboxed"];
-          env = {};
-        };
-        "Claude (direnv)" = {
-          type = "custom";
-          command = "direnv";
-          args = [
-            "exec"
-            "."
-            "claude-agent-acp"
-          ];
+          command = "zed-agent-sandbox";
+          args = ["claude"];
           env = {};
         };
         "Cursor (direnv)" = {
