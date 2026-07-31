@@ -5,6 +5,38 @@
 }: let
   graphify = pkgs.callPackage ../packages/graphify.nix {};
 
+  librusty_v8 = pkgs.fetchurl {
+    url = "https://github.com/denoland/rusty_v8/releases/download/v147.4.0/librusty_v8_release_${pkgs.stdenv.hostPlatform.rust.rustcTarget}.a.gz";
+    hash =
+      {
+        x86_64-linux = "sha256-Cd3vbFEZKv/wVBExoO+cAPgxhdI5HaqxgDgqOr82rJU=";
+        aarch64-linux = "sha256-lMPw/eAFFAT8obaR8opJbXjbgw58+0maBEyxpeOllFU=";
+        aarch64-darwin = "sha256-fnR0DD7woOj8DiaKJYYSPpg0D+lDVmjNwSiPrvtzYq4=";
+      }
+      .${
+        pkgs.stdenv.hostPlatform.system
+      }
+        or (throw "librusty_v8 147.4.0 is not available for ${pkgs.stdenv.hostPlatform.system}");
+  };
+  codex-acp = pkgs.codex-acp.overrideAttrs (finalAttrs: previousAttrs: {
+    version = "0.16.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "zed-industries";
+      repo = "codex-acp";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-LeD3nHvRWX4ZgZ3/fVngDcR6/LtaY4eb2M2WmWaymlY=";
+    };
+    cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
+      inherit (finalAttrs) pname version src;
+      hash = "sha256-ea3XyOaSshvv3oD4rm37nE76ABTbSv1y/s7HX2fqNRk=";
+    };
+    postPatch = "";
+    env =
+      previousAttrs.env
+      // {
+        RUSTY_V8_ARCHIVE = librusty_v8;
+      };
+  });
   cursor = pkgs.symlinkJoin {
     name = "cursor";
     paths = [pkgs.code-cursor];
@@ -40,24 +72,28 @@
       fi
     '';
   };
-  zed-agent-sandbox-builder = pkgs.writeText "zed-agent-sandbox-builder.nix" ''
-    (import ${./zed-agent-sandbox.nix} {
+  dev-sandbox-builder = pkgs.writeText "dev-sandbox-builder.nix" ''
+    (import ${./dev-sandbox.nix} {
       nixpkgs = ${pkgs.path};
       jail-nix = ${inputs.jail-nix};
       system = ${builtins.toJSON pkgs.stdenv.hostPlatform.system};
     })
   '';
-  zed-agent-sandbox = pkgs.writeShellApplication {
-    name = "zed-agent-sandbox";
+  agent-sandbox = pkgs.writeShellApplication {
+    name = "agent-sandbox";
     runtimeInputs = [
       pkgs.coreutils
       pkgs.git
       pkgs.nix
     ];
     text = ''
-      agent="''${1:-}"
-      if [[ "$agent" != "codex" && "$agent" != "claude" ]]; then
-        echo "Usage: zed-agent-sandbox {codex|claude} [ACP arguments...]" >&2
+      command_path="''${1:-}"
+      if [[ ! "$command_path" =~ ^/nix/store/[[:alnum:]]{32}-[^/]+/bin/[^/]+$ ]]; then
+        echo "Usage: agent-sandbox /nix/store/.../bin/<command> [arguments...]" >&2
+        exit 2
+      fi
+      if [[ ! -x "$command_path" ]]; then
+        echo "Command is not executable: $command_path" >&2
         exit 2
       fi
       shift
@@ -89,25 +125,25 @@
           --impure \
           --no-link \
           --print-out-paths \
-          --file ${zed-agent-sandbox-builder} \
+          --file ${dev-sandbox-builder} \
           --argstr projectDir "$project_dir" \
           --argstr projectGitRoot "$project_git_root" \
           --argstr projectGitDir "$project_git_dir" \
-          --argstr agent "$agent"
+          --argstr binPath "$command_path"
       )"
       if [[ -z "$sandbox" || "$sandbox" == *$'\n'* ]]; then
         echo "Expected one sandbox output, got: $sandbox" >&2
         exit 1
       fi
 
-      exec "$sandbox/bin/zed-agent-sandboxed" "$@"
+      exec "$sandbox/bin/dev-sandbox" "$@"
     '';
   };
 in {
   home.packages = with pkgs; [
     cursor
     nix-format
-    zed-agent-sandbox
+    agent-sandbox
     alejandra
     python3
     ripgrep
@@ -162,23 +198,21 @@ in {
       agent_servers = {
         "Codex (sandboxed)" = {
           type = "custom";
-          command = "zed-agent-sandbox";
-          args = ["codex"];
+          command = "agent-sandbox";
+          args = ["${pkgs.lib.getExe codex-acp}"];
           env = {};
         };
         "Claude (sandboxed)" = {
           type = "custom";
-          command = "zed-agent-sandbox";
-          args = ["claude"];
+          command = "agent-sandbox";
+          args = ["${pkgs.lib.getExe pkgs.claude-agent-acp}"];
           env = {};
         };
-        "Cursor (direnv)" = {
+        "Cursor (sandboxed)" = {
           type = "custom";
-          command = "direnv";
+          command = "agent-sandbox";
           args = [
-            "exec"
-            "."
-            "cursor-agent"
+            "${pkgs.lib.getExe pkgs.cursor-cli}"
             "acp"
           ];
           env = {};

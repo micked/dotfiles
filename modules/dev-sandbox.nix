@@ -10,44 +10,6 @@
   lib = pkgs.lib;
   jail = (import "${jail-nix}/lib").init pkgs;
 
-  librusty_v8 = pkgs.fetchurl {
-    url = "https://github.com/denoland/rusty_v8/releases/download/v147.4.0/librusty_v8_release_${pkgs.stdenv.hostPlatform.rust.rustcTarget}.a.gz";
-    hash =
-      {
-        x86_64-linux = "sha256-Cd3vbFEZKv/wVBExoO+cAPgxhdI5HaqxgDgqOr82rJU=";
-        aarch64-linux = "sha256-lMPw/eAFFAT8obaR8opJbXjbgw58+0maBEyxpeOllFU=";
-        aarch64-darwin = "sha256-fnR0DD7woOj8DiaKJYYSPpg0D+lDVmjNwSiPrvtzYq4=";
-      }
-      .${
-        pkgs.stdenv.hostPlatform.system
-      }
-        or (throw "librusty_v8 147.4.0 is not available for ${pkgs.stdenv.hostPlatform.system}");
-  };
-  codex-acp = pkgs.codex-acp.overrideAttrs (finalAttrs: previousAttrs: {
-    version = "0.16.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "zed-industries";
-      repo = "codex-acp";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-LeD3nHvRWX4ZgZ3/fVngDcR6/LtaY4eb2M2WmWaymlY=";
-    };
-    cargoDeps = pkgs.rustPlatform.fetchCargoVendor {
-      inherit (finalAttrs) pname version src;
-      hash = "sha256-ea3XyOaSshvv3oD4rm37nE76ABTbSv1y/s7HX2fqNRk=";
-    };
-    postPatch = "";
-    env =
-      previousAttrs.env
-      // {
-        RUSTY_V8_ARCHIVE = librusty_v8;
-      };
-  });
-
-  agents = {
-    codex = codex-acp;
-    claude = pkgs.claude-agent-acp;
-  };
-
   fallbackPackages = with pkgs; [
     bashInteractive
     curl
@@ -88,11 +50,23 @@ in
     projectDir ? "",
     projectGitRoot ? "",
     projectGitDir ? "",
-    agent,
+    binPath,
   }: let
-    agentPackage =
-      agents.${agent}
-      or (throw "Unknown ACP agent '${agent}'; expected 'codex' or 'claude'");
+    storePrefix = builtins.storeDir + "/";
+    storeRelativePath =
+      if lib.hasPrefix storePrefix binPath
+      then lib.removePrefix storePrefix binPath
+      else throw "Command must be an absolute path below ${builtins.storeDir}: ${binPath}";
+    pathComponents = lib.splitString "/" storeRelativePath;
+    storePath =
+      if
+        builtins.length pathComponents
+        == 3
+        && builtins.elemAt pathComponents 1 == "bin"
+        && builtins.elemAt pathComponents 2 != ""
+      then builtins.storePath "${storePrefix}${builtins.head pathComponents}"
+      else throw "Command must have the form ${builtins.storeDir}/<store-path>/bin/<name>: ${binPath}";
+    command = "${storePath}/${lib.concatStringsSep "/" (lib.tail pathComponents)}";
     projectRef =
       if projectDir == ""
       then null
@@ -154,28 +128,32 @@ in
       else if builtins.isFunction exportedConfig
       then exportedConfig jail.combinators
       else exportedConfig;
-    devShellBridge = with jail.combinators;
-      lib.optionals (devShell != null) [
+    sandboxPermissions = with jail.combinators;
+      configuredPermissions
+      ++ [
+        (add-pkg-deps [storePath])
+      ]
+      ++ lib.optionals (devShell != null) [
         (add-runtime ''
-          if [[ -z "''${ZED_AGENT_DEV_ENV:-}" ]]; then
-            echo "ZED_AGENT_DEV_ENV is not set" >&2
+          if [[ -z "''${DEV_SANDBOX_ENV:-}" ]]; then
+            echo "DEV_SANDBOX_ENV is not set" >&2
             exit 1
           fi
-          RUNTIME_ARGS+=(--ro-bind "$ZED_AGENT_DEV_ENV" /tmp/zed-agent-dev-env)
+          RUNTIME_ARGS+=(--ro-bind "$DEV_SANDBOX_ENV" /tmp/dev-sandbox-env)
         '')
         (wrap-entry (entry: ''
           set +u
+          sandbox_path="$PATH"
           # shellcheck source=/dev/null
-          source /tmp/zed-agent-dev-env
+          source /tmp/dev-sandbox-env
+          export PATH="$sandbox_path:$PATH"
           ${entry}
         ''))
       ];
-    jailedAgent = jail "zed-${agent}-acp-sandboxed" agentPackage (
-      configuredPermissions ++ devShellBridge
-    );
+    jailedCommand = jail "dev-sandboxed-command" command sandboxPermissions;
   in
     pkgs.writeShellApplication {
-      name = "zed-agent-sandboxed";
+      name = "dev-sandbox";
       runtimeInputs = [
         pkgs.coreutils
         pkgs.nix
@@ -183,10 +161,10 @@ in
       text =
         if devShell == null
         then ''
-          exec ${lib.getExe jailedAgent} "$@"
+          exec ${lib.getExe jailedCommand} "$@"
         ''
         else ''
-          dev_env="$(mktemp --tmpdir zed-agent-dev-env.XXXXXX)"
+          dev_env="$(mktemp --tmpdir dev-sandbox-env.XXXXXX)"
           trap 'rm -f "$dev_env"' EXIT
 
           if ! nix print-dev-env --impure --no-write-lock-file ${
@@ -196,6 +174,6 @@ in
             exit 1
           fi
 
-          ZED_AGENT_DEV_ENV="$dev_env" ${lib.getExe jailedAgent} "$@"
+          DEV_SANDBOX_ENV="$dev_env" ${lib.getExe jailedCommand} "$@"
         '';
     }
