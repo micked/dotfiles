@@ -78,6 +78,12 @@
       enable = true;
     };
 
+    programs.weylus = {
+      enable = true;
+      openFirewall = true;
+      users = ["msk"];
+    };
+
     services.xserver = {
       videoDrivers = ["nvidia"];
       dpi = 96;
