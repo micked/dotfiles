@@ -116,11 +116,19 @@
       exec "$sandbox/bin/dev-sandbox" "$@"
     '';
   };
+  pibx = pkgs.writeShellApplication {
+    name = "pibx";
+    text = ''
+      exec ${agent-sandbox}/bin/agent-sandbox ${pkgs.lib.getExe pkgs.pi-coding-agent} "$@"
+    '';
+  };
 in {
+  imports = [ ./dev-pi.nix ];
   home.packages = with pkgs; [
     cursor
     nix-format
     agent-sandbox
+    pibx
     alejandra
     python3
     ripgrep
@@ -131,7 +139,6 @@ in {
     nodejs
     claude-agent-acp
     cursor-cli
-    pi-coding-agent
   ];
 
   programs.zed-editor = {
