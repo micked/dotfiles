@@ -5,6 +5,7 @@
 }: let
   graphify = pkgs.callPackage ../packages/graphify.nix {};
   codex-acp = pkgs.callPackage ../packages/codex-acp.nix {};
+  pi-coding-editor = pkgs.callPackage ../packages/pi-coding-editor.nix {};
   cursor = pkgs.symlinkJoin {
     name = "cursor";
     paths = [pkgs.code-cursor];
@@ -64,9 +65,15 @@
       pkgs.nix
     ];
     text = ''
+      mount_pi=false
+      if [[ "''${1:-}" == "--mount-pi" ]]; then
+        mount_pi=true
+        shift
+      fi
+
       command_path="''${1:-}"
       if [[ ! "$command_path" =~ ^/nix/store/[[:alnum:]]{32}-[^/]+/bin/[^/]+$ ]]; then
-        echo "Usage: agent-sandbox /nix/store/.../bin/<command> [arguments...]" >&2
+        echo "Usage: agent-sandbox [--mount-pi] /nix/store/.../bin/<command> [arguments...]" >&2
         exit 2
       fi
       if [[ ! -x "$command_path" ]]; then
@@ -106,6 +113,7 @@
           --argstr projectDir "$project_dir" \
           --argstr projectGitRoot "$project_git_root" \
           --argstr projectGitDir "$project_git_dir" \
+          --arg mountPi "$mount_pi" \
           --argstr binPath "$command_path"
       )"
       if [[ -z "$sandbox" || "$sandbox" == *$'\n'* ]]; then
@@ -119,11 +127,14 @@
   pibx = pkgs.writeShellApplication {
     name = "pibx";
     text = ''
-      exec ${agent-sandbox}/bin/agent-sandbox ${pkgs.lib.getExe pkgs.pi-coding-agent} "$@"
+      exec ${agent-sandbox}/bin/agent-sandbox \
+        --mount-pi \
+        ${pkgs.lib.getExe pi-coding-editor} \
+        "$@"
     '';
   };
 in {
-  imports = [ ./dev-pi.nix ];
+  imports = [./dev-pi.nix];
   home.packages = with pkgs; [
     cursor
     nix-format
