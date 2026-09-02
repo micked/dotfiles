@@ -50,7 +50,7 @@ in {
     inkscape
     gnome-calculator
     pass
-    libreoffice-fresh
+    libreoffice-stable
     file-roller
     evince
     scrot

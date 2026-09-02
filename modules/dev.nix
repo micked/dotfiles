@@ -131,6 +131,7 @@ in {
     nodejs
     claude-agent-acp
     cursor-cli
+    pi-coding-agent
   ];
 
   programs.zed-editor = {
