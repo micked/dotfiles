@@ -1,5 +1,5 @@
 {pkgs, ...}: let
-  clc = pkgs.writeShellScriptBin "clc" "/home/msk/keep/clc21/clcmainwb21";
+  # clc = pkgs.writeShellScriptBin "clc" "/home/msk/keep/clc21/clcmainwb21";
   # pymol-git = pkgs.pymol.overrideAttrs (oldAttrs: {
   #   src = pkgs.fetchFromGitHub {
   #     owner = "schrodinger";
@@ -36,8 +36,8 @@ in {
     pymol-wayland # -git
     kicad
 
-    clc
-    jdk11 # For CLC
+    # clc
+    # jdk11 # For CLC
   ];
 
   imports = [
@@ -45,5 +45,6 @@ in {
     ./syncthing.nix
   ];
 
-  programs.git.settings.user.email = pkgs.lib.mkForce "msk@evaxion.ai";
+  programs.git.settings.user.name = "msk";
+  programs.git.settings.user.email = "msk@evaxion.ai";
 }
