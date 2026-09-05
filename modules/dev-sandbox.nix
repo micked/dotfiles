@@ -50,6 +50,7 @@ in
     projectDir ? "",
     projectGitRoot ? "",
     projectGitDir ? "",
+    mountPi ? false,
     binPath,
   }: let
     storePrefix = builtins.storeDir + "/";
@@ -133,6 +134,7 @@ in
       ++ [
         (add-pkg-deps [storePath])
       ]
+      ++ lib.optional mountPi (rw-bind (noescape "~/.pi") (noescape "~/.pi"))
       ++ lib.optionals (devShell != null) [
         (add-runtime ''
           if [[ -z "''${DEV_SANDBOX_ENV:-}" ]]; then
