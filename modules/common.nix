@@ -75,6 +75,7 @@ in {
     ./zsh.nix
     ./fonts
     ./dev.nix
+    ./blender.nix
   ];
 
   fonts.fontconfig.enable = true;
