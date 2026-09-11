@@ -10,6 +10,8 @@ in {
     pkgs.jq
   ];
 
+  home.file.".pi/agent/local/pi-bigtdd".source = ../pi-dev/bigtdd;
+
   # Idempotently add pi-gpt-search to pi's settings.json so pi auto-installs
   # the package on startup. Uses jq to preserve any existing settings.
   home.activation.piGptSearch = lib.hm.dag.entryAfter ["writeBoundary"] ''
@@ -23,6 +25,23 @@ in {
       fi
     else
       $DRY_RUN_CMD echo '{"packages": ["git:github.com/mateusdcc/pi-gpt-search"]}' > "$settings_file"
+    fi
+  '';
+
+  # Load the in-tree BigTDD package through a stable path. The Home Manager
+  # symlink points at the current Nix store copy after each rebuild.
+  home.activation.piBigTdd = lib.hm.dag.entryAfter ["writeBoundary" "piGptSearch"] ''
+    settings_file="$HOME/.pi/agent/settings.json"
+    package_source="~/.pi/agent/local/pi-bigtdd"
+    $DRY_RUN_CMD mkdir -p "$(dirname "$settings_file")"
+
+    if [ -f "$settings_file" ]; then
+      if ! ${pkgs.jq}/bin/jq -e --arg source "$package_source" '.packages // [] | index($source)' "$settings_file" >/dev/null 2>&1; then
+        $DRY_RUN_CMD ${pkgs.jq}/bin/jq --arg source "$package_source" '.packages = ((.packages // []) + [$source])' "$settings_file" > "$settings_file.tmp"
+        $DRY_RUN_CMD mv "$settings_file.tmp" "$settings_file"
+      fi
+    else
+      $DRY_RUN_CMD ${pkgs.jq}/bin/jq -n --arg source "$package_source" '{packages: [$source]}' > "$settings_file"
     fi
   '';
 }

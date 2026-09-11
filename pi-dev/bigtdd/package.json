@@ -1,0 +1,28 @@
+{
+  "name": "pi-bigtdd",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A branch-per-task, commit-per-stage, test-driven multi-agent workflow for Pi",
+  "license": "MIT",
+  "keywords": [
+    "pi-package"
+  ],
+  "type": "module",
+  "scripts": {
+    "test": "node --experimental-strip-types --test tests/*.test.ts"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-agent-core": "*",
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "typebox": "*"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions/bigtdd/index.ts"
+    ],
+    "skills": [
+      "./skills"
+    ]
+  }
+}
