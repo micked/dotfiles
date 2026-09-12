@@ -75,27 +75,27 @@
       ];
     };
 
-    nixosConfigurations.zentry3 = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        ./configuration-zentry3.nix
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.msk = {
-            config,
-            pkgs,
-            ...
-          }: {
-            home.homeDirectory = "/home/msk";
-            home.username = "msk";
-            home.stateVersion = "22.05";
-            imports = [./modules/server.nix];
-          };
-        }
-      ];
-    };
+    # nixosConfigurations.zentry3 = nixpkgs.lib.nixosSystem {
+    #   system = "x86_64-linux";
+    #   modules = [
+    #     ./configuration-zentry3.nix
+    #     home-manager.nixosModules.home-manager
+    #     {
+    #       home-manager.useGlobalPkgs = true;
+    #       home-manager.useUserPackages = true;
+    #       home-manager.users.msk = {
+    #         config,
+    #         pkgs,
+    #         ...
+    #       }: {
+    #         home.homeDirectory = "/home/msk";
+    #         home.username = "msk";
+    #         home.stateVersion = "22.05";
+    #         imports = [./modules/server.nix];
+    #       };
+    #     }
+    #   ];
+    # };
 
     nixosConfigurations.msk-oblivion-2 = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
