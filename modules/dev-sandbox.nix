@@ -161,21 +161,27 @@ in
         pkgs.nix
       ];
       text =
-        if devShell == null
-        then ''
-          exec ${lib.getExe jailedCommand} "$@"
         ''
-        else ''
-          dev_env="$(mktemp --tmpdir dev-sandbox-env.XXXXXX)"
-          trap 'rm -f "$dev_env"' EXIT
+          # jail.nix forwards LANG with nounset enabled, even if the host omits it.
+          export LANG="''${LANG:-C.UTF-8}"
+        ''
+        + (
+          if devShell == null
+          then ''
+            exec ${lib.getExe jailedCommand} "$@"
+          ''
+          else ''
+            dev_env="$(mktemp --tmpdir dev-sandbox-env.XXXXXX)"
+            trap 'rm -f "$dev_env"' EXIT
 
-          if ! nix print-dev-env --impure --no-write-lock-file ${
-            lib.escapeShellArg (projectRef + "#default")
-          } > "$dev_env"; then
-            echo "Failed to create the default dev-shell environment for ${projectDir}" >&2
-            exit 1
-          fi
+            if ! nix print-dev-env --impure --no-write-lock-file ${
+              lib.escapeShellArg (projectRef + "#default")
+            } > "$dev_env"; then
+              echo "Failed to create the default dev-shell environment for ${projectDir}" >&2
+              exit 1
+            fi
 
-          DEV_SANDBOX_ENV="$dev_env" ${lib.getExe jailedCommand} "$@"
-        '';
+            DEV_SANDBOX_ENV="$dev_env" ${lib.getExe jailedCommand} "$@"
+          ''
+        );
     }

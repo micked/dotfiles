@@ -1,0 +1,27 @@
+{
+  "branchPrefix": "bigtdd/",
+  "artifactDirectory": ".bigtdd",
+  "agentTimeoutMinutes": 30,
+  "humanCheckpoints": "agent-decides",
+  "requireHumanForTestUnlock": true,
+  "allowMainAgentTestUnlockWithoutUI": false,
+  "models": {
+    "orchestrator": "openrouter/moonshotai/kimi-k3",
+    "scout": "openrouter/z-ai/glm-5.3-flash",
+    "testAuthor": "openrouter/moonshotai/kimi-k3",
+    "testReviewer": "openrouter/z-ai/glm-5.3",
+    "testRefiner": "openrouter/moonshotai/kimi-k3",
+    "implementer": "openrouter/moonshotai/kimi-k3",
+    "featureReviewer": "openrouter/z-ai/glm-5.3",
+    "featureRefiner": "openrouter/moonshotai/kimi-k3"
+  },
+  "thinking": {
+    "scout": "low",
+    "testAuthor": "high",
+    "testReviewer": "high",
+    "testRefiner": "high",
+    "implementer": "high",
+    "featureReviewer": "high",
+    "featureRefiner": "high"
+  }
+}
