@@ -62,6 +62,7 @@ in {
     tomb
     pinentry-curses
     gnupg
+    cloudflared
 
     meslo-lgs-nf
   ];
