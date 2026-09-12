@@ -53,6 +53,10 @@
       plugins = [pkgs.networkmanager-openvpn];
     };
 
+    networking.hosts = {
+      "192.168.0.9" = ["git.tesyract.com"];
+    };
+
     services.xserver.xkb.layout = lib.mkForce "us";
 
     # boot.binfmt.emulatedSystems = ["aarch64-linux"];
