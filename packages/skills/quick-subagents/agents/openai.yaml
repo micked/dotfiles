@@ -1,0 +1,3 @@
+interface:
+  display_name: "Direct DeepSeek Workers"
+  short_description: "Save strong-model tokens with verified Pi delegation"
