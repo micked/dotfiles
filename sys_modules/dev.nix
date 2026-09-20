@@ -15,6 +15,9 @@
     mkdir -p $out/lib/udev/rules.d
     cp ${./60-sipeed.rules} $out/lib/udev/rules.d/60-sipeed.rules
   '';
+  orbbec-rules = (pkgs.writeTextDir "lib/udev/rules.d/70-orbbec.rules" ''
+    SUBSYSTEM=="usb", ATTR{idVendor}=="2bc5", ATTR{idProduct}=="0403", TAG+="uaccess"
+  '');
   libsigrok-sipeed = pkgs.libsigrok.overrideAttrs (final: prev: {
     src = pkgs.fetchFromGitHub {
       owner = "sipeed";
@@ -53,6 +56,7 @@ in {
     picotool-rules
     slogic-rules
     litetrack-rules
+    orbbec-rules
   ];
   users.groups.plugdev = {};
   nixpkgs.config = {
