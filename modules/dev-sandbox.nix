@@ -129,8 +129,31 @@ in
       else if builtins.isFunction exportedConfig
       then exportedConfig jail.combinators
       else exportedConfig;
+    extraMounts =
+      if devShell == null
+      then []
+      else devShell.sandboxMounts or [];
+    mountDirectory = path:
+      if !builtins.isString path
+      then throw "devShell sandboxMounts entries must be strings"
+      else if path == ""
+      then throw "devShell sandboxMounts entries must not be empty"
+      else if lib.hasPrefix "/" path
+      then jail.combinators.readwrite path
+      else if lib.hasPrefix "~/" path
+      then
+        jail.combinators.readwrite (jail.combinators.noescape (
+          ''"$HOME"/'' + lib.escapeShellArg (lib.removePrefix "~/" path)
+        ))
+      # Normalize ./ and ../ without copying the host directory into the store.
+      else jail.combinators.readwrite (toString (/. + "${projectDir}/${path}"));
     sandboxPermissions = with jail.combinators;
       configuredPermissions
+      ++ (
+        if builtins.isList extraMounts
+        then map mountDirectory extraMounts
+        else throw "devShell sandboxMounts must be a list of directory strings"
+      )
       ++ [
         (add-pkg-deps [storePath])
       ]
