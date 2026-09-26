@@ -17,6 +17,7 @@
   '';
   orbbec-rules = (pkgs.writeTextDir "lib/udev/rules.d/70-orbbec.rules" ''
     SUBSYSTEM=="usb", ATTR{idVendor}=="2bc5", ATTR{idProduct}=="0403", TAG+="uaccess"
+    SUBSYSTEM=="usb", ATTR{idVendor}=="2bc5", ATTR{idProduct}=="0407", TAG+="uaccess"
   '');
   libsigrok-sipeed = pkgs.libsigrok.overrideAttrs (final: prev: {
     src = pkgs.fetchFromGitHub {
