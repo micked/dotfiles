@@ -31,3 +31,8 @@ and review costs. Check observable behavior: a useful worker starts before
 deep exploration, routine work stays delegated, the director avoids duplicate
 work, and completion is supported by evidence. Report unavailable usage data
 as unavailable; a successful worker smoke test alone proves no savings.
+
+The [LFSR implementation field study](case-study.md) records observed failures,
+instruction changes, and measurement limits from a real complex task. Read it
+when evaluating this revision; its lesson-specific details are not universal
+requirements for normal delegation.
