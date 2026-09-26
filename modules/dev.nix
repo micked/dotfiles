@@ -141,7 +141,7 @@ in {
     agent-sandbox
     pibx
     alejandra
-    python3
+    (python3.withPackages (ps: with ps; [requests]))
     ripgrep
     graphify
     nil
