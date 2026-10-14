@@ -6,14 +6,6 @@
   graphify = pkgs.callPackage ../packages/graphify.nix {};
   codex-acp = pkgs.callPackage ../packages/codex-acp.nix {};
   pi-coding-editor = pkgs.callPackage ../packages/pi-coding-editor.nix {};
-  cursor = pkgs.symlinkJoin {
-    name = "cursor";
-    paths = [pkgs.code-cursor];
-    nativeBuildInputs = [pkgs.makeWrapper];
-    postBuild = ''
-      wrapProgram $out/bin/cursor --set SHELL ${pkgs.zsh}/bin/zsh
-    '';
-  };
   zed-editor = pkgs.symlinkJoin {
     name = "zed-editor";
     paths = [pkgs.zed-editor];
@@ -136,12 +128,15 @@
 in {
   imports = [./dev-pi.nix];
   home.packages = with pkgs; [
-    cursor
     nix-format
     agent-sandbox
     pibx
     alejandra
-    (python3.withPackages (ps: with ps; [requests]))
+    (python3.withPackages (ps:
+      with ps; [
+        requests
+        pillow
+      ]))
     ripgrep
     graphify
     nil
@@ -149,7 +144,6 @@ in {
     #codex-acp
     nodejs
     claude-agent-acp
-    cursor-cli
   ];
 
   programs.zed-editor = {
@@ -214,15 +208,6 @@ in {
           type = "custom";
           command = "agent-sandbox";
           args = ["${pkgs.lib.getExe pkgs.claude-agent-acp}"];
-          env = {};
-        };
-        "Cursor (sandboxed)" = {
-          type = "custom";
-          command = "agent-sandbox";
-          args = [
-            "${pkgs.lib.getExe pkgs.cursor-cli}"
-            "acp"
-          ];
           env = {};
         };
       };

@@ -63,6 +63,8 @@ in {
     pinentry-curses
     gnupg
     cloudflared
+    ffmpeg
+    imagemagick
 
     meslo-lgs-nf
   ];
