@@ -130,6 +130,9 @@ let
     };
 in
 {
+  programs.git.settings.user.name = "msk";
+  programs.git.settings.user.email = "msk@evaxion.ai";
+
   home.username = "msk";
   home.homeDirectory = "/home/msk";
 
