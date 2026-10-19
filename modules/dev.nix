@@ -58,14 +58,39 @@
     ];
     text = ''
       mount_pi=false
-      if [[ "''${1:-}" == "--mount-pi" ]]; then
-        mount_pi=true
-        shift
-      fi
+      project_dir=""
+      usage() {
+        echo "Usage: agent-sandbox [--mount-pi] [--flake DIR] /nix/store/.../bin/<command> [arguments...]" >&2
+      }
+      while [[ $# -gt 0 ]]; do
+        case "$1" in
+          --mount-pi)
+            mount_pi=true
+            shift
+            ;;
+          --flake)
+            if [[ $# -lt 2 || -z "$2" ]]; then
+              usage
+              exit 2
+            fi
+            project_dir="$(realpath -e -- "$2")" || exit 2
+            if [[ ! -d "$project_dir" || ! -f "$project_dir/flake.nix" ]]; then
+              echo "Flake directory must contain flake.nix: $2" >&2
+              exit 2
+            fi
+            shift 2
+            ;;
+          --)
+            shift
+            break
+            ;;
+          *) break ;;
+        esac
+      done
 
       command_path="''${1:-}"
       if [[ ! "$command_path" =~ ^/nix/store/[[:alnum:]]{32}-[^/]+/bin/[^/]+$ ]]; then
-        echo "Usage: agent-sandbox [--mount-pi] /nix/store/.../bin/<command> [arguments...]" >&2
+        usage
         exit 2
       fi
       if [[ ! -x "$command_path" ]]; then
@@ -74,12 +99,14 @@
       fi
       shift
 
-      project_dir="$PWD"
-      while [[ "$project_dir" != "/" && ! -f "$project_dir/flake.nix" ]]; do
-        project_dir="$(dirname "$project_dir")"
-      done
-      if [[ ! -f "$project_dir/flake.nix" ]]; then
-        project_dir=""
+      if [[ -z "$project_dir" ]]; then
+        project_dir="$PWD"
+        while [[ "$project_dir" != "/" && ! -f "$project_dir/flake.nix" ]]; do
+          project_dir="$(dirname "$project_dir")"
+        done
+        if [[ ! -f "$project_dir/flake.nix" ]]; then
+          project_dir=""
+        fi
       fi
 
       project_git_root=""

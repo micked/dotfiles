@@ -20,16 +20,24 @@ agent-sandbox "$(readlink -f "$(command -v bash)")" -c 'pwd; node --version'
 The general syntax is:
 
 ```text
-agent-sandbox [--mount-pi] /nix/store/<store-path>/bin/<command> [arguments...]
+agent-sandbox [--mount-pi] [--flake DIR] /nix/store/<store-path>/bin/<command> [arguments...]
 ```
 
 The executable must exist at that store path. All remaining arguments go to the
 command. `--mount-pi` mounts the host's `~/.pi` read-write; `pibx` enables this
 option automatically when launching Pi.
 
-The launcher searches upward from the current directory for the nearest
-`flake.nix`. If it exports `devShells.${system}.default`, the sandbox loads that
-shell's environment. Launch from the project root to
+Use `--flake DIR` before the executable to select a directory containing
+`flake.nix`. Relative paths resolve from the launch directory. For example:
+
+```sh
+agent-sandbox --flake ~/dotfiles "$(readlink -f "$(command -v bash)")"
+```
+
+Without `--flake`, the launcher searches upward from the current directory for
+the nearest `flake.nix`. If it exports `devShells.${system}.default`, the sandbox
+loads that shell's environment. The app starts in the directory from which
+`agent-sandbox` was launched, regardless of the flake location. Launch from the project root to
 make the whole project available through the default current-directory mount.
 Without a default dev shell, the command still runs; fallback permissions apply
 unless the flake exports a custom config.
@@ -102,7 +110,8 @@ combinators. The first available config wins, in this order:
 2. `sandboxConfigs.${system}.default`
 3. `lib.sandboxConfigs.${system}.default`
 
-Extra mounts, the command's dependencies, `--mount-pi`, and dev-shell environment
+The launch directory's read-write mount and initial working directory, extra
+mounts, the command's dependencies, `--mount-pi`, and dev-shell environment
 loading still apply with custom permissions.
 
 ## Troubleshooting

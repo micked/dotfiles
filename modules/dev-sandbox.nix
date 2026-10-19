@@ -38,7 +38,6 @@
         no-new-session
         (add-pkg-deps fallbackPackages)
         (persist-home "coding-agents")
-        mount-cwd
         (try-fwd-env "ANTHROPIC_API_KEY")
         (try-fwd-env "CLAUDE_CODE_OAUTH_TOKEN")
         (try-fwd-env "OPENAI_API_KEY")
@@ -156,6 +155,10 @@ in
       )
       ++ [
         (add-pkg-deps [storePath])
+        mount-cwd
+        (add-runtime ''
+          RUNTIME_ARGS+=(--chdir "$PWD" --setenv DEV_SANDBOX_CWD "$PWD")
+        '')
       ]
       ++ lib.optional mountPi (rw-bind (noescape "~/.pi") (noescape "~/.pi"))
       ++ lib.optionals (devShell != null) [
@@ -166,12 +169,18 @@ in
           fi
           RUNTIME_ARGS+=(--ro-bind "$DEV_SANDBOX_ENV" /tmp/dev-sandbox-env)
         '')
+      ]
+      ++ [
         (wrap-entry (entry: ''
-          set +u
-          sandbox_path="$PATH"
-          # shellcheck source=/dev/null
-          source /tmp/dev-sandbox-env
-          export PATH="$sandbox_path:$PATH"
+          readonly launch_directory="$DEV_SANDBOX_CWD"
+          ${lib.optionalString (devShell != null) ''
+            set +u
+            sandbox_path="$PATH"
+            # shellcheck source=/dev/null
+            source /tmp/dev-sandbox-env
+            export PATH="$sandbox_path:$PATH"
+          ''}
+          cd -- "$launch_directory"
           ${entry}
         ''))
       ];
