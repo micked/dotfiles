@@ -86,6 +86,10 @@
 
     home-manager.backupFileExtension = "backup";
 
+    # YubiKey: smartcard daemon for the OpenPGP applet (pass), udev rules for ykman
+    services.pcscd.enable = true;
+    services.udev.packages = [pkgs.yubikey-personalization];
+
     # services.udev.packages = [pkgs.chrysalis];
     # services.udev.extraRules = ''
     #   SUBSYSTEM=="usb", ATTR{idVendor}=="20a0", ATTR{idProduct}=="41e5", MODE:="0666"

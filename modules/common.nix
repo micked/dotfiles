@@ -62,6 +62,7 @@ in {
     tomb
     pinentry-curses
     gnupg
+    yubikey-manager
     cloudflared
     ffmpeg
     imagemagick
@@ -152,6 +153,21 @@ in {
     purgeMimeAppsList = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
       $DRY_RUN_CMD rm -rf ~/.config/mimeapps.list
     '';
+  };
+
+  # pass decrypts with subkeys on the YubiKey; only the public key lives here.
+  # Stubs for the card keys are created by `gpg --card-status`.
+  programs.gpg = {
+    enable = true;
+    publicKeys = lib.optional (builtins.pathExists ../keys/msk.asc) {
+      source = ../keys/msk.asc;
+      trust = 5;
+    };
+    # Go through pcscd so ykman/FIDO can share the YubiKey with scdaemon
+    scdaemonSettings = {
+      disable-ccid = true;
+      pcsc-shared = true;
+    };
   };
 
   services.gpg-agent = {
