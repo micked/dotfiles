@@ -50,6 +50,7 @@ in
     projectGitRoot ? "",
     projectGitDir ? "",
     mountPi ? false,
+    mountParent ? false,
     binPath,
   }: let
     storePrefix = builtins.storeDir + "/";
@@ -155,6 +156,10 @@ in
       )
       ++ [
         (add-pkg-deps [storePath])
+      ]
+      # Mount the parent before the current directory so the cwd bind stays on top.
+      ++ lib.optional mountParent (readwrite (noescape ''"$(dirname "$PWD")"''))
+      ++ [
         mount-cwd
         (add-runtime ''
           RUNTIME_ARGS+=(--chdir "$PWD" --setenv DEV_SANDBOX_CWD "$PWD")

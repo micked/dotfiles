@@ -20,12 +20,23 @@ agent-sandbox "$(readlink -f "$(command -v bash)")" -c 'pwd; node --version'
 The general syntax is:
 
 ```text
-agent-sandbox [--mount-pi] [--flake DIR] /nix/store/<store-path>/bin/<command> [arguments...]
+agent-sandbox [--mount-pi] [--parent] [--flake DIR] /nix/store/<store-path>/bin/<command> [arguments...]
 ```
 
 The executable must exist at that store path. All remaining arguments go to the
 command. `--mount-pi` mounts the host's `~/.pi` read-write; `pibx` enables this
 option automatically when launching Pi.
+
+`--parent` also mounts the launch directory's parent read-write and searches for
+`flake.nix` starting from the parent instead of the launch directory, so the
+parent's dev shell is loaded. The app still starts in the launch directory.
+`--flake DIR` overrides which flake's environment is loaded; the parent is still
+mounted.
+
+```sh
+cd ~/sync/dev/workspace/my-project
+agent-sandbox --parent "$(readlink -f "$(command -v bash)")"  # uses workspace/flake.nix
+```
 
 Use `--flake DIR` before the executable to select a directory containing
 `flake.nix`. Relative paths resolve from the launch directory. For example:

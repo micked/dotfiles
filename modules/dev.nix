@@ -58,14 +58,19 @@
     ];
     text = ''
       mount_pi=false
+      mount_parent=false
       project_dir=""
       usage() {
-        echo "Usage: agent-sandbox [--mount-pi] [--flake DIR] /nix/store/.../bin/<command> [arguments...]" >&2
+        echo "Usage: agent-sandbox [--mount-pi] [--parent] [--flake DIR] /nix/store/.../bin/<command> [arguments...]" >&2
       }
       while [[ $# -gt 0 ]]; do
         case "$1" in
           --mount-pi)
             mount_pi=true
+            shift
+            ;;
+          --parent)
+            mount_parent=true
             shift
             ;;
           --flake)
@@ -99,8 +104,16 @@
       fi
       shift
 
+      if [[ "$mount_parent" == true && "$PWD" == "/" ]]; then
+        echo "--parent cannot be used from /" >&2
+        exit 2
+      fi
+
       if [[ -z "$project_dir" ]]; then
         project_dir="$PWD"
+        if [[ "$mount_parent" == true ]]; then
+          project_dir="$(dirname "$PWD")"
+        fi
         while [[ "$project_dir" != "/" && ! -f "$project_dir/flake.nix" ]]; do
           project_dir="$(dirname "$project_dir")"
         done
@@ -133,6 +146,7 @@
           --argstr projectGitRoot "$project_git_root" \
           --argstr projectGitDir "$project_git_dir" \
           --arg mountPi "$mount_pi" \
+          --arg mountParent "$mount_parent" \
           --argstr binPath "$command_path"
       )"
       if [[ -z "$sandbox" || "$sandbox" == *$'\n'* ]]; then
