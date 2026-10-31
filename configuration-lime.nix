@@ -59,7 +59,7 @@
 
     services.xserver.xkb.layout = lib.mkForce "us";
 
-    # boot.binfmt.emulatedSystems = ["aarch64-linux"];
+    boot.binfmt.emulatedSystems = ["aarch64-linux"];
     # virtualisation.docker.enable = true;
 
     networking.firewall.allowedTCPPorts = [9090];
