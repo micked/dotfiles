@@ -38,7 +38,6 @@
         no-new-session
         (add-pkg-deps fallbackPackages)
         (persist-home "coding-agents")
-        mount-cwd
         (try-fwd-env "ANTHROPIC_API_KEY")
         (try-fwd-env "CLAUDE_CODE_OAUTH_TOKEN")
         (try-fwd-env "OPENAI_API_KEY")
@@ -51,6 +50,7 @@ in
     projectGitRoot ? "",
     projectGitDir ? "",
     mountPi ? false,
+    mountParent ? false,
     binPath,
   }: let
     storePrefix = builtins.storeDir + "/";
@@ -157,6 +157,14 @@ in
       ++ [
         (add-pkg-deps [storePath])
       ]
+      # Mount the parent before the current directory so the cwd bind stays on top.
+      ++ lib.optional mountParent (readwrite (noescape ''"$(dirname "$PWD")"''))
+      ++ [
+        mount-cwd
+        (add-runtime ''
+          RUNTIME_ARGS+=(--chdir "$PWD" --setenv DEV_SANDBOX_CWD "$PWD")
+        '')
+      ]
       ++ lib.optional mountPi (rw-bind (noescape "~/.pi") (noescape "~/.pi"))
       ++ lib.optionals (devShell != null) [
         (add-runtime ''
@@ -166,12 +174,18 @@ in
           fi
           RUNTIME_ARGS+=(--ro-bind "$DEV_SANDBOX_ENV" /tmp/dev-sandbox-env)
         '')
+      ]
+      ++ [
         (wrap-entry (entry: ''
-          set +u
-          sandbox_path="$PATH"
-          # shellcheck source=/dev/null
-          source /tmp/dev-sandbox-env
-          export PATH="$sandbox_path:$PATH"
+          readonly launch_directory="$DEV_SANDBOX_CWD"
+          ${lib.optionalString (devShell != null) ''
+            set +u
+            sandbox_path="$PATH"
+            # shellcheck source=/dev/null
+            source /tmp/dev-sandbox-env
+            export PATH="$sandbox_path:$PATH"
+          ''}
+          cd -- "$launch_directory"
           ${entry}
         ''))
       ];

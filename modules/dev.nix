@@ -58,14 +58,44 @@
     ];
     text = ''
       mount_pi=false
-      if [[ "''${1:-}" == "--mount-pi" ]]; then
-        mount_pi=true
-        shift
-      fi
+      mount_parent=false
+      project_dir=""
+      usage() {
+        echo "Usage: agent-sandbox [--mount-pi] [--parent] [--flake DIR] /nix/store/.../bin/<command> [arguments...]" >&2
+      }
+      while [[ $# -gt 0 ]]; do
+        case "$1" in
+          --mount-pi)
+            mount_pi=true
+            shift
+            ;;
+          --parent)
+            mount_parent=true
+            shift
+            ;;
+          --flake)
+            if [[ $# -lt 2 || -z "$2" ]]; then
+              usage
+              exit 2
+            fi
+            project_dir="$(realpath -e -- "$2")" || exit 2
+            if [[ ! -d "$project_dir" || ! -f "$project_dir/flake.nix" ]]; then
+              echo "Flake directory must contain flake.nix: $2" >&2
+              exit 2
+            fi
+            shift 2
+            ;;
+          --)
+            shift
+            break
+            ;;
+          *) break ;;
+        esac
+      done
 
       command_path="''${1:-}"
       if [[ ! "$command_path" =~ ^/nix/store/[[:alnum:]]{32}-[^/]+/bin/[^/]+$ ]]; then
-        echo "Usage: agent-sandbox [--mount-pi] /nix/store/.../bin/<command> [arguments...]" >&2
+        usage
         exit 2
       fi
       if [[ ! -x "$command_path" ]]; then
@@ -74,12 +104,22 @@
       fi
       shift
 
-      project_dir="$PWD"
-      while [[ "$project_dir" != "/" && ! -f "$project_dir/flake.nix" ]]; do
-        project_dir="$(dirname "$project_dir")"
-      done
-      if [[ ! -f "$project_dir/flake.nix" ]]; then
-        project_dir=""
+      if [[ "$mount_parent" == true && "$PWD" == "/" ]]; then
+        echo "--parent cannot be used from /" >&2
+        exit 2
+      fi
+
+      if [[ -z "$project_dir" ]]; then
+        project_dir="$PWD"
+        if [[ "$mount_parent" == true ]]; then
+          project_dir="$(dirname "$PWD")"
+        fi
+        while [[ "$project_dir" != "/" && ! -f "$project_dir/flake.nix" ]]; do
+          project_dir="$(dirname "$project_dir")"
+        done
+        if [[ ! -f "$project_dir/flake.nix" ]]; then
+          project_dir=""
+        fi
       fi
 
       project_git_root=""
@@ -106,6 +146,7 @@
           --argstr projectGitRoot "$project_git_root" \
           --argstr projectGitDir "$project_git_dir" \
           --arg mountPi "$mount_pi" \
+          --arg mountParent "$mount_parent" \
           --argstr binPath "$command_path"
       )"
       if [[ -z "$sandbox" || "$sandbox" == *$'\n'* ]]; then

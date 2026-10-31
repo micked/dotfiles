@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   lib,
   pkgs-stable,
@@ -102,7 +101,7 @@ let
         ]
       );
     in
-    pkgs.stdenvNoCC.mkDerivation rec {
+    pkgs.stdenvNoCC.mkDerivation {
       pname = "jlab";
       version = "1.0";
       dontUnpack = true;
@@ -130,6 +129,9 @@ let
     };
 in
 {
+  programs.git.settings.user.name = "msk";
+  programs.git.settings.user.email = "msk@evaxion.ai";
+
   home.username = "msk";
   home.homeDirectory = "/home/msk";
 
@@ -164,8 +166,6 @@ in
     ./modules/fonts
     ./modules/dev.nix
   ];
-
-  programs.git.settings.user.email = pkgs.lib.mkForce "msk@evaxion.ai";
 
   programs.zsh.initExtra = ''
     source ${./modules/slurm-output.sh}

@@ -62,6 +62,7 @@ in {
     tomb
     pinentry-curses
     gnupg
+    yubikey-manager
     cloudflared
     ffmpeg
     imagemagick
@@ -154,6 +155,19 @@ in {
     '';
   };
 
+  # pass decrypts with subkeys on the YubiKey. Import the public key once per
+  # machine with `gpg --import keys/msk.asc` (not via publicKeys: its boot-time
+  # import leaves keyboxd running and holding pubring.db.lock).
+  # Stubs for the card keys are created by `gpg --card-status`.
+  programs.gpg = {
+    enable = true;
+    # Go through pcscd so ykman/FIDO can share the YubiKey with scdaemon
+    scdaemonSettings = {
+      disable-ccid = true;
+      pcsc-shared = true;
+    };
+  };
+
   services.gpg-agent = {
     enable = true;
     extraConfig = ''
@@ -161,5 +175,20 @@ in {
       max-cache-ttl 36000
     '';
     pinentry.package = pkgs.pinentry-tty;
+  };
+
+  # keyboxd never releases its lock on shutdown. If the stale PID in the lock
+  # gets reused by another process on the next boot, gpg waits on it forever.
+  systemd.user.services.keyboxd-stale-lock = {
+    Unit.Description = "Remove stale keyboxd lock from a previous boot";
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pkgs.writeShellScript "keyboxd-stale-lock" ''
+        if ! ${pkgs.procps}/bin/pgrep -u "$(id -u)" -x keyboxd >/dev/null; then
+          rm -f "$HOME"/.gnupg/public-keys.d/pubring.db.lock "$HOME"/.gnupg/public-keys.d/.#lk*
+        fi
+      ''}";
+    };
+    Install.WantedBy = [ "default.target" ];
   };
 }
