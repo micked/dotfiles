@@ -23,8 +23,8 @@
     src = pkgs.fetchFromGitHub {
       owner = "sipeed";
       repo = "libsigrok";
-      rev = "0ce0720421b6bcc8e65a0c94c5b2883cbfe22d7e";
-      hash = "sha256-4aqX+OX4bBsvvb7b1XHKqG6u1Ek3floXDfjr27usZwo=";
+      rev = "bf6b346e597d112f48102fe6a7b2318c6d7b49e2";
+      hash = "sha256-j0J0A9+aE1S2P02Ly50wIcvf6dZKkfhrMz7GX3gtkZ0=";
     };
   });
   pulseview-sipeed =
@@ -33,8 +33,8 @@
       src = pkgs.fetchFromGitHub {
         owner = "sipeed";
         repo = "pulseview";
-        rev = "ed585bc9dfe1dbebb530b668cd10c85064efeb6b";
-        hash = "sha256-tOVGT8P6x1WZC94KIAMOR94hOLZog1jjpEecRpFd+wE=";
+        rev = "f8bb77b4782ac997c9a25c51fe85e8ff8201ba10";
+        hash = "sha256-MXFcyyUe6s98UYAM4agXOB36g4HHi+ZHKqCnYunvmmE=";
       };
       buildInputs = with pkgs; [
         glib
@@ -45,8 +45,7 @@
         libzip
         libftdi1
         hidapi
-        glibmm
-        pcre
+        glibmm_2_4
         python3
         qt5.qtsvg
       ];

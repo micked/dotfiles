@@ -2,7 +2,54 @@
   lib,
   fetchgit,
   python3Packages,
+  fetchFromGitHub,
 }:
+let
+  # Upstream pins mcp<2: 2.x renamed FastMCP to MCPServer. Unmerged ports
+  # exist (upstream PRs #43, #47); drop this once one lands.
+  mcp = python3Packages.buildPythonPackage rec {
+    pname = "mcp";
+    version = "1.30.0";
+    pyproject = true;
+
+    src = fetchFromGitHub {
+      owner = "modelcontextprotocol";
+      repo = "python-sdk";
+      tag = "v${version}";
+      hash = "sha256-EkmTqsK+vBJcURuwFkhtNJMFgtzgw/7Cd+Fpav4P/ko=";
+    };
+
+    build-system = with python3Packages; [
+      hatchling
+      uv-dynamic-versioning
+    ];
+    dependencies = with python3Packages;
+      [
+        anyio
+        httpx
+        httpx-sse
+        jsonschema
+        pydantic
+        pydantic-settings
+        pyjwt
+        python-multipart
+        sse-starlette
+        starlette
+        typing-extensions
+        typing-inspection
+        uvicorn
+        # cli extra, required by blender-mcp
+        python-dotenv
+        typer
+      ]
+      ++ pyjwt.optional-dependencies.crypto;
+
+    # Test suite needs many extra inputs; the import check covers the API
+    # blender-mcp uses.
+    doCheck = false;
+    pythonImportsCheck = ["mcp" "mcp.server.fastmcp"];
+  };
+in
 python3Packages.buildPythonApplication {
   pname = "blender-mcp";
   version = "1.0.2";
@@ -18,10 +65,10 @@ python3Packages.buildPythonApplication {
   '';
 
   build-system = [python3Packages.setuptools];
-  dependencies = with python3Packages; [
-    docutils
+  dependencies = [
+    python3Packages.docutils
     mcp
-    pyyaml
+    python3Packages.pyyaml
   ];
   pythonImportsCheck = ["blmcp"];
 

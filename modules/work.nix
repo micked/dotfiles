@@ -31,9 +31,10 @@
   });
 in {
   home.packages = with pkgs; [
-    zotero
-    python3Packages.blinkstick
-    pymol-wayland # -git
+    # zotero
+    # python3Packages.blinkstick
+    pymol
+    # pymol-wayland # -git
     kicad
 
     # clc
