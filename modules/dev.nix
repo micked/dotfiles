@@ -3,8 +3,8 @@
   pkgs,
   ...
 }: let
-  graphify = pkgs.callPackage ../packages/graphify.nix {};
-  codex-acp = pkgs.callPackage ../packages/codex-acp.nix {};
+  # graphify = pkgs.callPackage ../packages/graphify.nix {};
+  # codex-acp = pkgs.callPackage ../packages/codex-acp.nix {};
   pi-coding-editor = pkgs.callPackage ../packages/pi-coding-editor.nix {};
   zed-editor = pkgs.symlinkJoin {
     name = "zed-editor";
@@ -14,15 +14,15 @@
       wrapProgram $out/bin/zeditor --set GPUI_X11_SCALE_FACTOR 1
     '';
   };
-  codex-acp-work = pkgs.symlinkJoin {
-    name = "codex-acp-work";
-    paths = [codex-acp];
-    nativeBuildInputs = [pkgs.makeWrapper];
-    postBuild = ''
-      wrapProgram $out/bin/codex-acp --run 'export CODEX_HOME="$HOME/.codex-work"'
-    '';
-    meta.mainProgram = "codex-acp";
-  };
+  # codex-acp-work = pkgs.symlinkJoin {
+  #   name = "codex-acp-work";
+  #   paths = [codex-acp];
+  #   nativeBuildInputs = [pkgs.makeWrapper];
+  #   postBuild = ''
+  #     wrapProgram $out/bin/codex-acp --run 'export CODEX_HOME="$HOME/.codex-work"'
+  #   '';
+  #   meta.mainProgram = "codex-acp";
+  # };
   nix-format = pkgs.writeShellApplication {
     name = "nix-format";
     runtimeInputs = [
@@ -179,12 +179,12 @@ in {
         pillow
       ]))
     ripgrep
-    graphify
+    # graphify
     nil
     nixd
     #codex-acp
     nodejs
-    claude-agent-acp
+    # claude-agent-acp
   ];
 
   programs.zed-editor = {
@@ -221,36 +221,31 @@ in {
           };
         };
       };
-      agent = {
-        sandbox_permissions = {
-          write_paths = ["/home/msk/.cache/nix"];
-        };
-      };
       agent_servers = {
-        "Codex (sandboxed)" = {
-          type = "custom";
-          command = "agent-sandbox";
-          args = ["${pkgs.lib.getExe codex-acp}"];
-          env = {};
-        };
-        "Codex (Work)" = {
-          type = "custom";
-          command = "${pkgs.lib.getExe codex-acp-work}";
-          args = [];
-          env = {};
-        };
-        "Codex (Work, Sandboxed)" = {
-          type = "custom";
-          command = "agent-sandbox";
-          args = ["${pkgs.lib.getExe codex-acp-work}"];
-          env = {};
-        };
-        "Claude (sandboxed)" = {
-          type = "custom";
-          command = "agent-sandbox";
-          args = ["${pkgs.lib.getExe pkgs.claude-agent-acp}"];
-          env = {};
-        };
+        # "Codex (sandboxed)" = {
+        #   type = "custom";
+        #   command = "agent-sandbox";
+        #   args = ["${pkgs.lib.getExe codex-acp}"];
+        #   env = {};
+        # };
+        # "Codex (Work)" = {
+        #   type = "custom";
+        #   command = "${pkgs.lib.getExe codex-acp-work}";
+        #   args = [];
+        #   env = {};
+        # };
+        # "Codex (Work, Sandboxed)" = {
+        #   type = "custom";
+        #   command = "agent-sandbox";
+        #   args = ["${pkgs.lib.getExe codex-acp-work}"];
+        #   env = {};
+        # };
+        # "Claude (sandboxed)" = {
+        #   type = "custom";
+        #   command = "agent-sandbox";
+        #   args = ["${pkgs.lib.getExe pkgs.claude-agent-acp}"];
+        #   env = {};
+        # };
       };
     };
   };

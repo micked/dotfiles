@@ -93,7 +93,7 @@ let
           #}))
           matplotlib
           biopython
-          nglview
+          # nglview
           ipykernel
           jupyterlab
           jupyterlab-vim
@@ -167,7 +167,7 @@ in
     ./modules/dev.nix
   ];
 
-  programs.zsh.initExtra = ''
+  programs.zsh.initContent = ''
     source ${./modules/slurm-output.sh}
     [[ -f ${nix-load} ]] && source ${nix-load}
     [[ -f ${micromamba-zsh} ]] && source ${micromamba-zsh}
