@@ -1,0 +1,13 @@
+{
+  "name": "pi-need2know",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Consult a minimally informed Claude adviser before Pi implements a task",
+  "keywords": ["pi-package"],
+  "scripts": {
+    "test": "python3 -m unittest discover -s tests -v"
+  },
+  "pi": {
+    "skills": ["./skills"]
+  }
+}

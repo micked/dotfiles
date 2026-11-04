@@ -27,6 +27,10 @@ The executable must exist at that store path. All remaining arguments go to the
 command. `--mount-pi` mounts the host's `~/.pi` read-write; `pibx` enables this
 option automatically when launching Pi.
 
+The host's `~/.agents/skills` is always mounted read-only when it exists. Its
+entries are resolved at launch, including home-manager symlinks into the Nix
+store, which are bound with their store closures.
+
 `--parent` also mounts the launch directory's parent read-write and searches for
 `flake.nix` starting from the parent instead of the launch directory, so the
 parent's dev shell is loaded. The app still starts in the launch directory.

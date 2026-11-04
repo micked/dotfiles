@@ -11,6 +11,7 @@ in {
   ];
 
   home.file.".pi/agent/local/pi-bigtdd".source = ../pi-dev/bigtdd;
+  home.file.".agents/skills/pi-need2know".source = ../pi-dev/need2know;
 
   # Idempotently add pi-gpt-search to pi's settings.json so pi auto-installs
   # the package on startup. Uses jq to preserve any existing settings.
@@ -33,6 +34,21 @@ in {
   home.activation.piBigTdd = lib.hm.dag.entryAfter ["writeBoundary" "piGptSearch"] ''
     settings_file="$HOME/.pi/agent/settings.json"
     package_source="~/.pi/agent/local/pi-bigtdd"
+    $DRY_RUN_CMD mkdir -p "$(dirname "$settings_file")"
+
+    if [ -f "$settings_file" ]; then
+      if ! ${pkgs.jq}/bin/jq -e --arg source "$package_source" '.packages // [] | index($source)' "$settings_file" >/dev/null 2>&1; then
+        $DRY_RUN_CMD ${pkgs.jq}/bin/jq --arg source "$package_source" '.packages = ((.packages // []) + [$source])' "$settings_file" > "$settings_file.tmp"
+        $DRY_RUN_CMD mv "$settings_file.tmp" "$settings_file"
+      fi
+    else
+      $DRY_RUN_CMD ${pkgs.jq}/bin/jq -n --arg source "$package_source" '{packages: [$source]}' > "$settings_file"
+    fi
+  '';
+
+  home.activation.piNeed2know = lib.hm.dag.entryAfter ["writeBoundary" "piBigTdd"] ''
+    settings_file="$HOME/.pi/agent/settings.json"
+    package_source="~/.pi/agent/local/pi-need2know"
     $DRY_RUN_CMD mkdir -p "$(dirname "$settings_file")"
 
     if [ -f "$settings_file" ]; then

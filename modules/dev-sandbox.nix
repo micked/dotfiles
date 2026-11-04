@@ -166,6 +166,23 @@ in
         '')
       ]
       ++ lib.optional mountPi (rw-bind (noescape "~/.pi") (noescape "~/.pi"))
+      # Shared agent skills, read-only. Entries are usually home-manager symlinks
+      # into the store, so resolve them and bind their closures at launch. A fresh
+      # tmpfs keeps the recreated symlinks out of the persisted home, where stale
+      # targets would make bwrap refuse to start after a skill update.
+      ++ [
+        (add-runtime ''
+          if [[ -d "$HOME/.agents/skills" ]]; then
+            RUNTIME_ARGS+=(--tmpfs "$HOME/.agents/skills")
+          fi
+        '')
+        (runtime-deep-ro-bind (noescape ''"$HOME/.agents/skills"''))
+        (add-runtime ''
+          if [[ -d "$HOME/.agents/skills" ]]; then
+            RUNTIME_ARGS+=(--remount-ro "$HOME/.agents/skills")
+          fi
+        '')
+      ]
       ++ lib.optionals (devShell != null) [
         (add-runtime ''
           if [[ -z "''${DEV_SANDBOX_ENV:-}" ]]; then
