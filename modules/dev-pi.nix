@@ -12,6 +12,7 @@ in {
 
   home.file.".pi/agent/local/pi-bigtdd".source = ../pi-dev/bigtdd;
   home.file.".agents/skills/pi-need2know".source = ../pi-dev/need2know;
+  home.file.".agents/skills/grill-me".source = ../packages/skills/grill-me;
 
   # Idempotently add pi-gpt-search to pi's settings.json so pi auto-installs
   # the package on startup. Uses jq to preserve any existing settings.
