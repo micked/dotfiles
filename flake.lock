@@ -55,6 +55,40 @@
         "type": "sourcehut"
       }
     },
+    "libsurvive-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1793723859,
+        "narHash": "sha256-+2FMtxX12f6NMJVwAv0647Tk7Ytg5aefLgyE7zst984=",
+        "ref": "refs/heads/master",
+        "rev": "44b1e2f0cb95e5697bc0b86f58fd8520a813b713",
+        "revCount": 2418,
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/collabora/libsurvive.git"
+      },
+      "original": {
+        "submodules": true,
+        "type": "git",
+        "url": "https://github.com/collabora/libsurvive.git"
+      }
+    },
+    "monado-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1794012844,
+        "narHash": "sha256-ftxQUfOpLRbWV07ZbruNMU7WyMbDKWOPU5Qp7hd11dQ=",
+        "ref": "refs/heads/main",
+        "rev": "29536cc06b7439b3e1c997d4ae328fea0744f0e2",
+        "revCount": 9203,
+        "type": "git",
+        "url": "https://gitlab.freedesktop.org/monado/monado.git"
+      },
+      "original": {
+        "type": "git",
+        "url": "https://gitlab.freedesktop.org/monado/monado.git"
+      }
+    },
     "nix-system-graphics": {
       "inputs": {
         "nixpkgs": [
@@ -191,6 +225,8 @@
         "agenix": "agenix",
         "home-manager": "home-manager",
         "jail-nix": "jail-nix",
+        "libsurvive-src": "libsurvive-src",
+        "monado-src": "monado-src",
         "nix-system-graphics": "nix-system-graphics",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",

@@ -1,4 +1,7 @@
-{pkgs, ...}: let
+{inputs}: {pkgs, ...}: let
+  monado-git = pkgs.callPackage ../packages/monado-git.nix {
+    inherit (inputs) monado-src libsurvive-src;
+  };
   patched-bwrap = pkgs.bubblewrap.overrideAttrs (o: {
     patches = (o.patches or []) ++ [./bwrap.patch];
   });
@@ -31,11 +34,30 @@
   '';
 in {
   config = {
+    services.monado = {
+      enable = false;
+      defaultRuntime = false; # Register as default OpenXR runtime
+      package = monado-git;
+    };
+
+    systemd.user.services.monado.environment = {
+      STEAMVR_LH_ENABLE = "1";
+      XRT_COMPOSITOR_COMPUTE = "1";
+      XRT_COMPOSITOR_FORCE_WAYLAND_DIRECT = "1";
+      IPC_EXIT_WHEN_IDLE = "1";
+    };
+
     programs.steam = {
       enable = true;
       package = pkgs.steam.override {
         buildFHSEnv = args: ((pkgs.buildFHSEnv.override {bubblewrap = patched-bwrap;})
           (args // {extraBwrapArgs = (args.extraBwrapArgs or []) ++ ["--cap-add ALL"];}));
+        extraProfile = ''
+          # Allows Monado/WiVRn to be used
+          # export PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES=1
+          # Fixes timezones on VRChat
+          unset TZ
+        '';
       };
       extraPackages = with pkgs; [
         usbutils

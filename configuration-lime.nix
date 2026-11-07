@@ -7,7 +7,7 @@
   imports = [
     ./configuration-common.nix
     ./hardware-configuration-lime.nix
-    ./sys_modules/vr.nix
+    (import ./sys_modules/vr.nix {inherit inputs;})
     ./sys_modules/dev.nix
   ];
 

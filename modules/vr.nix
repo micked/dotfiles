@@ -1,25 +1,11 @@
 {
-  config,
+  # config,
+  # osConfig,
   pkgs,
-  lib,
   ...
-}: let
-  # slimevr_exe = config.lib.nixGL.wrap pkgs.slimevr;
-  # slimevr = pkgs.writeShellScriptBin "slimevr" "WEBKIT_DISABLE_DMABUF_RENDERER=1 ${slimevr_exe}/bin/slimevr $@";
-  # wlx-overlay-s = pkgs.wlx-overlay-s.overrideAttrs (prevAttrs: {
-  #   postInstall = ''
-  #     patchelf $out/bin/wlx-overlay-s \
-  #       --add-needed ${lib.getLib pkgs.libGL}/lib/libEGL.so.1 \
-  #       --add-needed ${lib.getLib pkgs.libGL}/lib/libGL.so.1 \
-  #       --add-needed ${lib.getLib pkgs.vulkan-loader}/lib/libvulkan.so.1 \
-  #       --add-needed ${lib.getLib pkgs.libuuid}/lib/libuuid.so.1
-  #   '';
-  #   #--add-needed ${lib.getLib wayland}/lib/libwayland-client.so.0 \
-  #   #--add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0 \
-  # });
-  # baballonia = import ./vr_baballonia.nix {inherit pkgs;};
-  #index_camera_passthrough = import ./vr_icp.nix {inherit pkgs;};
-in {
+}: {
+  # xdg.configFile."openxr/1/active_runtime.json".source = "${osConfig.services.monado.package}/share/openxr/1/openxr_monado.json";
+
   home.packages = [
     # slimevr
     pkgs.wayvr
@@ -27,4 +13,25 @@ in {
     #baballonia
     #index_camera_passthrough
   ];
+
+  # xdg.configFile."openvr/openvrpaths.vrpath".text = let
+  #   steam = "${config.xdg.dataHome}/Steam";
+  # in
+  #   builtins.toJSON {
+  #     version = 1;
+  #     jsonid = "vrpathreg";
+
+  #     external_drivers = null;
+  #     config = ["${steam}/config"];
+
+  #     log = ["${steam}/logs"];
+
+  #     runtime = [
+  #       "${pkgs.xrizer}/lib/xrizer"
+  #       # OR
+  #       #"${pkgs.opencomposite}/lib/opencomposite"
+  #       # OR (using nixpkgs-xr)
+  #       # "${pkgs.vapor}/lib/VapoR"
+  #     ];
+  #   };
 }

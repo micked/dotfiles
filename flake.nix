@@ -25,6 +25,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     jail-nix.url = "sourcehut:~alexdavid/jail.nix";
+    monado-src = {
+      url = "git+https://gitlab.freedesktop.org/monado/monado.git";
+      flake = false;
+    };
+    libsurvive-src = {
+      url = "git+https://github.com/collabora/libsurvive.git?submodules=1";
+      flake = false;
+    };
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs";
