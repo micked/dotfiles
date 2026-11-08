@@ -13,9 +13,19 @@
     ${pkgs.oath-toolkit}/bin/oathtool -v --totp=sha256 --digits=8 $(${pkgs.pass}/bin/pass c2_secret) | tail -n1
   '';
   sophos_pass = pkgs.writeShellScriptBin "sophos_pass" ''
-    PASS=$(${pkgs.pass}/bin/pass sophos)
-    TOKEN=$(${pkgs.oath-toolkit}/bin/oathtool --totp=sha1 --digits=6 $(${pkgs.pass}/bin/pass sophos_secret))
-    echo $PASS$TOKEN
+    set -euo pipefail
+    # sophos_combined: line 1 = password, line 2 = TOTP secret (one decrypt)
+    { IFS= read -r PASS; IFS= read -r SECRET || [ -n "$SECRET" ]; } < <(${pkgs.pass}/bin/pass sophos_combined)
+    TOKEN=$(${pkgs.oath-toolkit}/bin/oathtool --totp=sha1 --digits=6 "$SECRET")
+    echo "$PASS$TOKEN"
+  '';
+  # Bring up the NM VPN with a freshly computed <password><TOTP>. The secret is
+  # piped to nmcli's own secret agent, so it never touches disk or the clipboard.
+  sophos_up = pkgs.writeShellScriptBin "sophos_up" ''
+    set -euo pipefail
+    PW=$(${sophos_pass}/bin/sophos_pass)
+    printf 'vpn.secrets.password:%s\n' "$PW" \
+      | nmcli connection up id sslvpn-msk-client-config passwd-file /dev/stdin
   '';
   sophos_login = pkgs.writeShellScriptBin "sophos_login" ''
     curl 'https://remote.evaxion-biotech.com:8090/login.xml' \
@@ -36,6 +46,7 @@ in {
     calc
     c2_pass
     sophos_pass
+    sophos_up
     sophos_login
 
     # bluetooth
